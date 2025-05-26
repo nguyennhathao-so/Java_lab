@@ -1,0 +1,125 @@
+@startuml
+skinparam classAttributeIconSize 0
+
+class ActivityLogs {
+  int log_id
+  int user_id
+  String action
+  String ip_address
+  Date timestamp
+}
+
+class Appointments {
+  int appointment_id
+  int user_id
+  int center_id
+  Date scheduled_time
+  String status
+  int donation_id
+}
+
+class Blogs {
+  int blog_id
+  int author_id
+  String title
+  String content
+  Date created_at
+}
+
+class BloodInventory {
+  int inventory_id
+  int center_id
+  String blood_type
+  String component_type
+  int quantity
+  Date expiry_date
+  String status
+  int donation_id
+}
+
+class BloodTypes {
+  String blood_type
+  String can_donate_to
+  String can_receive_from
+}
+
+class DonationRequests {
+  int request_id
+  int center_id
+  String blood_type_needed
+  int quantity
+  String urgency_level
+  String status
+  Date created_at
+}
+
+class Donations {
+  int donation_id
+  int user_id
+  int request_id
+  String donation_type
+  int amount
+  Date date
+}
+
+class HealthCenters {
+  int center_id
+  String name
+  String address
+  String contact_info
+  String location
+}
+
+class MedicalRecords {
+  int record_id
+  int user_id
+  float weight
+  String blood_pressure
+  String disease_history
+  Date checked_date
+  String notes
+}
+
+class Notifications {
+  int notification_id
+  int user_id
+  String message
+  String status
+  Date created_at
+}
+
+class Roles {
+  int role_id
+  String role_name
+}
+
+class Users {
+  int user_id
+  String name
+  String email
+  String password
+  String blood_type
+  int role_id
+  Date last_donation_date
+  String location
+  String status
+  Date created_at
+  String phone
+  String gender
+}
+
+ActivityLogs --> Users
+Appointments --> Users
+Appointments --> HealthCenters
+Appointments --> Donations
+Blogs --> Users
+Donations --> Users
+Donations --> DonationRequests
+BloodInventory --> HealthCenters
+BloodInventory --> Donations
+BloodInventory --> BloodTypes
+MedicalRecords --> Users
+Notifications --> Users
+Users --> Roles
+
+@enduml

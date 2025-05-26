@@ -23,7 +23,7 @@ Phần mềm hỗ trợ việc hiến máu cho 01 cơ sở y tế.
 
 ## Thành viên nhóm
 - Nguyễn Nhật Hào - [Vai trò: Leader, Developer,Designer]
-- [Họ tên 2] - [Vai trò, ví dụ: Designer, Tester]
+- Lê Hoàng Phúc - [Vai trò:Database,Developer]
 - [Họ tên 3] - [Vai trò, ví dụ: Developer]
 
 ## Tài liệu và tài nguyên
@@ -32,8 +32,8 @@ Phần mềm hỗ trợ việc hiến máu cho 01 cơ sở y tế.
   ![Use Case Diagram](đường_dẫn_đến_ảnh_use_case.jpg)  
   (Thay `đường_dẫn_đến_ảnh_use_case.jpg` bằng đường dẫn thực tế của ảnh bạn tải lên GitHub)
 - **Class Diagram**:  
-  ![Class Diagram](đường_dẫn_đến_ảnh_class_diagram.jpg)  
-  (Thay `đường_dẫn_đến_ảnh_class_diagram.jpg` bằng đường dẫn thực tế của ảnh)
+  ![Class Diagram](docs/diagrams/Class_diagram.png))  
+  
 
 ## Hướng dẫn sử dụng
 [Mô tả ngắn về cách chạy hoặc sử dụng dự án nếu có, ví dụ: Clone repository và chạy file main.java]

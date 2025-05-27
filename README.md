@@ -24,7 +24,7 @@ Phần mềm hỗ trợ việc hiến máu cho 01 cơ sở y tế.
 ## Thành viên nhóm
 - Nguyễn Nhật Hào - [Vai trò: Leader, Developer,Designer]
 - Lê Hoàng Phúc - [Vai trò:Database,Developer]
-- [Phan Tấn Thuận] - [Vai trò:Developer,Designer]
+- Phan Tấn Thuận - [Vai trò:Developer,Designer]
 - Bùi Văn Ý - [Vai trò: Developer, Use case]
 
 ## Tài liệu và tài nguyên

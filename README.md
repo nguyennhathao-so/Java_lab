@@ -24,7 +24,7 @@ Phần mềm hỗ trợ việc hiến máu cho 01 cơ sở y tế.
 ## Thành viên nhóm
 - Nguyễn Nhật Hào - [Vai trò: Leader, Developer,Designer]
 - Lê Hoàng Phúc - [Vai trò:Database,Developer]
-- [Họ tên 3] - [Vai trò, ví dụ: Developer]
+- [Phan Tấn Thuận] - [Vai trò:Developer,Designer]
 
 ## Tài liệu và tài nguyên
 - **Link Figma**: https://www.figma.com/design/Eky7yuhoYzaOERYHojC8hW/Untitled?node-id=0-1&t=RZfe7tKimf9CXEMf-1

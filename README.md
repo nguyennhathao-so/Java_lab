@@ -25,12 +25,12 @@ Phần mềm hỗ trợ việc hiến máu cho 01 cơ sở y tế.
 - Nguyễn Nhật Hào - [Vai trò: Leader, Developer,Designer]
 - Lê Hoàng Phúc - [Vai trò:Database,Developer]
 - [Phan Tấn Thuận] - [Vai trò:Developer,Designer]
+- Bùi Văn Ý - [Vai trò: Developer, Use case]
 
 ## Tài liệu và tài nguyên
 - **Link Figma**: https://www.figma.com/design/Eky7yuhoYzaOERYHojC8hW/Untitled?node-id=0-1&t=RZfe7tKimf9CXEMf-1
 - **Use Case Diagram**:  
-  ![Use Case Diagram](đường_dẫn_đến_ảnh_use_case.jpg)  
-  (Thay `đường_dẫn_đến_ảnh_use_case.jpg` bằng đường dẫn thực tế của ảnh bạn tải lên GitHub)
+  ![Use Case Diagram]([đường_dẫn_đến_ảnh_use_case.jpg](https://drive.google.com/drive/folders/11U8IEAm0wlEs782jPfQsCB1V8r5Da21j?usp=sharing))  
 - **Class Diagram**:  
   ![Class Diagram](docs/diagrams/Class_diagram.png))  
   

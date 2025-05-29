@@ -30,7 +30,7 @@ Phần mềm hỗ trợ việc hiến máu cho 01 cơ sở y tế.
 ## Tài liệu và tài nguyên
 - **Link Figma**: https://www.figma.com/design/Eky7yuhoYzaOERYHojC8hW/Untitled?node-id=0-1&t=RZfe7tKimf9CXEMf-1
 - **Use Case Diagram**:  
-  ![Use Case Diagram]((https://drive.google.com/drive/folders/11U8IEAm0wlEs782jPfQsCB1V8r5Da21j?usp=sharing))  
+  ![Use Case Diagram]((https://drive.google.com/drive/folders/11U8IEAm0wlEs782jPfQsCB1V8r5Da21j?hl=vi))  
 - **Class Diagram**:  
   ![Class Diagram](docs/diagrams/Class_diagram.png))  
   

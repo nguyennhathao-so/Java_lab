@@ -34,9 +34,9 @@ Phần mềm hỗ trợ việc hiến máu cho 01 cơ sở y tế.
 - **Link use case**:https://drive.google.com/drive/folders/11U8IEAm0wlEs782jPfQsCB1V8r5Da21j?hl=vi
 - ![Use Case Diagram](())  
 - **Class Diagram**:  
-  ![Class Diagram](docs/diagrams/Class_diagram.png))  
+  ![Class Diagram](docs/diagrams/Class_diagram.png)  
   
-
+ 
 ## Hướng dẫn sử dụng
 [Mô tả ngắn về cách chạy hoặc sử dụng dự án nếu có, ví dụ: Clone repository và chạy file main.java]
 

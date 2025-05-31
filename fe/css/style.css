@@ -1,0 +1,223 @@
+a{
+    color: #007bff;
+    text-decoration: none;
+}
+html,body{
+    font-family:'Inter', sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #333;
+    background-color: #f8f9fa;
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+}
+/* main sẽ chiếm hết chiều cao còn lại nếu nội dung ít */
+main {
+  flex: 1;
+}
+
+/* đảm bảo footer không bị đẩy lùi */
+#footer {
+  margin-top: auto;
+}
+
+
+/*============================================================ CSS cho header ==================================================================*/
+.main-header {
+  background-color: #f26457;
+  color: white;
+  padding: 14px 0;
+  font-family: 'Inter', sans-serif;
+}
+
+.container {
+  max-width: 100%;
+  margin: auto;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding : 0 64px;
+}
+
+.logo img {
+  height: 70px;
+  width: auto;
+}
+
+.nav-links {
+  display: flex;
+  gap: 24px;
+  align-items: center;
+  font-weight: 600;
+  margin-left:500px;
+}
+
+.nav-links a{
+  color: white;
+  text-decoration: none;
+  position: relative;
+  padding: 4px 0;
+  font-size: 20px;
+  user-select: none; /* Ngăn chặn việc chọn chữ khi hover */
+  
+}
+
+.nav-links a::after {
+  content: '';
+  position: absolute;
+  left: 0;
+  bottom: -4px;
+  width: 100%;
+  height: 4px;
+  background-color: white;
+  transform: scaleX(0); /* Bắt đầu ẩn */
+  transform-origin: left;
+  transition: transform 0.3s ease-in-out;
+}
+
+.nav-links a:hover::after {
+  transform: scaleX(1); /* Hiện ra khi hover */
+}
+.nav-links a.active::after {
+  transform: scaleX(1);
+}
+/* Auth links bên phải */
+.auth-links {
+  display: flex;
+  align-items: center;
+  gap: 12px;              /* Khoảng cách giữa 2 link rõ hơn */
+  font-weight: 600;
+}
+
+.auth-links a {
+  color: white;
+  text-decoration: none;
+  font-size: 20px;
+  position: relative;
+  padding: 4px 0;
+}
+
+/* Gạch dưới trượt ra khi hover */
+.auth-links a::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  width: 100%;
+  height: 4px;
+  background-color: white;
+  transform: scaleX(0);
+  transform-origin: left;
+  transition: transform 0.3s ease-in-out;
+}
+
+.auth-links a:hover::after {
+  transform: scaleX(1);
+}
+
+
+/* ==========================================================Footer ======================================================= */
+.donor-footer {
+  background-color: #bbbaba;
+  color: #333;
+  font-family: 'Inter', sans-serif;
+  padding: 30px 20px;
+}
+
+.footer-top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+}
+
+.footer-logo {
+  flex: 1;
+  min-width: 200px;
+  text-align: center;
+}
+
+.footer-logo img {
+  height: auto;
+  display: block;
+  margin: 0 auto 8px;
+}
+
+.footer-info {
+  flex: 2;
+  min-width: 300px;
+}
+
+.footer-info ul {
+  list-style: none;
+  padding-left: 0;
+  margin-top: 20px;
+}
+
+.footer-info li {
+  margin-bottom: 20px;
+  color: #000;
+font-family: Inter;
+font-size: 15px;
+font-style: normal;
+font-weight: 500;
+line-height: normal;
+text-transform: capitalize;
+}
+.footer-info li strong{
+  font-weight: bold;
+}
+
+.center-title {
+  color: red;
+  text-transform: uppercase;
+  font-weight: bold;
+  font-size:25px;
+  margin-bottom: 10px;
+  font-weight: 700;
+
+}
+
+.footer-branches {
+  margin-top: 20px;
+  text-align: center;
+}
+
+.footer-branches h3 {
+font-size: 30px;
+font-weight: 700;
+text-transform: uppercase;
+}
+.footer-branches .divp {
+    color: #000;
+    font-size: 15px;
+    font-weight: 500;
+    text-transform: uppercase;
+    margin-top: 14px;
+}
+
+.branch-list {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 40px;
+  margin-top: 40px;
+}
+
+.branch-item {
+  max-width: 220px;
+  text-align: left;
+}
+.branch-item strong{
+    font-weight: 700;
+    color: #000;
+    font-size: 15px;
+}
+.branch-item p {
+  line-height: normal;
+}
+
+

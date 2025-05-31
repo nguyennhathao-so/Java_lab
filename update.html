@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Cập nhật tình trạng</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+
+<body>
+    <div class="container">
+        <nav class="sidebar">
+            <div class="logo-section">
+                <img src="images/logo.png" alt="Logo" class="logo" />
+                <h2>WORLD BLOOD<br>DONOR DAY</h2>
+            </div>
+            <ul class="menu">
+                <li style="display: flex; align-items: center; gap: 6px;">
+                    <img src="images/home.png" alt="Logo" class="logo" style="width: 20px; height: 20px;" />
+                    <span>TRANG CHỦ</span>
+                </li>
+                <li style="display: flex; align-items: center; gap: 6px;">
+                    <img src="images/dashboard.png" alt="Logo" class="logo" style="width: 20px; height: 20px;" />
+                    <span>THỐNG KÊ</span>
+                </li>
+                <li style="display: flex; align-items: center; gap: 6px;">
+                    <img src="images/user.png" alt="Logo" class="logo" style="width: 20px; height: 20px;" />
+                    <span>NGƯỜI DÙNG</span>
+                </li>
+                <a href="index.html" style="text-decoration: none; color: white;">
+                    <li style="display: flex; align-items: center; gap: 6px;">
+                        <img src="images/blood_donations.png" alt="Logo" class="logo"
+                            style="width: 20px; height: 20px;" />
+                        <span>YÊU CẦU HIẾN MÁU</span>
+                    </li>
+                </a>
+
+                <li style="display: flex; align-items: center; gap: 6px;">
+                    <img src="images/blood_request.png" alt="Logo" class="logo" style="width: 20px; height: 20px;" />
+                    <span>YÊU CẦU CẦN MÁU</span>
+                </li>
+                <a href="blood_donations_history.html" style="text-decoration: none; color: white;">
+                    <li style="display: flex; align-items: center; gap: 6px;">
+                        <img src="images/blood_request_history.png" alt="Logo" class="logo"
+                            style="width: 20px; height: 20px;" />
+                        <span>LỊCH SỬ YÊU CẦU</span>
+                    </li>
+                </a>
+
+                <li style="display: flex; align-items: center; gap: 6px;">
+                    <img src="images/blood_storage.png" alt="Logo" class="logo" style="width: 20px; height: 20px;" />
+                    <span>MÁU DỰ TRỮ</span>
+                </li>
+
+            </ul>
+        </nav>
+        <main class="main-content">
+            <header class="header">
+                <h1>CẬP NHẬT TÌNH TRẠNG</h1>
+                <div class="admin-info">Admin 🔒</div>
+            </header>
+            <section class="content form-section">
+                <form>
+                    <label for="illness">Có Dấu Hiệu Của Bệnh Ẩn Gì Không</label>
+                    <input type="text" id="illness" placeholder="Nhập Tình Trạng Bệnh">
+
+                    <label for="amount">Số Lượng Máu Hiến (ml)</label>
+                    <input type="text" id="amount" placeholder="Nhập Tình Trạng Bệnh">
+
+                    <button type="submit" class="submit-button">CẬP NHẬT</button>
+                </form>
+            </section>
+        </main>
+    </div>
+    <script src="js/main.js"></script>
+</body>
+
+</html>

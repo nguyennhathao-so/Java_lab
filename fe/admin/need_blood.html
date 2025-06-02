@@ -2,17 +2,16 @@
 <html lang="vi">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Lịch sử hiến máu</title>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Yêu cầu cần máu</title>
 
     <!-- favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="/fe/assets/favicons/apple-icon-180x180.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/fe/assets/favicons/favicon-32x32.png" />
     <link rel="icon" type="image/png" sizes="16x16" href="/fe/assets/favicons/favicon-16x16.png" />
     <link rel="manifest" href="/fe/assets/favicons/manifest.json" />
-    <!-- 'theme-color' is not supported in Firefox, Firefox for Android, Opera -->
     <meta name="theme-color" content="#ffffff" />
 
     <!-- font -->
@@ -23,13 +22,12 @@
         rel="stylesheet" />
 
     <!-- css -->
-    <link rel="stylesheet" href="/fe/css/reset.css">
-    <link rel="stylesheet" href="/fe/css/style_admin.css">
+    <link rel="stylesheet" href="/fe/css/reset.css" />
+    <link rel="stylesheet" href="/fe/css/style_admin.css" />
 
     <!-- js -->
     <script src="/fe/js/jquery-3.7.1.min.js"></script>
     <script src="/fe/js/component_admin.js"></script>
-
 </head>
 
 <body>
@@ -37,10 +35,10 @@
         <div id="slide-bar"></div>
         <main class="main-content">
             <header class="header">
-                <h1>LỊCH SỬ HIẾN MÁU</h1>
+                <h1>DANH SÁCH YÊU CẦU CẦN MÁU</h1>
                 <div class="admin-info" style="display: flex; align-items: center; gap: 10px;">
                     <span>Admin</span>
-                    <img src="/fe/assets/images/icon_admin/logout.png" alt="logout" style="width:20px">
+                    <img src="/fe/assets/images/icon_admin/logout.png" alt="logout" style="width:20px" />
                 </div>
             </header>
             <section class="content">
@@ -51,10 +49,12 @@
                             <th>ID</th>
                             <th>Tên</th>
                             <th>SDT</th>
-                            <td>Giới tính</td>
+                            <th>Giới tính</th>
+                            <th>Thời gian</th>
                             <th>Nhóm máu</th>
-                            <th>Đơn vị (ml)</th>
-                            <th>Ghi chú</th>
+                            <th>Số lượng (ml)</th>
+                            <th>Trạng thái</th>
+                            <th>Hoạt động</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -64,19 +64,29 @@
                             <td>name 1</td>
                             <td>11116711111</td>
                             <td>Nam</td>
+                            <td>29/3/2011</td>
                             <td>A+</td>
-                            <td>14</td>
-                            <td>Thành công</td>
+                            <td>40</td>
+                            <td>Khẩn cấp</td>
+                            <td>
+                                <button class="delete">Xóa</button>
+                                <button class="accept">Đồng ý</button>
+                            </td>
                         </tr>
                         <tr>
                             <td>2</td>
                             <td>5455</td>
                             <td>name 2</td>
                             <td>45543543</td>
-                            <td>Nữ </td>
+                            <td>Nữ</td>
+                            <td>29/3/2011</td>
                             <td>AB+</td>
-                            <td>18</td>
-                            <td>Ổn định</td>
+                            <td>50</td>
+                            <td>Không</td>
+                            <td>
+                                <button class="delete">Xóa</button>
+                                <button class="accept">Đồng ý</button>
+                            </td>
                         </tr>
                     </tbody>
                 </table>

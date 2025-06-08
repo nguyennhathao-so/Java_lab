@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Diễn Đàn Chia Sẻ</title>
+  <link rel="stylesheet" href="css/reset.css" />
+  <link rel="stylesheet" href="css/style.css" />
+  <script src="js/jquery-3.7.1.min.js"></script>
+  <script src="js/component.js"></script>
+  <style>
+    body {
+      font-family: 'Inter', sans-serif;
+      background-color: #f1f1f1;
+    }
+
+    .forum-container {
+      max-width: 900px;
+      margin: 40px auto;
+      padding: 20px;
+    }
+
+    .title-page {
+      text-align: center;
+      color: red;
+      font-size: 28px;
+      font-weight: 700;
+      margin-bottom: 30px;
+      text-transform: uppercase;
+    }
+
+    .forum-box, .post-box {
+      background: white;
+      padding: 24px;
+      border-radius: 12px;
+      margin-bottom: 30px;
+    }
+
+    .title-section {
+      color: red;
+      font-size: 18px;
+      font-weight: bold;
+      margin-bottom: 16px;
+    }
+
+    .post-item {
+      border-bottom: 1px solid #ccc;
+      padding: 12px 0;
+    }
+
+    .post-item:last-child {
+      border-bottom: none;
+    }
+
+    .post-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 6px;
+    }
+
+    .post-avatar {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+    }
+
+    .post-name {
+      font-weight: bold;
+    }
+
+    .post-content {
+      padding-left: 42px;
+      font-size: 14px;
+      margin-bottom: 8px;
+    }
+
+    .post-readmore {
+      font-size: 13px;
+      color: #007bff;
+      padding-left: 42px;
+      cursor: pointer;
+    }
+
+    .post-box label {
+      font-weight: bold;
+      display: block;
+      margin-bottom: 6px;
+    }
+
+    .post-box input, .post-box textarea {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 14px;
+      border-radius: 6px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+
+    .btn-post {
+      display: inline-block;
+      background-color: red;
+      color: white;
+      padding: 10px 30px;
+      border: none;
+      border-radius: 6px;
+      font-size: 16px;
+      font-weight: 500;
+      cursor: pointer;
+      margin: auto;
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <div id="header"></div>
+
+  <main class="forum-container">
+    <h2 class="title-page">Diễn Đàn Chia Sẻ</h2>
+
+    <div class="forum-box">
+      <h3 class="title-section">Diễn Đàn</h3>
+
+      <div class="post-item">
+        <div class="post-header">
+          <img src="/fe/assets/images/doctors/doctor1.jpeg" alt="Avatar" class="post-avatar">
+          <span class="post-name">Nguyen Van A</span>
+        </div>
+        <div class="post-content"
+          data-short="Hiến máu là một hành động đơn giản nhưng vô cùng cao cả. Mỗi đơn vị máu bạn hiến có thể cứu sống 3 người..."
+          data-full="Hiến máu là một hành động đơn giản nhưng vô cùng cao cả. Mỗi đơn vị máu bạn hiến có thể cứu sống 3 người. Không chỉ giúp ích cho cộng đồng, việc hiến máu còn mang lại nhiều lợi ích cho chính bạn. Nó giúp cơ thể bạn kích thích quá trình tái tạo máu mới, cải thiện tuần hoàn và giảm nguy cơ mắc một số bệnh lý về tim mạch.">
+          Hiến máu là một hành động đơn giản nhưng vô cùng cao cả. Mỗi đơn vị máu bạn hiến có thể cứu sống 3 người...
+        </div>
+        <div class="post-readmore">Đọc Thêm</div>
+      </div>
+
+      <div class="post-item">
+        <div class="post-header">
+          <img src="/fe/assets/images/doctors/doctor2.jpeg" alt="Avatar" class="post-avatar">
+          <span class="post-name">Nguyen Van B</span>
+        </div>
+        <div class="post-content"
+          data-short="Việc hiến máu không chỉ giúp người bệnh mà còn giúp bản thân kiểm tra sức khỏe định kỳ miễn phí..."
+          data-full="Việc hiến máu không chỉ giúp người bệnh mà còn giúp bản thân kiểm tra sức khỏe định kỳ miễn phí. Bạn sẽ được theo dõi huyết áp, nhịp tim, lượng hemoglobin... từ đó sớm phát hiện các bất thường nếu có.">
+          Việc hiến máu không chỉ giúp người bệnh mà còn giúp bản thân kiểm tra sức khỏe định kỳ miễn phí...
+        </div>
+        <div class="post-readmore">Đọc Thêm</div>
+      </div>
+    </div>
+
+    <div class="post-box">
+      <h3 class="title-section">Gửi Bài Chia Sẻ Của Bạn</h3>
+      <form>
+        <label for="title">Tiêu Đề Bài Viết</label>
+        <input type="text" id="title" placeholder="Nhập tiêu đề" required />
+
+        <label for="content">Nội Dung</label>
+        <textarea id="content" rows="4" placeholder="Nhập nội dung" required></textarea>
+
+        <button class="btn-post" type="submit">Đăng</button>
+      </form>
+    </div>
+  </main>
+
+  <div id="footer"></div>
+
+  <script>
+    document.querySelectorAll('.post-readmore').forEach(button => {
+      button.addEventListener('click', function () {
+        const content = this.previousElementSibling;
+        const isExpanded = this.textContent === "Thu Gọn";
+
+        if (isExpanded) {
+          content.textContent = content.getAttribute('data-short');
+          this.textContent = "Đọc Thêm";
+        } else {
+          content.textContent = content.getAttribute('data-full');
+          this.textContent = "Thu Gọn";
+        }
+      });
+    });
+  </script>
+</body>
+</html>

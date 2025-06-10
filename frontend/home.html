@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <title>Trang chủ</title>
+
+  <!-- Favicon -->
+  <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicons/apple-icon-180x180.png" />
+  <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicons/favicon-32x32.png" />
+  <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicons/favicon-16x16.png" />
+  <link rel="manifest" href="./assets/favicons/manifest.json" />
+  <meta name="theme-color" content="#ffffff" />
+
+  <!-- Font chữ -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Akshar:wght@300..700&family=Inter:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet"
+  />
+
+  <!-- CSS -->
+  <link rel="stylesheet" href="./css/reset.css" />
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="./css/slick.css"/>
+
+  <!-- CSS nội tuyến riêng cho hero section -->
+  <style>
+    .hero-section {
+      position: relative;
+      height: 700px;
+      overflow: hidden;
+      display: flex;
+      align-items: center;
+      padding-left: 60px;
+      color: white;
+      margin-bottom: 100px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    .hero-bg {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      opacity: 0;
+      transition: opacity 1s ease-in-out;
+      z-index: 0;
+    }
+
+    .bg1 { z-index: 0; }
+    .bg2 { z-index: 1; }
+
+    .overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(0, 0, 0, 0.6), transparent);
+      z-index: 2;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 3;
+      max-width: 500px;
+    }
+
+    .hero-content h2 {
+      color: #FFF;
+      font-size: 48px;
+      font-weight: 700;
+      text-transform: uppercase;
+    }
+
+    .hero-content p {
+      color: #FFF;
+      font-size: 24px;
+      font-weight: 500;
+      line-height: 1.6;
+      margin: 39px 0 40px 0;
+      width: 100%;
+      letter-spacing: 1px;
+      text-shadow: 0 2px 8px rgba(0,0,0,0.18);
+    }
+
+    .btn-primary {
+      background: linear-gradient(90deg, #f44336 60%, #ffadad 100%);
+      color: #fff;
+      padding: 16px 36px;
+      border: none;
+      border-radius: 30px;
+      font-size: 22px;
+      font-weight: 700;
+      letter-spacing: 1px;
+      box-shadow: 0 4px 16px rgba(244,67,54,0.15);
+      text-decoration: none;
+      display: inline-block;
+      cursor: pointer;
+      transition: background 0.3s, box-shadow 0.3s, transform 0.2s;
+      outline: none;
+      text-transform: uppercase;
+    }
+
+    .btn-primary:hover {
+      background-color: #f4bebe;
+    }
+
+    /* about-section*/
+    .about-section {
+      padding: 60px 40px;
+      background-color: #FFEAEA;
+      margin:80px auto;
+      font-family: 'Inter', sans-serif;
+}
+
+.section-title {
+  text-align: center;
+  font-size: 48px;
+  font-weight: 700;
+  text-transform: uppercase;
+  padding-bottom:50px;
+}
+
+.about-top {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 40px;
+  margin-bottom: 40px;
+  align-items: center;
+}
+
+.about-image img {
+  width: 100%;
+  height: 400px;
+  object-fit: cover;
+  border-radius: 12px;
+}
+
+.about-text {
+  flex: 1;
+}
+
+.about-text h3 {
+  font-size: 32px;
+  font-weight: 700;
+  text-transform: uppercase;
+}
+
+.about-text p {
+  color: #000;
+  font-size: 24px;
+  font-weight: 500;
+  line-height: 40px; /* 166.667% */
+  letter-spacing: 2.4px;
+}
+
+.about-text .highlight {
+  color: #e53935;
+  font-weight: bold;
+}
+
+.about-bottom {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 60px;
+  justify-content: space-between;
+}
+
+.about-card {
+  flex: 1;
+  min-width: 280px;
+  background-color: #FFADAD;
+  padding: 20px 24px;
+  border-radius: 12px;
+  position: relative;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.05);
+}
+
+.about-card h4 {
+font-size: 32px;
+font-weight: 700;
+line-height: 40px; /* 125% */
+letter-spacing: 3.2px;
+text-transform: capitalize;
+}
+
+.about-card ul {
+  list-style: none;
+  padding-left: 0;
+  font-size: 15px;
+  line-height: 1.6;
+}
+.about-card ul li {
+font-size: 24px;
+font-weight: 500;
+line-height: 40px; /* 166.667% */
+letter-spacing: 2.4px;
+text-transform: capitalize;
+padding-top:11px;
+}
+
+.about-card .pin-icon {
+  position: absolute;
+  top: -25px;
+  right: -15px;
+  width: 60px;
+}
+
+/* doctor-section */
+.doctor-section {
+  text-align: center;
+  padding: 0 40px;
+  font-family: 'Inter', sans-serif;
+  margin-bottom: 80px;
+}
+
+.doctor-section .section-title {
+font-size: 48px;
+font-weight: 700;
+line-height: 40px; /* 83.333% */
+letter-spacing: 4.8px;
+text-transform: uppercase;
+padding-bottom: 20px;
+}
+
+.doctor-section .section-subtitle {
+  color: #000;
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 40px; /* 153.846% */
+  letter-spacing: 2.6px;
+  width: 60%;
+  margin: 0 auto 60px;
+}
+
+.doctor-section .doctor-carousel {
+  width: 100%;
+  margin: auto;
+}
+
+.doctor-section .doctor-card {
+  background-color: #eaeaea;  /* xám nhạt */
+  padding: 24px 16px;
+  border-radius: 6px;
+  text-align: center;
+  box-shadow: 0 0 0 1px #ccc;
+  transition: transform 0.3s;
+
+}
+
+.doctor-card:hover {
+  transform: translateY(-5px);
+}
+
+.doctor-card img {
+  width: 100%;
+  max-width: 220px;
+  height: auto;
+  object-fit: cover;
+  margin: auto;
+  margin-bottom: 16px;
+  display: block;
+  border-radius: 4px;
+}
+
+.doctor-card h4 {
+  font-size: 16px;
+  font-weight: 600;
+  margin-bottom: 4px;
+  color: #000;
+}
+
+.doctor-card p {
+  font-size: 14px;
+  color: #333;
+  margin: 0;
+}
+/* Slick dots nằm ngang và cách đều */
+.slick-dots {
+  display: flex !important;
+  justify-content: center;
+  gap: 10px;
+  margin-top: 20px;
+  padding: 0;
+  list-style: none;
+}
+
+.slick-dots li {
+  display: inline-block;
+}
+
+.slick-dots button {
+  width: 30px;
+  height: 30px;
+  border: 1px solid #ccc;
+  background-color: #fff;
+  color: #333;
+  font-weight: bold;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background 0.3s;
+}
+
+.slick-dots .slick-active button {
+  background-color: #f44336;
+  color: #fff;
+  border-color: #f44336;
+}
+
+/* blood-info-section */
+.blood-info-section {
+  background-color: #ffecec; /* nền hồng nhạt */
+  padding: 60px 20px;
+  font-family: 'Inter', sans-serif;
+  text-align: center;
+}
+
+.blood-info-section .section-title {
+  font-size: 28px;
+  font-weight: bold;
+  padding:0;
+}
+
+.blood-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);  /* đúng 2 cột */
+  gap: 40px;
+  max-width: 900px;
+  margin: 40px auto; /* Thêm khoảng cách trên dưới */
+}
+
+.blood-card {
+  background-color: #fff;
+  padding: 24px 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  text-align: left;
+  transition: transform 0.3s ease;
+  height: 100%;
+}
+
+.blood-card:hover {
+  transform: translateY(-4px);
+}
+
+.blood-card h4 {
+  font-size: 18px;
+  font-weight: bold;
+  color: red;
+  margin-bottom: 12px;
+}
+
+.blood-card p {
+  font-size: 15px;
+  color: #333;
+  line-height: 1.6;
+  margin: 0;
+}
+
+
+  </style>
+
+  <!-- JS -->
+  <script src="js/jquery-3.7.1.min.js"></script>
+  <script src="js/component.js"></script>
+  <script src="js/trangChu.js"></script>
+  <script src="js/slick.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/example.js"></script>
+</head>
+
+<body>
+  <!-- Header -->
+  <div id="header"></div>
+
+  <!-- Main Content -->
+  <main>
+    <section class="hero-section" id="hero">
+      <div class="hero-bg bg1"></div>
+      <div class="hero-bg bg2"></div>
+      <div class="overlay"></div>
+      <div class="hero-content">
+        <h2>MỘT GIỌT MÁU<br />VẠN TIA HY VỌNG.</h2>
+        <p>
+          Hãy cùng nhau trao tặng sự sống, lan tỏa yêu thương,
+          và chung tay xây dựng cộng đồng khỏe mạnh, nhân ái.
+        </p>
+        <button class="btn-primary">Đặt lịch</button>
+      </div>
+    </section>
+    <section class="about-section">
+  <h2 class="section-title">🏥 GIỚI THIỆU VỀ CHÚNG TÔI</h2>
+
+  <div class="about-top">
+    <div class="about-image">
+      <img src="assets/images/icon/hospital.jpeg" alt="Trung tâm hiến máu" />
+    </div>
+    <div class="about-text">
+      <h3>CHÚNG TÔI LÀ AI?</h3>
+      <p>
+        Trung tâm Hiến Máu Tình Nguyện <span class="highlight">DONOR</span> là đơn vị uy tín trong việc tổ chức,
+        tiếp nhận và bảo quản máu hiến từ cộng đồng. Với đội ngũ y bác sĩ chuyên nghiệp, hệ thống thiết bị hiện đại và quy trình khép kín,
+        chúng tôi cam kết mang đến sự an toàn tuyệt đối cho người hiến máu và người nhận.
+      </p>
+    </div>
+  </div>
+
+  <div class="about-bottom">
+    <div class="about-card pink">
+      <h4>📎 Sứ Mệnh Của Chúng Tôi</h4>
+      <ul>
+        <li>❤️ Kết Nối Những Tấm Lòng Nhân Ái.</li>
+        <li>🩸 Cung Cấp Nguồn Máu Chất Lượng Cho Các Bệnh Viện Trên Toàn Quốc.</li>
+        <li>📢 Nâng Cao Nhận Thức Cộng Đồng Về Ý Nghĩa Và Tầm Quan Trọng Của Việc Hiến Máu Nhân Đạo.</li>
+      </ul>
+      <img class="pin-icon" src="assets/images/icon/pin1.png" alt="pin" />
+    </div>
+
+    <div class="about-card pink">
+      <h4>📌 Dịch Vụ & Hỗ Trợ</h4>
+      <ul>
+        <li>🩷 Hiến Máu Tình Nguyện Tại Trung Tâm Hoặc Theo Đợt Tổ Chức Lưu Động</li>
+        <li>🩺 Kiểm Tra Sức Khỏe Miễn Phí Trước Và Sau Hiến Máu</li>
+        <li>📄 Cấp Giấy Chứng Nhận Hiến Máu & Hỗ Trợ Máu Khi Cần Thiết</li>
+      </ul>
+      <img class="pin-icon" src="assets/images/icon/pin1.png" alt="pin" />
+    </div>
+  </div>
+    </section>
+    <section class="doctor-section">
+  <h2 class="section-title">👨‍⚕️ ĐỘI NGŨ BÁC SĨ</h2>
+  <p class="section-subtitle">
+    Đội ngũ hơn 9 bác sĩ và chuyên gia y tế giàu kinh nghiệm, tận tâm với sứ mệnh cứu sống và chăm sóc sức khỏe cộng đồng.
+  </p>
+
+  <div class="doctor-carousel">
+    <!-- Mỗi item là một bác sĩ -->
+    <div class="doctor-card">
+      <img src="assets/images/doctors/doctor1.png" alt="Dr. Emily Carter" />
+      <h4>Dr. Emily Carter</h4>
+      <p>Specialist in Blood Transfusion</p>
+    </div>
+
+    <div class="doctor-card">
+      <img src="assets/images/doctors/doctor2.png" alt="Dr. James Anderson" />
+      <h4>Dr. James Anderson</h4>
+      <p>Hematology Consultant</p>
+    </div>
+
+    <!-- Thêm bác sĩ tiếp theo -->
+    <div class="doctor-card">
+      <img src="assets/images/doctors/doctor3.png" alt="Dr. Olivia Scott" />
+      <h4>Dr. Olivia Scott</h4>
+      <p>Blood Donation Campaign Coordinator</p>
+    </div>
+
+    <div class="doctor-card">
+    <img src="assets/images/doctors/doctor4.png" alt="Dr. Mia Thompson" />
+    <h4>Dr. Mia Thompson</h4>
+    <p>Platelet Therapy & Blood Disorders</p>
+  </div>
+
+  <div class="doctor-card">
+    <img src="assets/images/doctors/doctor5.png" alt="Dr. Benjamin Clarke" />
+    <h4>Dr. Benjamin Clarke</h4>
+    <p>Red Cell Serology Expert</p>
+  </div>
+
+  <div class="doctor-card">
+    <img src="assets/images/doctors/doctor6.png" alt="Dr. Ava Mitchell" />
+    <h4>Dr. Ava Mitchell</h4>
+    <p>Immunohematology Specialist</p>
+  </div>
+
+  <div class="doctor-card">
+    <img src="assets/images/doctors/doctor7.png" alt="Dr. William Hayes" />
+    <h4>Dr. William Hayes</h4>
+    <p>Expert in Blood Collection & Storage</p>
+  </div>
+
+  <div class="doctor-card">
+    <img src="assets/images/doctors/doctor8.png" alt="Dr. Sophia Bennett" />
+    <h4>Dr. Sophia Bennett</h4>
+    <p>Pediatric Hematologist</p>
+  </div>
+
+  <div class="doctor-card">
+    <img src="assets/images/doctors/doctor9.png" alt="Dr. Michael Reed" />
+    <h4>Dr. Michael Reed</h4>
+    <p>Clinical Blood Banking Expert</p>
+  </div>
+</div>
+    
+  </div>
+</section>
+
+<section class="blood-info-section">
+  <h2 class="section-title">📄 TÀI LIỆU NHÓM MÁU</h2>
+
+  <div class="blood-grid">
+    <div class="blood-card">
+      <h4>Nhóm A</h4>
+      <p>
+        Nhóm máu A có thể hiến cho A và AB, nhận từ A và O. Hồng cầu phù hợp với A, AB; huyết tương phù hợp với A, O.
+      </p>
+    </div>
+
+    <div class="blood-card">
+      <h4>Nhóm B</h4>
+      <p>
+        Nhóm máu B có thể hiến cho B và AB, nhận từ B và O. Hồng cầu phù hợp với B, AB; huyết tương phù hợp với B, O.
+      </p>
+    </div>
+
+    <div class="blood-card">
+      <h4>Nhóm AB</h4>
+      <p>
+        Nhóm máu AB có thể hiến cho AB, nhận từ tất cả nhóm. Là người nhận máu phổ quát, nhưng chỉ hiến huyết tương cho AB.
+      </p>
+    </div>
+
+    <div class="blood-card">
+      <h4>Nhóm O</h4>
+      <p>
+        Nhóm máu O có thể hiến cho tất cả nhóm, nhận từ O. Là người cho máu phổ quát, hồng cầu phù hợp với mọi nhóm.
+      </p>
+    </div>
+  </div>
+</section>
+
+
+  </main>
+
+  <!-- Footer -->
+  <div id="footer"></div>
+</body>
+</html>

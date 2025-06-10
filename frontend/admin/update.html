@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Danh sách yêu cầu hiến máu</title>
+
+    <!-- favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicons/apple-icon-180x180.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicons/favicon-16x16.png" />
+    <link rel="manifest" href="../assets/favicons/manifest.json" />
+    <!-- 'theme-color' is not supported in Firefox, Firefox for Android, Opera -->
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Akshar:wght@300..700&family=Inter:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet" />
+
+    <!-- css -->
+    <link rel="stylesheet" href="../css/reset.css">
+    <link rel="stylesheet" href="../css/style_admin.css">
+
+    <!-- js -->
+    <script src="../js/jquery-3.7.1.min.js" ></script>
+    <script src="../js/component_admin.js" ></script>
+    <script src="../js/blood_donations_history_admin.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/example.js"></script>
+
+</head>
+
+<body>
+    <div class="container">
+        <div id="slide-bar"></div>
+        <main class="main-content">
+            <header class="header">
+                <h1>CẬP NHẬT TÌNH TRẠNG</h1>
+                <div class="admin-info" style="display: flex; align-items: center; gap: 10px;">
+                    <span>Admin</span>
+                    <img src="../assets/images/icon_admin/logout.png" alt="logout" style="width:20px">
+                </div>
+            </header>
+            <section class="content form-section">
+                <form>
+                    <label for="illness">Có Dấu Hiệu Của Bệnh Ẩn Gì Không</label>
+                    <input type="text" id="illness" placeholder="Nhập Tình Trạng Bệnh">
+
+                    <label for="amount">Số Lượng Máu Hiến (ml)</label>
+                    <input type="text" id="amount" placeholder="Nhập Tình Trạng Bệnh">
+
+                    <button type="submit" class="submit-button">CẬP NHẬT</button>
+                </form>
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>

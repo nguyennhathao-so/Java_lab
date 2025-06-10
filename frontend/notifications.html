@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup_Signin</title>
+    <!-- Favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicons/apple-icon-180x180.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="./assets/favicons/favicon-16x16.png" />
+    <link rel="manifest" href="./assets/favicons/manifest.json" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- Font chữ -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@300..700&family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+
+    <!-- CSS -->
+    <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <script src="./js/form-toggle.js"></script>
+    <style>
+.thongbao-wrapper {
+  padding: 40px 20px;
+  background-color: #f1f1f1;
+  font-family: 'Inter', sans-serif;
+}
+
+.title-page {
+  text-align: center;
+  color: red;
+  font-size: 28px;
+  font-weight: 700;
+  margin-bottom: 30px;
+  text-transform: uppercase;
+}
+
+.thongbao-container {
+  max-width: 800px;
+  background: white;
+  margin: auto;
+  padding: 30px;
+  border-radius: 12px;
+}
+
+.title-section {
+  font-size: 20px;
+  font-weight: bold;
+  color: red;
+  margin-bottom: 24px;
+}
+
+.notification-list {
+  max-height: 600px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.notification-item {
+  margin-bottom: 24px;
+}
+
+.noti-header {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 600;
+  margin-bottom: 6px;
+}
+
+.noti-avatar {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+}
+
+.noti-role.admin {
+  color: red;
+}
+
+.noti-role.staff {
+  color: #007bff;
+}
+
+.noti-title {
+  font-weight: bold;
+}
+
+.noti-content {
+  font-size: 14px;
+  margin: 6px 0;
+  padding-left: 14px;
+}
+
+hr {
+  margin-top: 12px;
+}
+    </style>
+
+    <!-- JS -->
+    <script src="./js/jquery-3.7.1.min.js"></script>
+    <script src="./js/component.js"></script>
+    <script src="./js/api.js"></script>
+    <script src="./js/example.js"></script>
+</head>
+<body>
+    <!-- Header -->
+    <div id="header"></div>
+
+    <!-- Main Content -->
+     <main>
+<section class="thongbao-wrapper">
+  <h2 class="title-page">📢 Trang Thông Báo</h2>
+
+  <div class="thongbao-container">
+    <h3 class="title-section">Thông Báo</h3>
+
+    <div class="notification-list">
+      <div class="notification-item">
+        <div class="noti-header">
+          <img src="./assets/images/doctors/doctor1.jpeg" alt="Admin" class="noti-avatar">
+          <span class="noti-role admin">Admin</span>
+          <span class="noti-title">Vì Sao Bạn Nên Hiến Máu?</span>
+        </div>
+        <p class="noti-content">
+          Hiến máu là một hành động đơn giản nhưng vô cùng cao cả. Mỗi đơn vị máu bạn hiến có thể cứu sống 3 người. Không chỉ giúp ích cho cộng đồng, việc hiến máu còn mang lại nhiều lợi ích cho chính bạn. Nó giúp cơ thể bạn kích thích quá trình tái tạo máu mới, cải thiện tuần hoàn và giảm nguy cơ mắc một số bệnh lý về tim mạch. Đồng thời, hiến máu thường xuyên còn giúp bạn theo dõi được tình trạng sức khỏe định kỳ thông qua các xét nghiệm được thực hiện trước khi hiến máu.
+        </p>
+        <hr>
+      </div>
+
+      <div class="notification-item">
+        <div class="noti-header">
+          <img src="./assets/images/doctors/doctor10.jpeg" alt="Staff" class="noti-avatar">
+          <span class="noti-role staff">Staff</span>
+          <span class="noti-title">Thông Tin Về Lịch Hiến Máu Sắp Tới</span>
+        </div>
+        <p class="noti-content">
+          Chúng tôi xin thông báo lịch hiến máu tình nguyện sẽ diễn ra vào ngày 10/06 tại Bệnh viện Trung Ương. Các bạn đã đăng ký vui lòng đến đúng giờ để đảm bảo quy trình diễn ra suôn sẻ.
+        </p>
+        <hr>
+      </div>
+
+      <div class="notification-item">
+        <div class="noti-header">
+          <img src="./assets/images/doctors/doctor3.jpeg" alt="Admin" class="noti-avatar">
+          <span class="noti-role admin">Admin</span>
+          <span class="noti-title">Cập Nhật Chính Sách Ưu Đãi Cho Người Hiến Máu</span>
+        </div>
+        <p class="noti-content">
+          Bắt đầu từ tháng 7, tất cả người hiến máu sẽ được nhận thêm phiếu quà tặng và ưu tiên kiểm tra sức khỏe định kỳ miễn phí. Chi tiết sẽ được thông báo thêm trên website chính thức của chúng tôi.
+        </p>
+        <hr>
+      </div>
+      <div class="notification-item">
+        <div class="noti-header">
+          <img src="./assets/images/doctors/doctor3.jpeg" alt="Admin" class="noti-avatar">
+          <span class="noti-role admin">Admin</span>
+          <span class="noti-title">Cập Nhật Chính Sách Ưu Đãi Cho Người Hiến Máu</span>
+        </div>
+        <p class="noti-content">
+          Bắt đầu từ tháng 7, tất cả người hiến máu sẽ được nhận thêm phiếu quà tặng và ưu tiên kiểm tra sức khỏe định kỳ miễn phí. Chi tiết sẽ được thông báo thêm trên website chính thức của chúng tôi.
+        </p>
+        <hr>
+      </div>
+      <div class="notification-item">
+        <div class="noti-header">
+          <img src="./assets/images/doctors/doctor3.jpeg" alt="Admin" class="noti-avatar">
+          <span class="noti-role admin">Admin</span>
+          <span class="noti-title">Cập Nhật Chính Sách Ưu Đãi Cho Người Hiến Máu</span>
+        </div>
+        <p class="noti-content">
+          Bắt đầu từ tháng 7, tất cả người hiến máu sẽ được nhận thêm phiếu quà tặng và ưu tiên kiểm tra sức khỏe định kỳ miễn phí. Chi tiết sẽ được thông báo thêm trên website chính thức của chúng tôi.
+        </p>
+        <hr>
+      </div>
+    </div>
+  </div>
+</section>
+    </main>
+
+    <!-- Footer -->
+    <div id="footer"></div>
+</body>
+</html>

@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Chỉnh sửa người dùng</title>
+
+    <!-- favicon -->
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="../assets/favicons/apple-icon-180x180.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="../assets/favicons/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="../assets/favicons/favicon-16x16.png"
+    />
+    <link rel="manifest" href="../assets/favicons/manifest.json" />
+    <!-- 'theme-color' is not supported in Firefox, Firefox for Android, Opera -->
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Akshar:wght@300..700&family=Inter:ital,wght@0,100..900;1,100..900&display=swap"
+      rel="stylesheet"
+    />
+
+    <!-- css -->
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/style_admin.css" />
+    <link rel="stylesheet" href="../css/edit_use.css" />
+
+    <!-- js -->
+    <script src="../js/jquery-3.7.1.min.js"></script>
+    <script src="../js/component_admin.js"></script>
+    <script src="../js/blood_donations_history_admin.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/example.js"></script>
+  </head>
+
+  <body>
+    <div class="container">
+      <div id="slide-bar"></div>
+      <main class="main-content">
+        <header
+          class="header"
+          style="
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+            padding: 10px 30px;
+            background-color: #f86969;
+          "
+        >
+          <div
+            class="admin-info"
+            style="display: flex; align-items: center; gap: 10px"
+          >
+            <span style="color: white; font-weight: bold">Admin</span>
+            <img
+              src="../assets/images/icon_admin/logout.png"
+              alt="logout"
+              style="width: 20px"
+            />
+          </div>
+        </header>
+
+        <section class="edit-user-section">
+          <h1 class="edit-title">CHỈNH SỬA NGƯỜI DÙNG</h1>
+          <form class="form-user">
+            <label>Họ Và Tên *</label>
+            <input type="text" placeholder="Nhập Họ Tên" required />
+
+            <label>Email *</label>
+            <input type="email" placeholder="Nhập Email" required />
+
+            <label>Mật Khẩu *</label>
+            <div class="password-group">
+              <input type="password" placeholder="***********" required />
+              <span class="toggle-eye">👁️</span>
+            </div>
+
+            <label>Số Điện Thoại *</label>
+            <input type="tel" placeholder="Số Điện Thoại" required />
+
+            <label>Địa Chỉ</label>
+            <input type="text" placeholder="Nhập Địa Chỉ" />
+
+            <div class="row">
+              <div class="col">
+                <label>Giới Tính *</label>
+                <select required>
+                  <option disabled selected>Giới Tính</option>
+                  <option>Nam</option>
+                  <option>Nữ</option>
+                </select>
+              </div>
+              <div class="col">
+                <label>Nhóm Máu *</label>
+                <select required>
+                  <option disabled selected>Nhóm Máu</option>
+                  <option>A+</option>
+                  <option>A-</option>
+                  <option>B+</option>
+                  <option>B-</option>
+                  <option>AB+</option>
+                  <option>AB-</option>
+                  <option>O+</option>
+                  <option>O-</option>
+                </select>
+              </div>
+            </div>
+
+            <button type="submit" class="btn-update">CẬP NHẬT</button>
+          </form>
+        </section>
+      </main>
+    </div>
+  </body>
+</html>

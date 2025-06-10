@@ -1,9 +1,9 @@
 $(function () {
   const images = [
-    '/fe/assets/images/banner/banner1.jpeg',
-    '/fe/assets/images/banner/banner2.jpeg',
-    '/fe/assets/images/banner/banner3.jpeg',
-    '/fe/assets/images/banner/banner4.jpeg',
+    'assets/images/banner/banner1.jpeg',
+    'assets/images/banner/banner2.jpeg',
+    'assets/images/banner/banner3.jpeg',
+    'assets/images/banner/banner4.jpeg',
   ];
 
   let current = 0;

@@ -139,11 +139,16 @@ $(document).ready(function () {
           contentType: 'application/json',
           data: JSON.stringify(formData),
           success: function(response) {
-            alert('Đăng ký thành công!');
-            // Chuyển sang tab đăng nhập
-            $('.tab[data-target="#login-form"]').click();
-            // Reset form
-            $('#register-form')[0].reset();
+            // Lưu thông tin đăng nhập từ response
+            if (response.token) {
+              localStorage.setItem('authToken', response.token);
+              localStorage.setItem('userEmail', response.email);
+              localStorage.setItem('userName', response.fullName);
+              localStorage.setItem('role', response.role);
+              
+              // Chuyển đến trang chủ
+              window.location.href = 'trangChu.html';
+            }
           },
           error: function(xhr) {
             alert(xhr.responseText || 'Có lỗi xảy ra khi đăng ký. Vui lòng thử lại.');
@@ -194,16 +199,16 @@ $(document).ready(function () {
       contentType: 'application/json',
       data: JSON.stringify(loginData),
       success: function(response) {
-        // Store authentication token
+        // Store authentication token and user info
         if (response.token) {
           localStorage.setItem('authToken', response.token);
+          localStorage.setItem('userEmail', response.email);
+          localStorage.setItem('userName', response.fullName);
+          localStorage.setItem('role', response.role);
+          
+          // Redirect to home page after successful login
+          window.location.href = 'trangChu.html';
         }
-        if (response.user) {
-          localStorage.setItem('userData', JSON.stringify(response.user));
-        }
-        
-        alert('Đăng nhập thành công!');
-        window.location.href = 'trangChu.html';
       },
       error: function(xhr) {
         let errorMessage = 'Email hoặc mật khẩu không đúng!';

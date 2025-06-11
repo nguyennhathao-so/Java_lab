@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Đăng ký & Tra cứu máu</title>
+  <title>Dịch vụ hiến máu</title>
 
   <!-- Favicon -->
   <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicons/apple-icon-180x180.png" />
@@ -23,411 +23,40 @@
   <style>
     body {
       font-family: 'Inter', sans-serif;
-      background-color: #f1f1f1;
+      background-color: #ffffff;
       margin: 0;
       padding: 0;
-    }
-
-    
-
-    .tra-cuu-container {
-      margin-top: 50px;
-    }
-
-    .tra-cuu-container h2 {
-      font-size: 20px;
-      color: #d32f2f;
-      font-weight: 600;
-      margin-bottom: 20px;
-    }
-
-    .tra-cuu-form {
-      display: flex;
-      flex-direction: column;
-      gap: 20px;
-      margin-bottom: 20px;
-    }
-
-    .tra-cuu-form select {
-      width: 520px;
-      height: 60px;
-      padding: 12px;
-      font-size: 14px;
-      border: 1px solid #ccc;
-      border-radius: 6px;
-      
-    }
-
-    .radio-group {
-      display: flex;
-      gap: 20px;
-    }
-
-    .radio-group label {
-      font-size: 14px;
-    }
-
-    table {
-      width: 100%;
-      border-collapse: collapse;
-      margin-top: 10px;
-    }
-
-    table th, table td {
-      border: 1px solid #ddd;
-      padding: 10px;
-      font-size: 14px;
-      text-align: center;
-    }
-
-    table th {
-      background-color: #f8bebe;
-      color: #000;
-    }
-
-    .btn-tra-cuu {
-      display: block;
-      margin: 20px auto;
-      padding: 10px 30px;
-      background-color: #a32121;
-      color: #fff;
-      border: none;
-      border-radius: 6px;
-      font-size: 16px;
-      cursor: pointer;
-    }
-
-    .btn-tra-cuu:hover {
-      background-color: #851818;
-    }
-    
-    /* Khung bao từng phần */
-.box-section {
-  background-color: #fff;
-  padding: 24px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-  margin-bottom: 40px;
-  box-sizing: border-box;
-}
-
-/* Tìm kiếm máu wrapper */
-.search-wrapper {
-  width: 1282px;
-  height: 1451px;
-  margin: 0 auto;
-}
-
-/* Đăng ký cần máu wrapper */
-.register-wrapper {
-  width: 1296px;
-  height: 872px;
-  margin: 0 auto;
-}
-
-/* Ô input trong form */
-.form-distance-search .form-row input,
-.blood-form .form-row input,
-.blood-form .form-row select {
-  width: 520px;
-  height: 40px;
-  padding: 9px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-/* Bảng chứa dữ liệu */
-.table-wrapper {
-  width: 1165px;
-  height: 737px;
-  overflow: hidden;
-  margin: 20px auto;
-  background-color: #dcdcdc;
-  border-radius: 6px;
-  padding: 10px;
-  box-sizing: border-box;
-}
-
-.table-wrapper table {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: #fff;
-}
-
-.table-wrapper th {
-  background-color: #f8bebe;
-  padding: 12px;
-  font-weight: 600;
-}
-
-.table-wrapper td {
-  padding: 10px;
-  text-align: center;
-  border: 1px solid #ccc;
-}
-
-/* Dòng trống màu xám */
-.empty-row td {
-  background-color: #e0e0e0;
-  height: 40px;
-}
-
-/* Radio nhóm */
-.radio-group {
-  display: flex;
-  align-items: center;
-  gap: 20px;
-  padding-top: 10px;
-}
-
-/* Nút */
-.btn-tra-cuu {
-  background-color: #a32121;
-  color: #fff;
-  padding: 12px 30px;
-  border: none;
-  border-radius: 6px;
-  font-size: 16px;
-  cursor: pointer;
-  margin-top: 20px;
-}
-
-.btn-tra-cuu:hover {
-  background-color: #851818;
-}
-
-
-/* Đăng ký cần máu */
-.box-section1 {
-  background-color: #fff;
-  padding: 32px;
-  border-radius: 12px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-  width: 1292px;       /* Cập nhật width */
-  height: 600px;       /* Cập nhật height */
-  margin: 0 auto;
-  box-sizing: border-box;
-  overflow-y: auto;    /* Thêm để tránh tràn nội dung */
-}
-
-
-.blood-form1 {
-  display: flex;
-  flex-direction: column;
-  gap: 20px;
-  
-}
-
-.form-row1 {
-  display: flex;
-  gap: 20px;
-  flex-wrap: wrap;
-}
-
-.form-row1 input,
-.form-row1 select {
-  flex: 1;
-  padding: 14px;
-  font-size: 14px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  height: 30px;
-  width:50px; 
-
-}
-
-input[type="date"] {
-  font-family: 'Inter', sans-serif;
-}
-
-.radio-group1 {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  font-size: 14px;
-  flex-wrap: wrap;
-  margin-top: 10px;
-}
-
-.radio-green1 {
-  color: green;
-  font-weight: 500;
-}
-
-.radio-gray1 {
-  color: #333;
-  font-weight: 500;
-}
-
-.submit-wrapper1 {
-  text-align: center;
-  margin-top: 20px;
-}
-
-.submit-btn1 {
-  background-color: #b71c1c;
-  color: white;
-  border: none;
-  padding: 14px 36px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 600;
-  cursor: pointer;
-  transition: 0.3s;
-}
-
-.submit-btn1:hover {
-  background-color: #a10f0f;
-}
-
-
-
-
-.outer-wrapper3 {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  padding: 40px 0;
-}
-
-.search-container3 {
-  width: 1242px;
-  height: 850px;
-  background-color: white; /* Khung trắng */
-  border-radius: 10px;
-  padding: 30px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.search-title3 {
-  font-size: 20px;
-  font-weight: bold;
-  color: red;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.search-form3 {
-  margin-top: 20px;
-}
-
-.row3 {
-  display: flex;
-  justify-content: space-between;
-  margin-bottom: 20px;
-}
-
-.form-group3 {
-  width: 553px;
-  height: 90px;
-  display: flex;
-  flex-direction: column;
-}
-
-.form-group3 label {
-  font-weight: bold;
-  margin-bottom: 5px;
-}
-
-.form-group3 input,
-.form-group3 select {
-  height: 100%;
-  padding: 10px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 5px;
-}
-
-.table-container3 {
-  width: 1230px;
-  height: 500px;
-  margin: 30px auto 0;
-  background-color: #999; /* Phần trống màu xám đậm */
-  border-radius: 5px;
-  overflow: auto;
-}
-
-.result-table3 {
-  width: 100%;
-  border-collapse: collapse;
-  background-color: white;
-}
-
-.result-table3 thead {
-  background-color: #f8c8c8;
-}
-
-.result-table3 th,
-.result-table3 td {
-  border: 1px solid #aaa;
-  padding: 10px;
-  text-align: center;
-}
-
-.search-button3 {
-  margin-top: 30px;
-  background-color: #b22222;
-  color: white;
-  padding: 10px 30px;
-  font-size: 18px;
-  border: none;
-  border-radius: 10px;
-  cursor: pointer;
-  justify-content: center; /* Căn giữa theo chiều ngang */
-}
-
-.search-button3:hover {
-  background-color: #8b0000;
-}
-
-html, body {
-  height: 100%;
-  margin: 0;
-  padding: 0;
-  background-color: #f1f1f1;
-}
-
-.main-container {
-      background-color: #fff;
-      width: 1296px;
-      min-height: 300px;
-      margin: 40px auto;
-      border-radius: 12px;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-      padding: 40px;
-      box-sizing: border-box;
+      height: 100%;
     }
 
     .title-page {
       text-align: center;
       font-size: 28px;
       font-weight: 600;
-      margin-bottom: 20px;
-      margin-top: 60px;
+      margin: 40px 0;
+      color: #333;
     }
 
     .service-buttons {
       display: flex;
       justify-content: center;
-      flex-wrap: wrap;
-      gap: 12px;
-      margin-bottom: 30px;
+      gap: 20px;
+      margin-bottom: 40px;
+      padding: 0 20px;
     }
 
     .btn-service {
       background-color: #ffebee;
       border: 1px solid #f44336;
       color: #d32f2f;
-      padding: 10px 18px;
+      padding: 10px 20px;
       font-size: 14px;
       border-radius: 30px;
       cursor: pointer;
       transition: 0.3s;
       display: flex;
       align-items: center;
-      gap: 6px;
+      gap: 8px;
     }
 
     .btn-service:hover {
@@ -435,195 +64,171 @@ html, body {
       color: white;
     }
 
-    .thongbao-container h2 {
-      font-size: 22px;
+    /* Form đăng ký hiến máu */
+    .blood-form {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .form-title {
       display: flex;
       align-items: center;
       gap: 10px;
-      margin-bottom: 20px;
+      margin-bottom: 30px;
+    }
+
+    .form-title img {
+      width: 24px;
+      height: 24px;
+    }
+
+    .form-title h2 {
+      font-size: 24px;
       color: #d32f2f;
-    }
-
-    .thongbao-container h2 img {
-      width: 36px;
-      height: 36px;
-    }
-
-    .blood-form {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
+      margin: 0;
     }
 
     .form-row {
       display: flex;
-      flex-wrap: wrap;
-      gap: 16px;
+      gap: 20px;
+      margin-bottom: 20px;
     }
 
-    .form-row input,
-    .form-row select {
+    .form-input {
       flex: 1;
-      padding: 6px;
-      border: 1px solid #ccc;
+      height: 45px;
+      padding: 0 15px;
+      border: 1px solid #ddd;
       border-radius: 6px;
-      font-size: 14px;
-      font-family: 'Inter', sans-serif;
-      min-width: 200px;
+      font-size: 16px;
     }
 
-    .form-row select.select-fixed {
-      width: 266px;
-      height: 60px;
+    .form-input:focus {
+      outline: none;
+      border-color: #d32f2f;
     }
 
-    .form-row input[type="date"] {
-      height: 60px;
-      padding: 0 12px;
+    /* Form tra cứu nhóm máu */
+    .blood-search {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 800px;
+      margin: 40px auto;
     }
 
-    .submit-wrapper {
-      text-align: center;
+    .blood-search select {
+      width: 100%;
+      height: 45px;
+      padding: 0 15px;
+      border: 1px solid #ddd;
+      border-radius: 6px;
+      font-size: 16px;
+      margin-bottom: 20px;
+      appearance: none;
+      background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+      background-repeat: no-repeat;
+      background-position: right 15px center;
+      background-size: 15px;
+    }
+
+    .radio-group {
+      display: flex;
+      gap: 30px;
+      margin-bottom: 20px;
+    }
+
+    .radio-group label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      color: #333;
+    }
+
+    .blood-table {
+      width: 100%;
+      border-collapse: collapse;
       margin-top: 20px;
     }
 
-    .submit-btn {
-      background-color: #d32f2f;
-      color: white;
-      border: none;
-      padding: 10px 30px;
+    .blood-table th,
+    .blood-table td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .blood-table th {
+      background: #f8bebe;
+      font-weight: 500;
+    }
+
+    /* Form tìm kiếm theo khoảng cách */
+    .distance-search {
+      background: white;
+      padding: 30px;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      max-width: 800px;
+      margin: 40px auto;
+    }
+
+    .search-form {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin-bottom: 30px;
+    }
+
+    .search-form input,
+    .search-form select {
+      width: 100%;
+      height: 45px;
+      padding: 0 15px;
+      border: 1px solid #ddd;
       border-radius: 6px;
       font-size: 16px;
+    }
+
+    .search-results {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+
+    .search-results th,
+    .search-results td {
+      border: 1px solid #ddd;
+      padding: 12px;
+      text-align: center;
+    }
+
+    .search-results th {
+      background: #f8bebe;
       font-weight: 500;
+    }
+
+    .btn-submit {
+      background: #d32f2f;
+      color: white;
+      border: none;
+      padding: 12px 40px;
+      font-size: 16px;
+      border-radius: 6px;
       cursor: pointer;
-      transition: 0.3s;
+      margin: 20px auto;
+      display: block;
     }
 
-    .submit-btn:hover {
-      background-color: #b71c1c;
+    .btn-submit:hover {
+      background: #b71c1c;
     }
-
-.search-button-wrapper3 {
-  display: flex;
-  justify-content: center; /* Căn giữa theo chiều ngang */
-  margin-top: 20px; /* Khoảng cách phía trên nếu cần */
-}
-
-
-/* Nền ngoài cùng */
-body {
-  background-color: #f1f1f1;
-  margin: 0;
-  font-family: Arial, sans-serif;
-}
-
-/* Khung trắng bao bọc phần đăng ký */
-.box-section1 {
-  background-color: #ffffff;
-  width: 1296px;
-  height: 740px;
-  margin: 40px auto;
-  padding: 40px 60px;
-  box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-  border-radius: 12px;
-  box-sizing: border-box;
-}
-
-/* Tiêu đề */
-.box-section1 h2 {
-  font-size: 28px;
-  margin-bottom: 30px;
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  color: #d9534f;
-}
-
-.box-section1 h2 img {
-  width: 28px;
-  height: 28px;
-}
-
-/* Form */
-.blood-form1 input,
-.blood-form1 select {
-  width: 165px;
-  height: 60px;
-  padding: 12px 18px;
-  font-size: 16px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  box-sizing: border-box;
-  margin-bottom: 20px;
-}
-
-.blood-form1 select {
-  background-color: #fff;
-}
-
-/* Các hàng trong form */
-.form-row1,
-.form-row2,
-.form-row-luongmau,
-.form-row-cuoi {
-  display: flex;
-  gap: 20px;
-  margin-bottom: 20px;
-}
-
-.form-row1 input,
-.form-row2 input,
-.form-row2 select,
-.form-row-luongmau input,
-.form-row-cuoi input {
-  flex: 1;
-}
-
-/* Nhóm radio */
-.radio-group1 {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  flex-wrap: wrap;
-}
-
-.radio-group1 label {
-  font-size: 16px;
-  color: #333;
-}
-
-.radio-green1 {
-  color: green;
-  font-weight: bold;
-}
-
-.radio-gray1 {
-  color: gray;
-  font-weight: bold;
-}
-
-/* Nút submit */
-.submit-wrapper1 {
-  text-align: center;
-  margin-top: 30px;
-}
-
-.submit-btn1 {
-  background-color: #d9534f;
-  color: white;
-  border: none;
-  padding: 15px 40px;
-  font-size: 18px;
-  border-radius: 8px;
-  cursor: pointer;
-  transition: background-color 0.3s ease;
-}
-
-.submit-btn1:hover {
-  background-color: #c9302c;
-}
-
-
   </style>
 
   <!-- JS -->
@@ -655,101 +260,96 @@ body {
   <main>
     <h1 class="title-page">DỊCH VỤ</h1>
     <div class="service-buttons">
-          <button class="btn-service" onclick="scrollToSection('hien-mau')">Đăng Ký Hiến Máu</button>
-          <button class="btn-service" onclick="scrollToSection('tra-cuu')">Tra Cứu Nhóm Máu</button>
-          <button class="btn-service" onclick="scrollToSection('tim-kiem')">Tìm Kiếm Máu Theo Khoảng Cách</button>
-          <button class="btn-service" onclick="scrollToSection('can-mau')">Đăng Ký Cần Máu Khẩn Cấp</button>
-
-        </div>
-    <div class="main-container">
-      
-      <section id="hien-mau" class="dkhm-wrapper">
-        
-
-      
-
-        <div class="thongbao-container">
-          <h2>
-            <img src="./assets/images/icon/syringe-svgrepo-com.svg" alt="Icon hiến máu" />
-            ĐĂNG KÝ HIẾN MÁU
-          </h2>
-
-          <form class="blood-form" action="#" method="post">
-            <div class="form-row">
-              <input type="text" name="hoten" placeholder="Nhập Họ Tên" required />
-              <input type="email" name="email" placeholder="Nhập Email" required />
-            </div>
-
-            <div class="form-row">
-              <input type="tel" name="sdt" placeholder="Số Điện Thoại" required />
-              <input type="text" name="diachi" placeholder="Nhập Địa Chỉ" required />
-            </div>
-
-            <div class="form-row">
-              <select name="gioitinh" required class="select-fixed">
-                <option value="">Giới Tính</option>
-                <option value="Nam">Nam</option>
-                <option value="Nữ">Nữ</option>
-              </select>
-
-              <select name="nhommau" required class="select-fixed">
-                <option value="">Nhóm Máu</option>
-                <option value="A">A</option>
-                <option value="B">B</option>
-                <option value="AB">AB</option>
-                <option value="O">O</option>
-              </select>
-
-              <input type="date" name="ngayhien" required />
-            </div>
-
-            <div class="submit-wrapper">
-              <button type="submit" class="submit-btn">Submit</button>
-            </div>
-          </form>
-        </div>
-
-        <!-- Bổ sung giao diện tra cứu -->
-        
-      </section>
+      <button class="btn-service" onclick="scrollToSection('hien-mau')">
+        <img src="./assets/images/icon/syringe-svgrepo-com.svg" alt="Icon" width="16">
+        Đăng Ký Hiến Máu
+      </button>
+      <button class="btn-service" onclick="scrollToSection('tra-cuu')">
+        <img src="./assets/images/icon/find-glass-interface-svgrepo-com.svg" alt="Icon" width="16">
+        Tra Cứu Nhóm Máu
+      </button>
+      <button class="btn-service" onclick="scrollToSection('tim-kiem')">
+        <img src="./assets/images/icon/distance-apart-svgrepo-com.svg" alt="Icon" width="16">
+        Tìm Kiếm Máu Theo Khoảng Cách
+      </button>
+      <button class="btn-service" onclick="scrollToSection('can-mau')">
+        <img src="./assets/images/icon/emergency-svgrepo-com.svg" alt="Icon" width="16">
+        Đăng Ký Cần Máu
+      </button>
     </div>
-
-
-
-
-
-    <!--Tra cứu nhóm máu -->
-    <div id="tra-cuu" class="main-container">
+    <div class="main-container" style="margin:0 auto 80px">
       
-      <section class="dkhm-wrapper">
-        <div class="tra-cuu-container">
-          <h2>🔍 TRA CỨU NHÓM MÁU</h2>
-          <form class="tra-cuu-form">
-            <select name="nhommau">
-              <option>Nhập Nhóm</option>
-              <option>A+</option>
-              <option>A-</option>
-              <option>B+</option>
-              <option>B-</option>
-              <option>AB+</option>
-              <option>AB-</option>
-              <option>O+</option>
-              <option>O-</option>
+      <!-- Form đăng ký hiến máu -->
+      <div id="hien-mau" class="blood-form">
+        <div class="form-title">
+          <img src="./assets/images/icon/syringe-svgrepo-com.svg" alt="Icon">
+          <h2>ĐĂNG KÝ HIẾN MÁU</h2>
+        </div>
+        <form>
+          <div class="form-row">
+            <input type="text" class="form-input" placeholder="Nhập Họ Tên">
+            <input type="email" class="form-input" placeholder="Nhập Email">
+          </div>
+          <div class="form-row">
+            <input type="tel" class="form-input" placeholder="Số Điện Thoại">
+            <input type="text" class="form-input" placeholder="Địa Chỉ">
+          </div>
+          <div class="form-row">
+            <select class="form-input">
+              <option value="">Giới Tính</option>
+              <option value="nam">Nam</option>
+              <option value="nu">Nữ</option>
             </select>
-
-            <div class="radio-group">
-              <label><input type="radio" name="loaichuyentype" checked /> Toàn Phần</label>
-              <label><input type="radio" name="loaichuyentype" /> Theo Thành Phần Máu</label>
-            </div>
-
-            <select name="loaimau">
-              <option>Nhập Loại Thành Phần</option>
-              <option>Hồng Cầu</option>
-              <option>Tiểu Cầu</option>
+            <select class="form-input">
+              <option value="">Nhóm Máu</option>
+              <option value="A">A</option>
+              <option value="B">B</option>
+              <option value="AB">AB</option>
+              <option value="O">O</option>
             </select>
-          </form>
+            <input type="date" class="form-input">
+          </div>
+          <button type="submit" class="btn-submit">Submit</button>
+        </form>
+      </div>
 
-          <table>
+      <!-- Form tra cứu nhóm máu -->
+      <div id="tra-cuu" class="blood-search">
+        <div class="form-title">
+          <img src="./assets/images/icon/find-glass-interface-svgrepo-com.svg" alt="Icon">
+          <h2>TRA CỨU NHÓM MÁU</h2>
+        </div>
+        <form>
+          <select>
+            <option value="">Nhập Nhóm Máu</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+          </select>
+
+          <div class="radio-group">
+            <label>
+              <input type="radio" name="type" checked>
+              Toàn Phần
+            </label>
+            <label>
+              <input type="radio" name="type">
+              Theo Thành Phần Máu
+            </label>
+          </div>
+
+          <select>
+            <option value="">Nhập Loại Thành Phần Máu</option>
+            <option value="hong-cau">Hồng Cầu</option>
+            <option value="tieu-cau">Tiểu Cầu</option>
+          </select>
+
+          <table class="blood-table">
             <thead>
               <tr>
                 <th>Nhóm máu người nhận</th>
@@ -780,47 +380,26 @@ body {
             </tbody>
           </table>
 
-          <button class="btn-tra-cuu">Tra Cứu</button>
-        </div>
-
-      </section>
-    </div>
-
-
-
-
-
-
-<!-- TÌM KIẾM MÁU THEO KHOẢNG CÁCH -->
-<div id="tim-kiem" class="outer-wrapper3">
-  <div class="search-container3">
-    <h2 class="search-title3">
-      <i class="fas fa-user-friends"></i>
-      <img src="./assets/images/icon/distance-apart-svgrepo-com.svg"/> TÌM KIẾM MÁU THEO KHOẢNG CÁCH
-    </h2>
-    <form class="search-form3">
-      <div class="row3">
-        <div class="form-group3">
-          <label>Loại Tìm Kiếm</label>
-          <select><option>Nhập Nhóm Máu</option></select>
-        </div>
-        <div class="form-group3">
-          <label>Khoảng Cách Tối Đa (km)</label>
-          <input type="text" placeholder="Nhập Khoảng Cách">
-        </div>
+          <button type="submit" class="btn-submit">Tra Cứu</button>
+        </form>
       </div>
-      <div class="row3">
-        <div class="form-group3">
-          <label>Nhập Tên</label>
+
+      <!-- Form tìm kiếm theo khoảng cách -->
+      <div id="tim-kiem" class="distance-search">
+        <div class="form-title">
+          <img src="./assets/images/icon/distance-apart-svgrepo-com.svg" alt="Icon">
+          <h2>TÌM KIẾM MÁU THEO KHOẢNG CÁCH</h2>
+        </div>
+        <form class="search-form">
+          <select>
+            <option value="">Nhập Nhóm Máu</option>
+          </select>
+          <input type="text" placeholder="Khoảng Cách Tối Đa (km)">
           <input type="text" placeholder="Nhập Tên">
-        </div>
-        <div class="form-group3">
-          <label>Vị Trí Hiện (Địa Chỉ Hoặc Tọa Độ)</label>
-          <input type="text" placeholder="Nhập Vị Trí">
-        </div>
-      </div>
-      <div class="table-container3">
-        <table class="result-table3">
+          <input type="text" placeholder="Vị Trí Hiện (Địa Chỉ Hoặc Tọa Độ)">
+        </form>
+
+        <table class="search-results">
           <thead>
             <tr>
               <th>Tên</th>
@@ -844,76 +423,70 @@ body {
             </tr>
           </tbody>
         </table>
+
+        <button type="submit" class="btn-submit">Tìm Kiếm</button>
       </div>
-      <div class="search-button-wrapper3"> <button 
-        type="submit" class="search-button3">Tìm Kiếm</button></div>
-      
-    </form>
-  </div>
-</div>
 
-
-
-
-
-<div id="can-mau" class="box-section1">
-  <h2>
-    <img src="./assets/images/icon/emergency-svgrepo-com.svg" alt="Icon"> 
-    ĐĂNG KÝ CẦN MÁU
-  </h2>
-  <form class="blood-form1">
-    <div class="form-row1">
-      <input type="text" placeholder="Nhập Tên Người" name="tennguoi">
-      <input type="text" placeholder="Số Điện Thoại" name="sdt">
-    </div>
-    <div class="form-row2">
-      <select name="nhommau">
-        <option value="">Chọn Nhóm Máu</option>
-        <option value="A+">A+</option>
-        <option value="A-">A-</option>
-        <option value="B+">B+</option>
-        <option value="B-">B-</option>
-        <option value="AB+">AB+</option>
-        <option value="AB-">AB-</option>
-        <option value="O+">O+</option>
-        <option value="O-">O-</option>
-      </select>
-      <input type="date" name="thoigian" placeholder="Thời Gian Khẩn Cấp">
-    </div>
-    <div class="form-row-luongmau">
-      <input type="text" placeholder="Nhập Vị Trí" name="vitri">
-      <div class="radio-group1">
-        <label>Khẩn Cấp Không?</label>
-        <label><input type="radio" name="khancap" value="yes"> <span class="radio-green1">Có</span></label>
-        <label><input type="radio" name="khancap" value="no" checked> <span class="radio-gray1">Không</span></label>
+      <!-- Form đăng ký cần máu -->
+      <div id="can-mau" class="blood-form">
+        <div class="form-title">
+          <img src="./assets/images/icon/emergency-svgrepo-com.svg" alt="Icon">
+          <h2>ĐĂNG KÝ CẦN MÁU</h2>
+        </div>
+        <form>
+          <div class="form-row">
+            <input type="text" class="form-input" placeholder="Nhập Tên Người">
+            <input type="tel" class="form-input" placeholder="Số Điện Thoại">
+          </div>
+          <div class="form-row">
+            <select class="form-input">
+              <option value="">Chọn Nhóm Máu</option>
+              <option value="A+">A+</option>
+              <option value="A-">A-</option>
+              <option value="B+">B+</option>
+              <option value="B-">B-</option>
+              <option value="AB+">AB+</option>
+              <option value="AB-">AB-</option>
+              <option value="O+">O+</option>
+              <option value="O-">O-</option>
+            </select>
+            <input type="date" class="form-input">
+          </div>
+          <div class="form-row">
+            <input type="text" class="form-input" placeholder="Nhập Vị Trí">
+          </div>
+          <div class="form-row">
+            <div class="radio-group" style="width: 100%">
+              <label>Khẩn Cấp Không?</label>
+              <label>
+                <input type="radio" name="emergency">
+                <span style="color: #28a745">Có</span>
+              </label>
+              <label>
+                <input type="radio" name="emergency" checked>
+                <span>Không</span>
+              </label>
+            </div>
+          </div>
+          <div class="form-row">
+            <input type="number" class="form-input" placeholder="Nhập Số Lượng Cần (ml)">
+          </div>
+          <button type="submit" class="btn-submit">Đăng Ký</button>
+        </form>
       </div>
     </div>
-    <div class="form-row-cuoi">
-      <input type="number" placeholder="Nhập Số Lượng Cần (ml)" name="soluong">
-    </div>
-    <div class="submit-wrapper1">
-      <button class="submit-btn1" type="submit">Đăng Ký</button>
-    </div>
-  </form>
-</div>
-
-
-
-
- 
   </main>
 
   <!-- Footer -->
   <div id="footer"></div>
 
   <script>
-  function scrollToSection(id) {
-    const section = document.getElementById(id);
-    if (section) {
-      section.scrollIntoView({ behavior: 'smooth' });
+    function scrollToSection(id) {
+      const section = document.getElementById(id);
+      if (section) {
+        section.scrollIntoView({ behavior: 'smooth' });
+      }
     }
-  }
-</script>
-
+  </script>
 </body>
 </html>

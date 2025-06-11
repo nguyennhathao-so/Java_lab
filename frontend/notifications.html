@@ -100,6 +100,21 @@ hr {
 
     <!-- JS -->
     <script src="./js/jquery-3.7.1.min.js"></script>
+    <script>
+      // Check if user is authenticated
+      function checkAuth() {
+        const authToken = localStorage.getItem('authToken');
+        const userEmail = localStorage.getItem('userEmail');
+        
+        if (!authToken || !userEmail) {
+          // Redirect to login if not authenticated
+          window.location.href = 'signin_signup.html';
+        }
+      }
+      
+      // Run check when page loads
+      document.addEventListener('DOMContentLoaded', checkAuth);
+    </script>
     <script src="./js/component.js"></script>
     <script src="./js/api.js"></script>
     <script src="./js/example.js"></script>

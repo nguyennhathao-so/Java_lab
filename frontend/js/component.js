@@ -4,7 +4,7 @@ $(document).ready(function () {
     const userEmail = localStorage.getItem('userEmail');
     const userName = localStorage.getItem('userName');
     const authToken = localStorage.getItem('authToken');
-    const role = localStorage.getItem('role');
+    const role = localStorage.getItem('role')?.toUpperCase();
 
     console.log('User info from localStorage:', { // Debug log
       email: userEmail,
@@ -18,16 +18,28 @@ $(document).ready(function () {
       $('#guest-view').hide();
       $('#user-view').show();
       $('#user-email').text(userName || userEmail);
+
+      // Show service and notification links for logged in users
+      $('#service-link').show();
+      $('#notification-link').show();
+
+      // Kiểm tra role và hiển thị/ẩn link admin
+      if (role === "ADMIN" || role === "STAFF") {
+        console.log('User is admin/staff, showing admin link'); // Debug log
+        $('#admin-link').show();
+      } else {
+        console.log('User is not admin/staff, hiding admin link'); // Debug log
+        $('#admin-link').hide();
+      }
     } else {
       console.log('User is not logged in, showing guest view...'); // Debug log
       $('#guest-view').show();
       $('#user-view').hide();
-    }
-
-    // Kiểm tra role admin
-    if (role === "admin") {
-      const adminLink = $('<a href="admin/index.html">Quản lý</a>');
-      $("nav").prepend(adminLink);
+      $('#admin-link').hide(); // Ẩn link admin khi chưa đăng nhập
+      
+      // Hide service and notification links for guests
+      $('#service-link').hide();
+      $('#notification-link').hide();
     }
   }
 

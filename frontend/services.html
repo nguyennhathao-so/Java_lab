@@ -628,6 +628,21 @@ body {
 
   <!-- JS -->
   <script src="js/jquery-3.7.1.min.js"></script>
+  <script>
+    // Check if user is authenticated
+    function checkAuth() {
+      const authToken = localStorage.getItem('authToken');
+      const userEmail = localStorage.getItem('userEmail');
+      
+      if (!authToken || !userEmail) {
+        // Redirect to login if not authenticated
+        window.location.href = 'signin_signup.html';
+      }
+    }
+    
+    // Run check when page loads
+    document.addEventListener('DOMContentLoaded', checkAuth);
+  </script>
   <script src="js/component.js"></script>
   <script src="js/form-toggle.js"></script>
 </head>
@@ -655,7 +670,7 @@ body {
 
         <div class="thongbao-container">
           <h2>
-            <img src="assets/images/icon/syringe-svgrepo-com.svg" alt="Icon hiến máu" />
+            <img src="./assets/images/icon/syringe-svgrepo-com.svg" alt="Icon hiến máu" />
             ĐĂNG KÝ HIẾN MÁU
           </h2>
 
@@ -781,7 +796,7 @@ body {
   <div class="search-container3">
     <h2 class="search-title3">
       <i class="fas fa-user-friends"></i>
-      <img src="fe/assets/images/icon/distance-apart-svgrepo-com.svg"/> TÌM KIẾM MÁU THEO KHOẢNG CÁCH
+      <img src="./assets/images/icon/distance-apart-svgrepo-com.svg"/> TÌM KIẾM MÁU THEO KHOẢNG CÁCH
     </h2>
     <form class="search-form3">
       <div class="row3">
@@ -843,7 +858,7 @@ body {
 
 <div id="can-mau" class="box-section1">
   <h2>
-    <img src="fe/assets/images/icon/emergency-svgrepo-com.svg" alt="Icon"> 
+    <img src="./assets/images/icon/emergency-svgrepo-com.svg" alt="Icon"> 
     ĐĂNG KÝ CẦN MÁU
   </h2>
   <form class="blood-form1">

@@ -144,10 +144,10 @@ $(document).ready(function () {
               localStorage.setItem('authToken', response.token);
               localStorage.setItem('userEmail', response.email);
               localStorage.setItem('userName', response.fullName);
-              localStorage.setItem('role', response.role);
+              localStorage.setItem('role', response.role?.toUpperCase());
               
               // Chuyển đến trang chủ
-              window.location.href = 'trangChu.html';
+              window.location.href = 'home.html';
             }
           },
           error: function(xhr) {
@@ -204,10 +204,10 @@ $(document).ready(function () {
           localStorage.setItem('authToken', response.token);
           localStorage.setItem('userEmail', response.email);
           localStorage.setItem('userName', response.fullName);
-          localStorage.setItem('role', response.role);
+          localStorage.setItem('role', response.role?.toUpperCase());
           
           // Redirect to home page after successful login
-          window.location.href = 'trangChu.html';
+          window.location.href = 'home.html';
         }
       },
       error: function(xhr) {

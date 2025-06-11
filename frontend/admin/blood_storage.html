@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Kho dự trữ máu</title>
+
+    <!-- favicon -->
+    <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicons/apple-icon-180x180.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="../assets/favicons/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="../assets/favicons/favicon-16x16.png" />
+    <link rel="manifest" href="../assets/favicons/manifest.json" />
+    <meta name="theme-color" content="#ffffff" />
+
+    <!-- font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Akshar:wght@300..700&family=Inter:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet" />
+
+    <!-- css -->
+    <link rel="stylesheet" href="../css/reset.css" />
+    <link rel="stylesheet" href="../css/style_admin.css" />
+
+    <!-- js -->
+    <script src="../js/jquery-3.7.1.min.js"></script>
+    <script src="../js/component_admin.js"></script>
+    <script src="../js/blood_donations_history_admin.js"></script>
+
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            max-width: 100%;
+            font-family: 'Inter', sans-serif;
+            background-color: #f6f6f6;
+            display: flex;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+        }
+
+        #slide-bar {
+            width: 240px;
+            background-color: #fff;
+            border-right: 1px solid #ddd;
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            overflow-y: auto;
+        }
+
+
+        /* Nhóm máu */
+        .blood-summary {
+            padding: 30px 40px;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            /* khoảng cách giữa các khối */
+        }
+
+
+        .blood-types {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .blood-card {
+            width: 393px;
+            height: 174px;
+            background: #fff;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            position: relative;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 24px;
+        }
+
+        .blood-card span {
+            font-size: 24px;
+        }
+
+        .blood-card img {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            width: 50px;
+            height: auto;
+        }
+
+        .blood-card strong {
+            position: absolute;
+            bottom: 10px;
+            left: 10px;
+            font-size: 18px;
+            font-weight: normal;
+        }
+
+        /* Tổng quan thống kê */
+        .summary-stats {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: #fff;
+            border-radius: 6px;
+            position: relative;
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+            height: 174px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding-left: 20px;
+        }
+
+        .stat-card p {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 500;
+            color: #333;
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(-50%);
+        }
+
+        .stat-card strong {
+            font-size: 20px;
+            font-weight: bold;
+            position: absolute;
+            bottom: 15px;
+            left: 20px;
+        }
+
+        .stat-card img {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            width: 32px;
+            height: 32px;
+        }
+
+        .bloodquantity_update {
+            font-size: 30px;
+            font-weight: bold;
+            /* đúng cú pháp */
+            text-align: center;
+        }
+
+
+        .note {
+            font-size: 17px;
+            color: red;
+            text-align: right;
+            margin-top: 10px;
+            margin-bottom: 10px;
+            /* cách ra dưới */
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div id="slide-bar">
+            <!-- Nội dung slidebar nếu có -->
+        </div>
+
+        <main class="main-content">
+            <header class="header">
+                <h1>KHO DỰ TRỮ MÁU</h1>
+                <div class="admin-info" style="display: flex; align-items: center; gap: 10px;">
+                    <span>Admin</span>
+                    <img src="../assets/images/icon_admin/logout.png" alt="logout" style="width: 20px" />
+                </div>
+            </header>
+
+            <section class="blood-summary">
+                <div class="blood-types">
+                    <div class="blood-card"><span>A+</span><img src="../assets/images/icon/blood-drop-svgrepo-com.svg"
+                            alt="drop"><strong>1</strong></div>
+                    <div class="blood-card"><span>A-</span><img src="../assets/images/icon/blood-drop-svgrepo-com.svg"
+                            alt="drop"><strong>5</strong></div>
+                    <div class="blood-card"><span>B+</span><img src="../assets/images/icon/blood-drop-svgrepo-com.svg"
+                            alt="drop"><strong>23</strong></div>
+                    <div class="blood-card"><span>B-</span><img src="../assets/images/icon/blood-drop-svgrepo-com.svg"
+                            alt="drop"><strong>8</strong></div>
+                    <div class="blood-card"><span>O+</span><img src="../assets/images/icon/blood-drop-svgrepo-com.svg"
+                            alt="drop"><strong>12</strong></div>
+                    <div class="blood-card"><span>O-</span><img src="../assets/images/icon/blood-drop-svgrepo-com.svg"
+                            alt="drop"><strong>8</strong></div>
+                    <div class="blood-card"><span>AB+</span><img src="../assets/images/icon/blood-drop-svgrepo-com.svg"
+                            alt="drop"><strong>36</strong></div>
+                    <div class="blood-card"><span>AB-</span><img src="../assets/images/icon/blood-drop-svgrepo-com.svg"
+                            alt="drop"><strong>15</strong></div>
+                </div>
+                <div class="note">Chú thích: các con số là các túi máu,mỗi túi máu là 10ml</div>
+                <div class="bloodquantity_update">CẬP NHẬT ĐƠN VỊ MÁU</div>
+                <div class="blood-update-form"
+                    style="display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 20px;">
+
+                    <!-- Nhóm máu + số lượng (trên cùng 1 dòng) -->
+                    <div style="display: flex; gap: 12px; flex-wrap: wrap; justify-content: center;">
+                        <select id="bloodTypeSelect" style="padding: 10px; font-size: 16px; width: 350px;">
+                            <option value="" disabled selected>Chọn nhóm máu</option>
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+
+                        <input type="number" id="quantityInput" placeholder="Số lượng (túi)" min="1"
+                            style="padding: 10px; font-size: 16px; width: 350px;">
+                    </div>
+
+                    <!-- Nút cập nhật -->
+                    <button id="updateButton"
+                        style="padding: 10px 20px; font-size: 16px; background-color: #f76c5e; color: white; border: none; border-radius: 5px; cursor: pointer;">
+                        CẬP NHẬT
+                    </button>
+                </div>
+
+            </section>
+        </main>
+    </div>
+</body>
+
+</html>
+<script>document.getElementById('updateButton').addEventListener('click', function () {
+        const bloodType = document.getElementById('bloodTypeSelect').value;
+        const quantity = document.getElementById('quantityInput').value;
+
+        if (!bloodType || !quantity) {
+            alert('Vui lòng chọn nhóm máu và nhập số lượng!');
+            return;
+        }
+
+        // Sau này bạn sẽ gọi API để update CSDL ở đây
+        console.log(`Cập nhật ${quantity} túi cho nhóm máu ${bloodType}`);
+    });
+</script>

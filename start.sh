@@ -10,5 +10,5 @@ sleep 10
 
 # Start frontend server
 echo "Starting frontend server..."
-cd ../frontend
-npx http-server . -p 8081 --cors -c-1
+cd /frontend
+npx http-server . -p 8081 --cors 

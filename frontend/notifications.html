@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="vi">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Signup_Signin</title>
+    <title>Thông báo - BloodCare</title>
     <!-- Favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="./assets/favicons/apple-icon-180x180.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="./assets/favicons/favicon-32x32.png" />
@@ -19,182 +19,387 @@
     <!-- CSS -->
     <link rel="stylesheet" href="./css/reset.css" />
     <link rel="stylesheet" href="./css/style.css" />
-    <script src="./js/form-toggle.js"></script>
     <style>
-.thongbao-wrapper {
-  padding: 40px 20px;
-  background-color: #f1f1f1;
-  font-family: 'Inter', sans-serif;
-}
+    .thongbao-wrapper {
+        padding: 40px 20px;
+        background-color: #f5f5f5;
+        font-family: 'Inter', sans-serif;
+        min-height: 100vh;
+    }
 
-.title-page {
-  text-align: center;
-  color: red;
-  font-size: 28px;
-  font-weight: 700;
-  margin-bottom: 30px;
-  text-transform: uppercase;
-}
+    .notification-filters {
+        max-width: 800px;
+        margin: 0 auto 20px;
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+    }
 
-.thongbao-container {
-  max-width: 800px;
-  background: white;
-  margin: auto;
-  padding: 30px;
-  border-radius: 12px;
-}
+    .filter-btn {
+        padding: 8px 16px;
+        border: none;
+        border-radius: 20px;
+        background: white;
+        color: #666;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
 
-.title-section {
-  font-size: 20px;
-  font-weight: bold;
-  color: red;
-  margin-bottom: 24px;
-}
+    .filter-btn.active {
+        background: #c62828;
+        color: white;
+    }
 
-.notification-list {
-  max-height: 600px;
-  overflow-y: auto;
-  padding-right: 8px;
-}
+    .title-page {
+        text-align: center;
+        color: #c62828;
+        font-size: 28px;
+        font-weight: 700;
+        margin-bottom: 30px;
+    }
 
-.notification-item {
-  margin-bottom: 24px;
-}
+    .thongbao-container {
+        max-width: 800px;
+        margin: auto;
+    }
 
-.noti-header {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-weight: 600;
-  margin-bottom: 6px;
-}
+    .notification-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
 
-.noti-avatar {
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-}
+    .notification-item {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        transition: all 0.3s ease;
+        border-left: 4px solid #c62828;
+    }
 
-.noti-role.admin {
-  color: red;
-}
+    .notification-item:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
 
-.noti-role.staff {
-  color: #007bff;
-}
+    .notification-item.unread {
+        background: #fff9f9;
+    }
 
-.noti-title {
-  font-weight: bold;
-}
+    .notification-item.success {
+        border-left-color: #4CAF50;
+    }
 
-.noti-content {
-  font-size: 14px;
-  margin: 6px 0;
-  padding-left: 14px;
-}
+    .notification-item.warning {
+        border-left-color: #FFC107;
+    }
 
-hr {
-  margin-top: 12px;
-}
+    .notification-item.danger {
+        border-left-color: #f44336;
+    }
+
+    .noti-header {
+        display: flex;
+        align-items: center;
+        gap: 15px;
+        margin-bottom: 15px;
+    }
+
+    .noti-icon {
+        width: 40px;
+        height: 40px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 20px;
+    }
+
+    .success .noti-icon {
+        background: #e8f5e9;
+        color: #4CAF50;
+    }
+
+    .warning .noti-icon {
+        background: #fff3e0;
+        color: #FFC107;
+    }
+
+    .danger .noti-icon {
+        background: #ffebee;
+        color: #f44336;
+    }
+
+    .noti-title {
+        font-weight: 600;
+        font-size: 18px;
+        flex-grow: 1;
+    }
+
+    .success .noti-title {
+        color: #4CAF50;
+    }
+
+    .warning .noti-title {
+        color: #FFC107;
+    }
+
+    .danger .noti-title {
+        color: #f44336;
+    }
+
+    .noti-time {
+        color: #666;
+        font-size: 14px;
+    }
+
+    .noti-content {
+        color: #444;
+        line-height: 1.6;
+    }
+
+    .noti-content p {
+        margin-bottom: 10px;
+    }
+
+    .noti-content ul {
+        margin: 10px 0;
+        padding-left: 20px;
+    }
+
+    .noti-content li {
+        margin-bottom: 5px;
+    }
+
+    .noti-footer {
+        margin-top: 15px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding-top: 15px;
+        border-top: 1px solid #eee;
+    }
+
+    .noti-actions {
+        display: flex;
+        gap: 10px;
+    }
+
+    .noti-btn {
+        padding: 8px 16px;
+        border-radius: 4px;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        font-size: 14px;
+    }
+
+    .noti-btn.primary {
+        background: #c62828;
+        color: white;
+    }
+
+    .noti-btn.secondary {
+        background: #f5f5f5;
+        color: #666;
+    }
+
+    .noti-status {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        font-size: 14px;
+    }
+
+    .status-dot {
+        width: 8px;
+        height: 8px;
+        border-radius: 50%;
+    }
+
+    .success .status-dot {
+        background: #4CAF50;
+    }
+
+    .warning .status-dot {
+        background: #FFC107;
+    }
+
+    .danger .status-dot {
+        background: #f44336;
+    }
+
+    .no-notifications {
+        text-align: center;
+        padding: 40px;
+        color: #666;
+        background: white;
+        border-radius: 12px;
+        margin-top: 20px;
+    }
     </style>
-
-    <!-- JS -->
-    <script src="./js/jquery-3.7.1.min.js"></script>
-    <script>
-      // Check if user is authenticated
-      function checkAuth() {
-        const authToken = localStorage.getItem('authToken');
-        const userEmail = localStorage.getItem('userEmail');
-        
-        if (!authToken || !userEmail) {
-          // Redirect to login if not authenticated
-          window.location.href = 'signin_signup.html';
-        }
-      }
-      
-      // Run check when page loads
-      document.addEventListener('DOMContentLoaded', checkAuth);
-    </script>
-    <script src="./js/component.js"></script>
-    <script src="./js/api.js"></script>
-    <script src="./js/example.js"></script>
 </head>
 <body>
     <!-- Header -->
     <div id="header"></div>
 
     <!-- Main Content -->
-     <main>
-<section class="thongbao-wrapper">
-  <h2 class="title-page">📢 Trang Thông Báo</h2>
+    <main>
+        <section class="thongbao-wrapper">
+            <h2 class="title-page">🔔 Thông báo</h2>
 
-  <div class="thongbao-container">
-    <h3 class="title-section">Thông Báo</h3>
+            <!-- Bộ lọc thông báo -->
+            <div class="notification-filters">
+                <button class="filter-btn active" data-type="all">Tất cả</button>
+                <button class="filter-btn" data-type="request">Yêu cầu</button>
+                <button class="filter-btn" data-type="reminder">Nhắc nhở</button>
+                <button class="filter-btn" data-type="health">Sức khỏe</button>
+            </div>
 
-    <div class="notification-list">
-      <div class="notification-item">
-        <div class="noti-header">
-          <img src="./assets/images/doctors/doctor1.jpeg" alt="Admin" class="noti-avatar">
-          <span class="noti-role admin">Admin</span>
-          <span class="noti-title">Vì Sao Bạn Nên Hiến Máu?</span>
-        </div>
-        <p class="noti-content">
-          Hiến máu là một hành động đơn giản nhưng vô cùng cao cả. Mỗi đơn vị máu bạn hiến có thể cứu sống 3 người. Không chỉ giúp ích cho cộng đồng, việc hiến máu còn mang lại nhiều lợi ích cho chính bạn. Nó giúp cơ thể bạn kích thích quá trình tái tạo máu mới, cải thiện tuần hoàn và giảm nguy cơ mắc một số bệnh lý về tim mạch. Đồng thời, hiến máu thường xuyên còn giúp bạn theo dõi được tình trạng sức khỏe định kỳ thông qua các xét nghiệm được thực hiện trước khi hiến máu.
-        </p>
-        <hr>
-      </div>
+            <div class="thongbao-container">
+                <div class="notification-list">
+                    <!-- Thông báo yêu cầu được duyệt -->
+                    <div class="notification-item success unread" data-type="request">
+                        <div class="noti-header">
+                            <div class="noti-icon">✓</div>
+                            <div class="noti-title">Yêu cầu hiến máu được chấp nhận</div>
+                            <div class="noti-time">2 giờ trước</div>
+                        </div>
+                        <div class="noti-content">
+                            <p>Yêu cầu hiến máu của bạn tại <strong>Bệnh viện Chợ Rẫy</strong> đã được chấp nhận.</p>
+                            <p><strong>Thời gian:</strong> 09:00, 20/03/2024</p>
+                            <p><strong>Ghi chú từ nhân viên:</strong> Hồ sơ của bạn đã đạt yêu cầu. Vui lòng đến đúng giờ và mang theo CCCD/CMND.</p>
+                        </div>
+                        <div class="noti-footer">
+                            <div class="noti-actions">
+                                <a href="#" class="noti-btn primary">Xem chi tiết lịch hẹn</a>
+                                <button class="noti-btn secondary">Đánh dấu đã đọc</button>
+                            </div>
+                            <div class="noti-status">
+                                <span class="status-dot"></span>
+                                <span>Đã duyệt</span>
+                            </div>
+                        </div>
+                    </div>
 
-      <div class="notification-item">
-        <div class="noti-header">
-          <img src="./assets/images/doctors/doctor10.jpeg" alt="Staff" class="noti-avatar">
-          <span class="noti-role staff">Staff</span>
-          <span class="noti-title">Thông Tin Về Lịch Hiến Máu Sắp Tới</span>
-        </div>
-        <p class="noti-content">
-          Chúng tôi xin thông báo lịch hiến máu tình nguyện sẽ diễn ra vào ngày 10/06 tại Bệnh viện Trung Ương. Các bạn đã đăng ký vui lòng đến đúng giờ để đảm bảo quy trình diễn ra suôn sẻ.
-        </p>
-        <hr>
-      </div>
+                    <!-- Thông báo yêu cầu bị từ chối -->
+                    <div class="notification-item danger unread" data-type="request">
+                        <div class="noti-header">
+                            <div class="noti-icon">✕</div>
+                            <div class="noti-title">Yêu cầu hiến máu không được chấp nhận</div>
+                            <div class="noti-time">1 ngày trước</div>
+                        </div>
+                        <div class="noti-content">
+                            <p>Rất tiếc, yêu cầu hiến máu của bạn chưa được chấp nhận vào lúc này.</p>
+                            <p><strong>Lý do:</strong> Khoảng cách thời gian từ lần hiến máu trước chưa đủ 3 tháng.</p>
+                            <p><strong>Ghi chú từ nhân viên:</strong> Bạn có thể đăng ký lại sau ngày 15/06/2024.</p>
+                        </div>
+                        <div class="noti-footer">
+                            <div class="noti-actions">
+                                <a href="#" class="noti-btn primary">Xem lịch sử hiến máu</a>
+                                <button class="noti-btn secondary">Đánh dấu đã đọc</button>
+                            </div>
+                            <div class="noti-status">
+                                <span class="status-dot"></span>
+                                <span>Từ chối</span>
+                            </div>
+                        </div>
+                    </div>
 
-      <div class="notification-item">
-        <div class="noti-header">
-          <img src="./assets/images/doctors/doctor3.jpeg" alt="Admin" class="noti-avatar">
-          <span class="noti-role admin">Admin</span>
-          <span class="noti-title">Cập Nhật Chính Sách Ưu Đãi Cho Người Hiến Máu</span>
-        </div>
-        <p class="noti-content">
-          Bắt đầu từ tháng 7, tất cả người hiến máu sẽ được nhận thêm phiếu quà tặng và ưu tiên kiểm tra sức khỏe định kỳ miễn phí. Chi tiết sẽ được thông báo thêm trên website chính thức của chúng tôi.
-        </p>
-        <hr>
-      </div>
-      <div class="notification-item">
-        <div class="noti-header">
-          <img src="./assets/images/doctors/doctor3.jpeg" alt="Admin" class="noti-avatar">
-          <span class="noti-role admin">Admin</span>
-          <span class="noti-title">Cập Nhật Chính Sách Ưu Đãi Cho Người Hiến Máu</span>
-        </div>
-        <p class="noti-content">
-          Bắt đầu từ tháng 7, tất cả người hiến máu sẽ được nhận thêm phiếu quà tặng và ưu tiên kiểm tra sức khỏe định kỳ miễn phí. Chi tiết sẽ được thông báo thêm trên website chính thức của chúng tôi.
-        </p>
-        <hr>
-      </div>
-      <div class="notification-item">
-        <div class="noti-header">
-          <img src="./assets/images/doctors/doctor3.jpeg" alt="Admin" class="noti-avatar">
-          <span class="noti-role admin">Admin</span>
-          <span class="noti-title">Cập Nhật Chính Sách Ưu Đãi Cho Người Hiến Máu</span>
-        </div>
-        <p class="noti-content">
-          Bắt đầu từ tháng 7, tất cả người hiến máu sẽ được nhận thêm phiếu quà tặng và ưu tiên kiểm tra sức khỏe định kỳ miễn phí. Chi tiết sẽ được thông báo thêm trên website chính thức của chúng tôi.
-        </p>
-        <hr>
-      </div>
-    </div>
-  </div>
-</section>
+                    <!-- Thông báo nhắc nhở hiến máu -->
+                    <div class="notification-item warning" data-type="reminder">
+                        <div class="noti-header">
+                            <div class="noti-icon">⏰</div>
+                            <div class="noti-title">Đã đến thời gian có thể hiến máu</div>
+                            <div class="noti-time">3 ngày trước</div>
+                        </div>
+                        <div class="noti-content">
+                            <p>Xin chào! Đã 3 tháng kể từ lần hiến máu trước của bạn.</p>
+                            <p>Bạn đã đủ điều kiện để tham gia hiến máu lại từ ngày <strong>15/03/2024</strong>.</p>
+                            <p><strong>Lần hiến máu trước:</strong></p>
+                            <ul>
+                                <li>Ngày hiến: 15/12/2023</li>
+                                <li>Lượng máu: 350ml</li>
+                                <li>Địa điểm: Trung tâm Hiến máu Nhân đạo</li>
+                            </ul>
+                        </div>
+                        <div class="noti-footer">
+                            <div class="noti-actions">
+                                <a href="#" class="noti-btn primary">Đặt lịch hiến máu</a>
+                            </div>
+                            <div class="noti-status">
+                                <span class="status-dot"></span>
+                                <span>Nhắc nhở</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Thông báo theo dõi sức khỏe -->
+                    <div class="notification-item" data-type="health">
+                        <div class="noti-header">
+                            <div class="noti-icon">❤️</div>
+                            <div class="noti-title">Cập nhật tình trạng sức khỏe</div>
+                            <div class="noti-time">5 ngày trước</div>
+                        </div>
+                        <div class="noti-content">
+                            <p>Đã 15 ngày kể từ lần hiến máu gần nhất của bạn. Vui lòng cập nhật tình trạng sức khỏe:</p>
+                            <ul>
+                                <li>Kiểm tra các triệu chứng bất thường</li>
+                                <li>Ghi nhận mức độ hồi phục</li>
+                                <li>Cập nhật chế độ dinh dưỡng</li>
+                            </ul>
+                        </div>
+                        <div class="noti-footer">
+                            <div class="noti-actions">
+                                <a href="#" class="noti-btn primary">Cập nhật sức khỏe</a>
+                            </div>
+                            <div class="noti-status">
+                                <span class="status-dot"></span>
+                                <span>Theo dõi sức khỏe</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
     </main>
 
     <!-- Footer -->
     <div id="footer"></div>
+
+    <!-- JS -->
+    <script src="./js/jquery-3.7.1.min.js"></script>
+    <script src="./js/component.js"></script>
+    <script src="./js/api.js"></script>
+    <script>
+        // Xử lý bộ lọc thông báo
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', () => {
+                // Cập nhật trạng thái active
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                btn.classList.add('active');
+
+                // Lọc thông báo
+                const type = btn.dataset.type;
+                document.querySelectorAll('.notification-item').forEach(item => {
+                    if (type === 'all' || item.dataset.type === type) {
+                        item.style.display = 'block';
+                    } else {
+                        item.style.display = 'none';
+                    }
+                });
+            });
+        });
+
+        // Xử lý đánh dấu đã đọc
+        document.querySelectorAll('.noti-btn.secondary').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const notificationItem = this.closest('.notification-item');
+                notificationItem.classList.remove('unread');
+            });
+        });
+    </script>
 </body>
 </html>

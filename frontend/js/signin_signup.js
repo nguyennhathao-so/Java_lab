@@ -2,7 +2,7 @@ $(document).ready(function () {
 
 
 
-  
+
   // Kiểm tra email đã tồn tại
   function checkEmail(email) {
     return $.ajax({
@@ -40,7 +40,7 @@ $(document).ready(function () {
   });
 
   // Xử lý sự kiện khi email thay đổi
-  $('#register-form input[type="email"]').on('blur', function() {
+  $('#register-form input[type="email"]').on('blur', function () {
     const email = $(this).val();
     if (email) {
       checkEmail(email).then(exists => {
@@ -53,7 +53,7 @@ $(document).ready(function () {
   });
 
   // Xử lý sự kiện khi số điện thoại thay đổi
-  $('#register-form input[type="tel"]').on('blur', function() {
+  $('#register-form input[type="tel"]').on('blur', function () {
     const phoneNumber = $(this).val();
     if (phoneNumber) {
       checkPhoneNumber(phoneNumber).then(exists => {
@@ -66,11 +66,11 @@ $(document).ready(function () {
   });
 
   // Kiểm tra mật khẩu khớp nhau
-  $('#pass2').on('input', function() {
+  $('#pass2').on('input', function () {
     const pass1 = $('#pass1').val();
     const pass2 = $(this).val();
     const nextFields = $('#register-form input[type="tel"], #register-form input[type="text"]:eq(1), #register-form select');
-    
+
     if (pass1 === pass2) {
       // Mật khẩu trùng khớp
       $(this).css('border-color', 'green');
@@ -87,12 +87,12 @@ $(document).ready(function () {
   });
 
   // Khóa các trường sau mật khẩu khi trang được tải
-  $(document).ready(function() {
+  $(document).ready(function () {
     $('#register-form input[type="tel"], #register-form input[type="text"]:eq(1), #register-form select').prop('disabled', true);
   });
 
   // Xử lý submit form đăng ký
-  $('#register-form').on('submit', function(event) {
+  $('#register-form').on('submit', function (event) {
     event.preventDefault();
 
     const email = $(this).find('input[type="email"]').val();
@@ -109,7 +109,7 @@ $(document).ready(function () {
 
     // Kiểm tra lại email và số điện thoại trước khi submit
     $.when(checkEmail(email), checkPhoneNumber(phoneNumber))
-      .then(function(emailExists, phoneExists) {
+      .then(function (emailExists, phoneExists) {
         if (emailExists[0]) {
           alert('Email này đã được sử dụng. Vui lòng sử dụng email khác.');
           $('#register-form input[type="email"]').focus();
@@ -138,39 +138,39 @@ $(document).ready(function () {
           method: 'POST',
           contentType: 'application/json',
           data: JSON.stringify(formData),
-          success: function(response) {
+          success: function (response) {
             alert('Đăng ký thành công!');
             // Chuyển sang tab đăng nhập
             $('.tab[data-target="#login-form"]').click();
             // Reset form
             $('#register-form')[0].reset();
           },
-          error: function(xhr) {
+          error: function (xhr) {
             alert(xhr.responseText || 'Có lỗi xảy ra khi đăng ký. Vui lòng thử lại.');
           }
         });
       }.bind(this))
-      .fail(function(error) {
+      .fail(function (error) {
         console.error('Error:', error);
         alert('Có lỗi xảy ra khi đăng ký. Vui lòng thử lại.');
       });
   });
 
   // Xử lý đăng nhập
-  $('#login-form').on('submit', function(event) {
+  $('#login-form').on('submit', function (event) {
     event.preventDefault();
-    
+
     const emailInput = $(this).find('input[type="email"]');
     const passwordInput = $('#login-pass');
     const submitButton = $(this).find('button[type="submit"]');
-    
+
     // Validate inputs
     if (!emailInput.val().trim()) {
       alert('Vui lòng nhập email!');
       emailInput.focus();
       return;
     }
-    
+
     if (!passwordInput.val().trim()) {
       alert('Vui lòng nhập mật khẩu!');
       passwordInput.focus();
@@ -193,7 +193,7 @@ $(document).ready(function () {
       method: 'POST',
       contentType: 'application/json',
       data: JSON.stringify(loginData),
-      success: function(response) {
+      success: function (response) {
         // Store authentication token
         if (response.token) {
           localStorage.setItem('authToken', response.token);
@@ -201,22 +201,22 @@ $(document).ready(function () {
         if (response.user) {
           localStorage.setItem('userData', JSON.stringify(response.user));
         }
-        
+
         alert('Đăng nhập thành công!');
-        window.location.href = 'trangChu.html';
+        window.location.href = 'home.html';
       },
-      error: function(xhr) {
+      error: function (xhr) {
         let errorMessage = 'Email hoặc mật khẩu không đúng!';
-        
+
         if (xhr.responseJSON && xhr.responseJSON.message) {
           errorMessage = xhr.responseJSON.message;
         } else if (xhr.status === 0) {
           errorMessage = 'Không thể kết nối đến máy chủ. Vui lòng thử lại sau!';
         }
-        
+
         alert(errorMessage);
       },
-      complete: function() {
+      complete: function () {
         // Re-enable form
         emailInput.prop('disabled', false);
         passwordInput.prop('disabled', false);

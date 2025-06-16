@@ -2,7 +2,9 @@ package com.example.backend.service.impl;
 
 import com.example.backend.dto.RegisterRequest;
 import com.example.backend.entity.User;
+import com.example.backend.entity.Role;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.repository.RoleRepository;
 import com.example.backend.service.IUserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,11 +15,14 @@ public class UserServiceImpl implements IUserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final RoleRepository roleRepository;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder) {
+    public UserServiceImpl(UserRepository userRepository, PasswordEncoder passwordEncoder,
+            RoleRepository roleRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
+        this.roleRepository = roleRepository;
     }
 
     @Override
@@ -34,14 +39,17 @@ public class UserServiceImpl implements IUserService {
 
         // Tạo user mới
         User user = new User();
-        user.setFullName(request.getFullName());
+        user.setName(request.getFullName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setPhoneNumber(request.getPhoneNumber());
+        user.setPhone(request.getPhoneNumber());
         user.setAddress(request.getAddress());
         user.setGender(request.getGender());
         user.setBloodType(request.getBloodType());
-        user.setRole("USER");
+        // Lấy role 'USER' từ database
+        Role userRole = roleRepository.findByRoleName("USER")
+                .orElseThrow(() -> new RuntimeException("Role USER not found"));
+        user.setRole(userRole);
 
         userRepository.save(user);
     }
@@ -52,7 +60,7 @@ public class UserServiceImpl implements IUserService {
     }
 
     @Override
-    public boolean isPhoneNumberExists(String phoneNumber) {
-        return userRepository.existsByPhoneNumber(phoneNumber);
+    public boolean isPhoneNumberExists(String phone) {
+        return userRepository.existsByPhone(phone);
     }
-} 
+}

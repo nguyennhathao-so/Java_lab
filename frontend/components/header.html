@@ -14,7 +14,16 @@
     </nav>
 
     <div class="auth-links">
-      <a href="signin_signup.html">Sign up</a>
+      <!-- Guest view -->
+      <div id="guest-view">
+        <a href="signin_signup.html">Đăng nhập</a>
+      </div>
+
+      <!-- Logged in user view -->
+      <div id="user-view" style="display: none;">
+        <span id="user-name"></span>
+        <a href="#" id="logout-btn">Đăng xuất</a>
+      </div>
     </div>
   </div>
 </header>

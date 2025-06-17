@@ -352,6 +352,7 @@ CREATE TABLE `users` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `phone` varchar(15) DEFAULT NULL,
   `gender` varchar(5) DEFAULT NULL,
+  `address` TEXT DEFAULT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `email` (`email`),
   KEY `role_id` (`role_id`),

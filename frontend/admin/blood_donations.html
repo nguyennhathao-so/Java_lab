@@ -31,6 +31,7 @@
     <script src="../js/component_admin.js"></script>
     <script src="../js/blood_donations_history_admin.js"></script>
     <script src="../js/api.js"></script>
+    <script src="../js/admin-api.js"></script>
     <script src="../js/example.js"></script>
 
 </head>
@@ -60,35 +61,74 @@
                             <th>Hoạt động</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>9011</td>
-                            <td>name 1</td>
-                            <td>11116711111</td>
-                            <td>29/3/2011</td>
-                            <td>Nam</td>
-                            <td>A+</td>
-                            <td><button class="delete">Xóa</button>
-                                <button class="accept">Đồng ý</button>
-                            </td>
-
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>5455</td>
-                            <td>name 2</td>
-                            <td>45543543</td>
-                            <td>29/3/2011</td>
-                            <td>Nữ</td>
-                            <td>AB+</td>
-                            <td><button class="delete">Xóa</button> <button class="accept">Đồng ý</button></td>
-                        </tr>
+                    <tbody id="donationsTableBody">
+                        <!-- Data will be loaded here dynamically -->
                     </tbody>
                 </table>
             </section>
         </main>
     </div>
+
+    <script>
+        // Load blood donations data
+        async function loadBloodDonations() {
+            try {
+                const donations = await adminApiService.getBloodDonations();
+                const tbody = document.getElementById('donationsTableBody');
+                tbody.innerHTML = '';
+
+                donations.forEach((donation, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${donation.donationId}</td>
+                        <td>${donation.user ? donation.user.name : 'N/A'}</td>
+                        <td>${donation.user ? donation.user.phone : 'N/A'}</td>
+                        <td>${donation.date ? new Date(donation.date).toLocaleDateString('vi-VN') : 'N/A'}</td>
+                        <td>${donation.user ? donation.user.gender : 'N/A'}</td>
+                        <td>${donation.user ? donation.user.bloodType : 'N/A'}</td>
+                        <td>
+                            <button class="delete" onclick="deleteDonation(${donation.donationId})">Xóa</button>
+                            <button class="accept" onclick="approveDonation(${donation.donationId})">Đồng ý</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error loading blood donations:', error);
+                document.getElementById('donationsTableBody').innerHTML = '<tr><td colspan="8">Không thể tải dữ liệu</td></tr>';
+            }
+        }
+
+        // Delete donation
+        async function deleteDonation(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa yêu cầu này?')) {
+                try {
+                    await adminApiService.deleteDonation(id);
+                    alert('Đã xóa yêu cầu thành công!');
+                    loadBloodDonations(); // Reload data
+                } catch (error) {
+                    console.error('Error deleting donation:', error);
+                    alert('Lỗi khi xóa yêu cầu!');
+                }
+            }
+        }
+
+        // Approve donation
+        async function approveDonation(id) {
+            try {
+                await adminApiService.approveDonation(id);
+                alert('Đã đồng ý yêu cầu hiến máu!');
+                loadBloodDonations(); // Reload data
+            } catch (error) {
+                console.error('Error approving donation:', error);
+                alert('Lỗi khi duyệt yêu cầu!');
+            }
+        }
+
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', loadBloodDonations);
+    </script>
 </body>
 
 </html>

@@ -27,10 +27,11 @@
     <link rel="stylesheet" href="../css/style_admin.css">
 
     <!-- js -->
-    <script src="../js/jquery-3.7.1.min.js" ></script>
-    <script src="../js/component_admin.js" ></script>
+    <script src="../js/jquery-3.7.1.min.js"></script>
+    <script src="../js/component_admin.js"></script>
     <script src="../js/blood_donations_history_admin.js"></script>
     <script src="../js/api.js"></script>
+    <script src="../js/admin-api.js"></script>
     <script src="../js/example.js"></script>
 
 </head>
@@ -61,40 +62,63 @@
                             <th>Hoạt động</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>9011</td>
-                            <td>name 1</td>
-                            <td>11116711111</td>
-                            <td>Nam</td>
-                            <td>A+</td>
-                            <td>14</td>
-                            <td>Không</td>
-                            <td>
-                                <button class="delete">Xóa</button>
-                                <a href="update.html"><button class="edit">Sửa</button></a>
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>5455</td>
-                            <td>name 2</td>
-                            <td>45543543</td>
-                            <td>Nữ</td>
-                            <td>AB+</td>
-                            <td>18</td>
-                            <td>Không</td>
-                            <td>
-                                <button class="delete">Xóa</button>
-                                <a href="update.html"><button class="edit">Sửa</button></a>
-                            </td>
-                        </tr>
+                    <tbody id="approveTableBody">
+                        <!-- Data will be loaded here dynamically -->
                     </tbody>
                 </table>
             </section>
         </main>
     </div>
+
+    <script>
+        // Load approved donations
+        async function loadApprovedDonations() {
+            try {
+                const donations = await adminApiService.getApprovedDonations();
+                const tbody = document.getElementById('approveTableBody');
+                tbody.innerHTML = '';
+
+                donations.forEach((donation, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${donation.donationId}</td>
+                        <td>${donation.user ? donation.user.name : 'N/A'}</td>
+                        <td>${donation.user ? donation.user.phone : 'N/A'}</td>
+                        <td>${donation.user ? donation.user.gender : 'N/A'}</td>
+                        <td>${donation.user ? donation.user.bloodType : 'N/A'}</td>
+                        <td>${donation.amount || 'N/A'}</td>
+                        <td>Không</td>
+                        <td>
+                            <button class="delete" onclick="deleteDonation(${donation.donationId})">Xóa</button>
+                            <a href="update.html"><button class="edit">Sửa</button></a>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error loading approved donations:', error);
+                document.getElementById('approveTableBody').innerHTML = '<tr><td colspan="9">Không thể tải dữ liệu</td></tr>';
+            }
+        }
+
+        // Delete donation
+        async function deleteDonation(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa yêu cầu này?')) {
+                try {
+                    await adminApiService.deleteDonation(id);
+                    alert('Đã xóa yêu cầu thành công!');
+                    loadApprovedDonations(); // Reload data
+                } catch (error) {
+                    console.error('Error deleting donation:', error);
+                    alert('Lỗi khi xóa yêu cầu!');
+                }
+            }
+        }
+
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', loadApprovedDonations);
+    </script>
 </body>
 
 </html>

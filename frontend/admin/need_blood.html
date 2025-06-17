@@ -29,6 +29,7 @@
     <script src="../js/jquery-3.7.1.min.js"></script>
     <script src="../js/component_admin.js"></script>
     <script src="../js/api.js"></script>
+    <script src="../js/admin-api.js"></script>
     <script src="../js/example.js"></script>
 </head>
 
@@ -59,7 +60,7 @@
                             <th>Hoạt động</th>
                         </tr>
                     </thead>
-                    <tbody>
+                    <tbody id="requestsTableBody">
                         <tr>
                             <td>1</td>
                             <td>9011</td>
@@ -95,6 +96,43 @@
             </section>
         </main>
     </div>
+    <script>
+        async function loadBloodRequests() {
+            try {
+                const requests = await adminApiService.getBloodRequests();
+                const tbody = document.getElementById('requestsTableBody');
+                tbody.innerHTML = '';
+                requests.forEach((request, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${request.requestId}</td>
+                        <td>${request.center ? request.center.name : 'N/A'}</td>
+                        <td>${request.center ? request.center.contactInfo : 'N/A'}</td>
+                        <td>N/A</td>
+                        <td>${request.createdAt ? new Date(request.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</td>
+                        <td>${request.bloodTypeNeeded || 'N/A'}</td>
+                        <td>${request.quantity || 'N/A'}</td>
+                        <td>${request.urgencyLevel === 'high' ? 'Khẩn cấp' : 'Bình thường'}</td>
+                        <td>
+                            <button class="delete" onclick="deleteBloodRequest(${request.requestId})">Xóa</button>
+                            <button class="accept" onclick="approveBloodRequest(${request.requestId})">Đồng ý</button>
+                        </td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error loading blood requests:', error);
+                document.getElementById('requestsTableBody').innerHTML = '<tr><td colspan="10">Không thể tải dữ liệu</td></tr>';
+            }
+        }
+
+        // Dummy functions for buttons (bạn có thể bổ sung logic sau)
+        function deleteBloodRequest(id) { alert('Xóa: ' + id); }
+        function approveBloodRequest(id) { alert('Duyệt: ' + id); }
+
+        document.addEventListener('DOMContentLoaded', loadBloodRequests);
+    </script>
 </body>
 
 </html>

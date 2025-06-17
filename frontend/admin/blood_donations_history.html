@@ -31,6 +31,7 @@
     <script src="../js/component_admin.js"></script>
     <script src="../js/blood_donations_history_admin.js"></script>
     <script src="../js/api.js"></script>
+    <script src="../js/admin-api.js"></script>
     <script src="../js/example.js"></script>
 
 </head>
@@ -60,32 +61,45 @@
                             <th>Ghi chú</th>
                         </tr>
                     </thead>
-                    <tbody>
-                        <tr>
-                            <td>1</td>
-                            <td>9011</td>
-                            <td>name 1</td>
-                            <td>11116711111</td>
-                            <td>Nam</td>
-                            <td>A+</td>
-                            <td>14</td>
-                            <td>Thành công</td>
-                        </tr>
-                        <tr>
-                            <td>2</td>
-                            <td>5455</td>
-                            <td>name 2</td>
-                            <td>45543543</td>
-                            <td>Nữ </td>
-                            <td>AB+</td>
-                            <td>18</td>
-                            <td>Ổn định</td>
-                        </tr>
+                    <tbody id="historyTableBody">
+                        <!-- Data will be loaded here dynamically -->
                     </tbody>
                 </table>
             </section>
         </main>
     </div>
+
+    <script>
+        // Load blood donations history
+        async function loadBloodDonationsHistory() {
+            try {
+                const donations = await adminApiService.getBloodDonationsHistory();
+                const tbody = document.getElementById('historyTableBody');
+                tbody.innerHTML = '';
+
+                donations.forEach((donation, index) => {
+                    const row = document.createElement('tr');
+                    row.innerHTML = `
+                        <td>${index + 1}</td>
+                        <td>${donation.donationId}</td>
+                        <td>${donation.user ? donation.user.name : 'N/A'}</td>
+                        <td>${donation.user ? donation.user.phone : 'N/A'}</td>
+                        <td>${donation.user ? donation.user.gender : 'N/A'}</td>
+                        <td>${donation.user ? donation.user.bloodType : 'N/A'}</td>
+                        <td>${donation.amount || 'N/A'}</td>
+                        <td>Thành công</td>
+                    `;
+                    tbody.appendChild(row);
+                });
+            } catch (error) {
+                console.error('Error loading blood donations history:', error);
+                document.getElementById('historyTableBody').innerHTML = '<tr><td colspan="8">Không thể tải dữ liệu</td></tr>';
+            }
+        }
+
+        // Load data when page loads
+        document.addEventListener('DOMContentLoaded', loadBloodDonationsHistory);
+    </script>
 </body>
 
 </html>

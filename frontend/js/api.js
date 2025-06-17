@@ -1,5 +1,5 @@
 // API base URL - change this to match your backend URL
-const API_BASE_URL = 'http://localhost:8080';
+const API_BASE_URL = 'http://localhost:8082';
 
 // Example API service
 const apiService = {
@@ -13,11 +13,11 @@ const apiService = {
                 },
                 credentials: 'include' // Include cookies if needed
             });
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             return await response.json();
         } catch (error) {
             console.error('Error fetching data:', error);
@@ -36,11 +36,11 @@ const apiService = {
                 credentials: 'include', // Include cookies if needed
                 body: JSON.stringify(data)
             });
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             return await response.json();
         } catch (error) {
             console.error('Error posting data:', error);
@@ -59,11 +59,11 @@ const apiService = {
                 credentials: 'include', // Include cookies if needed
                 body: JSON.stringify(data)
             });
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             return await response.json();
         } catch (error) {
             console.error('Error updating data:', error);
@@ -81,11 +81,11 @@ const apiService = {
                 },
                 credentials: 'include' // Include cookies if needed
             });
-            
+
             if (!response.ok) {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
-            
+
             return await response.json();
         } catch (error) {
             console.error('Error deleting data:', error);

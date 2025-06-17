@@ -29,6 +29,8 @@
     <script src="../js/jquery-3.7.1.min.js"></script>
     <script src="../js/component_admin.js"></script>
     <script src="../js/blood_donations_history_admin.js"></script>
+    <script src="../js/api.js"></script>
+    <script src="../js/admin-api.js"></script>
 
     <style>
         body {
@@ -245,6 +247,21 @@
             </section>
         </main>
     </div>
+    <script>
+        async function loadBloodInventory() {
+            try {
+                const res = await adminApiService.getBloodInventory();
+                // res.bloodTypeCounts là object {A+: 10, B+: 8, ...}
+                document.querySelectorAll('.blood-card').forEach(card => {
+                    const type = card.querySelector('span').innerText.trim();
+                    card.querySelector('strong').innerText = res.bloodTypeCounts[type] || 0;
+                });
+            } catch (error) {
+                console.error('Error loading blood inventory:', error);
+            }
+        }
+        document.addEventListener('DOMContentLoaded', loadBloodInventory);
+    </script>
 </body>
 
 </html>

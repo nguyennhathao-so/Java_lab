@@ -369,6 +369,74 @@ LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
+
+-- DỮ LIỆU MẪU CHO CÁC BẢNG CHÍNH
+
+-- Bảng roles
+INSERT INTO roles (role_id, role_name) VALUES (1, 'USER'), (2, 'ADMIN');
+
+-- Bảng users
+INSERT INTO users (name, email, password, blood_type, role_id, phone, gender, address)
+VALUES
+('Nguyen Van A', 'a@gmail.com', '$2a$10$examplehash', 'A', 1, '0123456789', 'Nam', 'Hà Nội'),
+('Nguyen Van B', 'b@gmail.com', '$2a$10$examplehash', 'B', 2, '0987654321', 'Nữ', 'Hồ Chí Minh');
+
+-- Bảng health_centers
+INSERT INTO health_centers (name, address, contact_info)
+VALUES
+('Trung tâm 1', '123 Đường A, Hà Nội', '0123456789'),
+('Trung tâm 2', '456 Đường B, Hồ Chí Minh', '0987654321');
+
+-- Bảng blood_types
+INSERT INTO blood_types (blood_type, can_donate_to, can_receive_from)
+VALUES
+('A', 'A,AB', 'A,O'),
+('B', 'B,AB', 'B,O'),
+('AB', 'AB', 'A,B,AB,O'),
+('O', 'A,B,AB,O', 'O');
+
+-- Bảng blood_inventory
+INSERT INTO blood_inventory (center_id, blood_type, component_type, quantity, status)
+VALUES
+(1, 'A', 'whole', 10, 'available'),
+(2, 'B', 'whole', 5, 'available');
+
+-- Bảng donation_requests
+INSERT INTO donation_requests (center_id, blood_type_needed, quantity, urgency_level, status)
+VALUES
+(1, 'A', 2, 'high', 'open'),
+(2, 'B', 1, 'medium', 'open');
+
+-- Bảng donations
+INSERT INTO donations (user_id, donation_type, amount, date)
+VALUES
+(1, 'whole', 350, '2024-06-01'),
+(2, 'whole', 450, '2024-06-02');
+
+-- Bảng activity_logs
+INSERT INTO activity_logs (user_id, action, ip_address)
+VALUES
+(1, 'Đăng nhập', '127.0.0.1'),
+(2, 'Đăng ký', '127.0.0.1');
+
+-- Bảng blogs
+INSERT INTO blogs (author_id, title, content)
+VALUES
+(1, 'Hiến máu cứu người', 'Nội dung bài viết...'),
+(2, 'Lợi ích của hiến máu', 'Nội dung bài viết...');
+
+-- Bảng medical_records
+INSERT INTO medical_records (user_id, weight, blood_pressure, disease_history, checked_date, notes)
+VALUES
+(1, 65, '120/80', 'Không', '2024-06-01', 'Khỏe mạnh'),
+(2, 55, '110/70', 'Không', '2024-06-02', 'Khỏe mạnh');
+
+-- Bảng notifications
+INSERT INTO notifications (user_id, message, status)
+VALUES
+(1, 'Bạn đã đăng ký thành công!', 'unread'),
+(2, 'Lịch hiến máu sắp tới', 'unread');
+
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;

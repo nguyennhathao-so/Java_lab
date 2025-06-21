@@ -35,6 +35,9 @@ public class Donation {
     @Column(name = "date")
     private Date date;
 
+    @Column(name = "status")
+    private String status;
+
     public enum DonationType {
         whole, platelets, plasma
     }

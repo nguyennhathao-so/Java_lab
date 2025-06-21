@@ -50,9 +50,8 @@
                         <tr style="user-select: none;">
                             <th>STT</th>
                             <th>ID</th>
-                            <th>Tên</th>
-                            <th>SDT</th>
-                            <th>Giới tính</th>
+                            <th>Tên trung tâm</th>
+                            <th>Liên hệ trung tâm</th>
                             <th>Thời gian</th>
                             <th>Nhóm máu</th>
                             <th>Số lượng (ml)</th>
@@ -66,7 +65,6 @@
                             <td>9011</td>
                             <td>name 1</td>
                             <td>11116711111</td>
-                            <td>Nam</td>
                             <td>29/3/2011</td>
                             <td>A+</td>
                             <td>40</td>
@@ -81,7 +79,6 @@
                             <td>5455</td>
                             <td>name 2</td>
                             <td>45543543</td>
-                            <td>Nữ</td>
                             <td>29/3/2011</td>
                             <td>AB+</td>
                             <td>50</td>
@@ -102,19 +99,25 @@
                 const requests = await adminApiService.getBloodRequests();
                 const tbody = document.getElementById('requestsTableBody');
                 tbody.innerHTML = '';
+
+                if (requests.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">Không có yêu cầu cần máu nào.</td></tr>';
+                    return;
+                }
+
                 requests.forEach((request, index) => {
+                    const center = request.center;
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${index + 1}</td>
                         <td>${request.requestId}</td>
-                        <td>${request.center ? request.center.name : 'N/A'}</td>
-                        <td>${request.center ? request.center.contactInfo : 'N/A'}</td>
-                        <td>N/A</td>
+                        <td>${center ? center.name : 'N/A'}</td>
+                        <td>${center ? center.contactInfo : 'N/A'}</td>
                         <td>${request.createdAt ? new Date(request.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</td>
                         <td>${request.bloodTypeNeeded || 'N/A'}</td>
                         <td>${request.quantity || 'N/A'}</td>
                         <td>${request.urgencyLevel === 'high' ? 'Khẩn cấp' : 'Bình thường'}</td>
-                        <td>
+                        <td class="action-buttons">
                             <button class="delete" onclick="deleteBloodRequest(${request.requestId})">Xóa</button>
                             <button class="accept" onclick="approveBloodRequest(${request.requestId})">Đồng ý</button>
                         </td>
@@ -123,13 +126,35 @@
                 });
             } catch (error) {
                 console.error('Error loading blood requests:', error);
-                document.getElementById('requestsTableBody').innerHTML = '<tr><td colspan="10">Không thể tải dữ liệu</td></tr>';
+                document.getElementById('requestsTableBody').innerHTML = '<tr><td colspan="9">Không thể tải dữ liệu</td></tr>';
             }
         }
 
-        // Dummy functions for buttons (bạn có thể bổ sung logic sau)
-        function deleteBloodRequest(id) { alert('Xóa: ' + id); }
-        function approveBloodRequest(id) { alert('Duyệt: ' + id); }
+        async function deleteBloodRequest(id) {
+            if (confirm(`Bạn có chắc chắn muốn xóa yêu cầu #${id}?`)) {
+                try {
+                    await adminApiService.deleteBloodRequest(id);
+                    alert('Đã xóa yêu cầu thành công.');
+                    loadBloodRequests(); // Tải lại danh sách
+                } catch (error) {
+                    console.error('Lỗi khi xóa yêu cầu:', error);
+                    alert('Có lỗi xảy ra khi xóa yêu cầu.');
+                }
+            }
+        }
+
+        async function approveBloodRequest(id) {
+            if (confirm(`Bạn có chắc chắn muốn duyệt yêu cầu #${id}? Yêu cầu sẽ được chuyển vào lịch sử.`)) {
+                try {
+                    await adminApiService.approveBloodRequest(id);
+                    alert('Yêu cầu đã được duyệt thành công!');
+                    loadBloodRequests(); // Tải lại danh sách
+                } catch (error) {
+                    console.error('Lỗi khi duyệt yêu cầu:', error);
+                    alert('Có lỗi xảy ra khi duyệt yêu cầu.');
+                }
+            }
+        }
 
         document.addEventListener('DOMContentLoaded', loadBloodRequests);
     </script>

@@ -242,6 +242,11 @@
                         style="padding: 10px 20px; font-size: 16px; background-color: #f76c5e; color: white; border: none; border-radius: 5px; cursor: pointer;">
                         CẬP NHẬT
                     </button>
+
+                    <select id="centerSelect" style="padding: 10px; font-size: 16px; width: 350px;">
+                        <option value="" disabled selected>Chọn trung tâm</option>
+                        <!-- Option sẽ được render bằng JS -->
+                    </select>
                 </div>
 
             </section>
@@ -265,16 +270,23 @@
 </body>
 
 </html>
-<script>document.getElementById('updateButton').addEventListener('click', function () {
+<script>
+    document.getElementById('updateButton').addEventListener('click', async function () {
         const bloodType = document.getElementById('bloodTypeSelect').value;
-        const quantity = document.getElementById('quantityInput').value;
+        const quantity = parseInt(document.getElementById('quantityInput').value);
+        const centerId = parseInt(document.getElementById('centerSelect').value);
 
-        if (!bloodType || !quantity) {
-            alert('Vui lòng chọn nhóm máu và nhập số lượng!');
+        if (!bloodType || !quantity || quantity < 1 || !centerId) {
+            alert('Vui lòng chọn đầy đủ thông tin!');
             return;
         }
 
-        // Sau này bạn sẽ gọi API để update CSDL ở đây
-        console.log(`Cập nhật ${quantity} túi cho nhóm máu ${bloodType}`);
+        try {
+            await adminApiService.updateBloodInventory(bloodType, quantity, centerId);
+            alert(`Đã cộng thêm ${quantity} túi cho nhóm máu ${bloodType} tại trung tâm đã chọn!`);
+            loadBloodInventory();
+        } catch (error) {
+            alert('Cập nhật thất bại! ' + (error?.message || ''));
+        }
     });
 </script>

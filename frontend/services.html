@@ -1,8 +1,9 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Dịch vụ hiến máu</title>
 
   <!-- Favicon -->
@@ -69,7 +70,7 @@
       background: white;
       padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       max-width: 800px;
       margin: 0 auto;
     }
@@ -117,7 +118,7 @@
       background: white;
       padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       max-width: 800px;
       margin: 40px auto;
     }
@@ -174,7 +175,7 @@
       background: white;
       padding: 30px;
       border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
       max-width: 800px;
       margin: 40px auto;
     }
@@ -238,13 +239,13 @@
     function checkAuth() {
       const authToken = localStorage.getItem('authToken');
       const userEmail = localStorage.getItem('userEmail');
-      
+
       if (!authToken || !userEmail) {
         // Redirect to login if not authenticated
         window.location.href = 'signin_signup.html';
       }
     }
-    
+
     // Run check when page loads
     document.addEventListener('DOMContentLoaded', checkAuth);
   </script>
@@ -278,7 +279,7 @@
       </button>
     </div>
     <div class="main-container" style="margin:0 auto 80px">
-      
+
       <!-- Form đăng ký hiến máu -->
       <div id="hien-mau" class="blood-form">
         <div class="form-title">
@@ -433,14 +434,11 @@
           <img src="./assets/images/icon/emergency-svgrepo-com.svg" alt="Icon">
           <h2>ĐĂNG KÝ CẦN MÁU</h2>
         </div>
-        <form>
+        <form id="needBloodForm">
           <div class="form-row">
-            <input type="text" class="form-input" placeholder="Nhập Tên Người">
-            <input type="tel" class="form-input" placeholder="Số Điện Thoại">
-          </div>
-          <div class="form-row">
-            <select class="form-input">
-              <option value="">Chọn Nhóm Máu</option>
+            <input type="number" class="form-input" id="needBloodQuantity" placeholder="Nhập Số Lượng Cần (ml)">
+            <select class="form-input" id="needBloodType">
+              <option value="" disabled selected>Chọn Nhóm Máu</option>
               <option value="A+">A+</option>
               <option value="A-">A-</option>
               <option value="B+">B+</option>
@@ -450,26 +448,23 @@
               <option value="O+">O+</option>
               <option value="O-">O-</option>
             </select>
-            <input type="date" class="form-input">
-          </div>
-          <div class="form-row">
-            <input type="text" class="form-input" placeholder="Nhập Vị Trí">
           </div>
           <div class="form-row">
             <div class="radio-group" style="width: 100%">
-              <label>Khẩn Cấp Không?</label>
+              <label>Mức độ khẩn cấp:</label>
               <label>
-                <input type="radio" name="emergency">
-                <span style="color: #28a745">Có</span>
+                <input type="radio" name="urgency" value="high">
+                <span>Cao</span>
               </label>
               <label>
-                <input type="radio" name="emergency" checked>
-                <span>Không</span>
+                <input type="radio" name="urgency" value="medium" checked>
+                <span>Trung bình</span>
+              </label>
+              <label>
+                <input type="radio" name="urgency" value="low">
+                <span>Thấp</span>
               </label>
             </div>
-          </div>
-          <div class="form-row">
-            <input type="number" class="form-input" placeholder="Nhập Số Lượng Cần (ml)">
           </div>
           <button type="submit" class="btn-submit">Đăng Ký</button>
         </form>
@@ -487,6 +482,40 @@
         section.scrollIntoView({ behavior: 'smooth' });
       }
     }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      const needBloodForm = document.getElementById('needBloodForm');
+      if (needBloodForm) {
+        needBloodForm.addEventListener('submit', async function (event) {
+          event.preventDefault();
+
+          const quantity = document.getElementById('needBloodQuantity').value;
+          const bloodType = document.getElementById('needBloodType').value;
+          const urgencyLevel = document.querySelector('input[name="urgency"]:checked').value;
+
+          if (!quantity || !bloodType) {
+            alert('Vui lòng điền đầy đủ thông tin số lượng và nhóm máu.');
+            return;
+          }
+
+          const requestData = {
+            quantity: parseInt(quantity, 10),
+            bloodTypeNeeded: bloodType,
+            urgencyLevel: urgencyLevel
+          };
+
+          try {
+            const result = await adminApiService.createDonationRequest(requestData);
+            alert('Đăng ký yêu cầu cần máu thành công!');
+            needBloodForm.reset();
+          } catch (error) {
+            console.error('Lỗi khi tạo yêu cầu:', error);
+            alert('Đã xảy ra lỗi. Vui lòng thử lại.');
+          }
+        });
+      }
+    });
   </script>
 </body>
+
 </html>

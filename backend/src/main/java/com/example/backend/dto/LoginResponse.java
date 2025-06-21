@@ -1,5 +1,7 @@
 package com.example.backend.dto;
 
+import com.example.backend.entity.Role;
+
 import lombok.AllArgsConstructor;
 import lombok.Data;
 

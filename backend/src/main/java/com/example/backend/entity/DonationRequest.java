@@ -38,6 +38,10 @@ public class DonationRequest {
     @Column(name = "created_at")
     private Timestamp createdAt;
 
+    @ManyToOne
+    @JoinColumn(name = "user_id")
+    private User user;
+
     public enum UrgencyLevel {
         low, medium, high
     }

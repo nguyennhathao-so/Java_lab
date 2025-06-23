@@ -47,6 +47,19 @@ public class DonationRequest {
     }
 
     public enum RequestStatus {
-        open, fulfilled, closed
+        open, fulfilled, closed;
+
+        public String toVietnamese() {
+            switch (this) {
+                case open:
+                    return "Đang chờ";
+                case fulfilled:
+                    return "Đã đáp ứng";
+                case closed:
+                    return "Đã đóng";
+                default:
+                    return this.name();
+            }
+        }
     }
 }

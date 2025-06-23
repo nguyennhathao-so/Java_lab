@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,7 +15,9 @@
     <!-- Font chữ -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@300..700&family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Akshar:wght@300..700&family=Inter:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet" />
 
     <!-- CSS -->
     <link rel="stylesheet" href="./css/reset.css" />
@@ -32,6 +35,7 @@
             padding: 0 20px;
             font-family: 'Inter', sans-serif;
         }
+
         .auth-box {
             background-color: #fddede;
             padding: 30px 24px;
@@ -41,12 +45,14 @@
             max-width: 420px;
             box-sizing: border-box;
         }
+
         .auth-tabs {
             display: flex;
             justify-content: center;
             border-bottom: 2px solid #ccc;
             margin-bottom: 24px;
         }
+
         .auth-tabs .tab {
             flex: 1;
             padding: 10px;
@@ -58,15 +64,18 @@
             border-bottom: 3px solid transparent;
             transition: 0.3s;
         }
+
         .auth-tabs .tab.active {
             color: #3f51b5;
             border-color: #3f51b5;
         }
+
         .auth-form label {
             display: block;
             margin: 12px 0 4px;
             font-weight: 500;
         }
+
         .auth-form input,
         .auth-form select {
             width: 100%;
@@ -78,19 +87,23 @@
             outline: none;
             box-sizing: border-box;
         }
+
         .input-password {
             position: relative;
             display: flex;
             align-items: center;
         }
+
         .input-password input {
             padding-right: 38px;
         }
+
         .select-group {
             display: flex;
             gap: 12px;
             margin-top: 12px;
         }
+
         .btn-red {
             background: #a01515;
             color: white;
@@ -104,12 +117,15 @@
             cursor: pointer;
             transition: background 0.3s;
         }
+
         .btn-red:hover {
             background: #860e0e;
         }
+
         .auth-form {
             display: none;
         }
+
         .auth-form.active {
             display: block;
         }
@@ -122,6 +138,7 @@
     <script src="./js/api.js"></script>
     <script src="./js/example.js"></script>
 </head>
+
 <body>
     <!-- Header -->
     <div id="header"></div>
@@ -167,10 +184,14 @@
                             </select>
                             <select required>
                                 <option disabled selected>Nhóm Máu</option>
-                                <option>A</option>
-                                <option>B</option>
-                                <option>AB</option>
-                                <option>O</option>
+                                <option>A+</option>
+                                <option>A-</option>
+                                <option>B+</option>
+                                <option>B-</option>
+                                <option>AB+</option>
+                                <option>AB-</option>
+                                <option>O+</option>
+                                <option>O-</option>
                             </select>
                         </div>
 
@@ -196,4 +217,5 @@
     <!-- Footer -->
     <div id="footer"></div>
 </body>
+
 </html>

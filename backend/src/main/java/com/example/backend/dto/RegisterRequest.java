@@ -15,4 +15,4 @@ public class RegisterRequest {
     private String address;
     private String gender;
     private String bloodType;
-} 
+}

@@ -7,6 +7,7 @@ import com.example.backend.entity.BloodInventory;
 import com.example.backend.entity.User;
 import com.example.backend.repository.*;
 import com.example.backend.dto.HistoryItem;
+import com.example.backend.dto.DonationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -41,35 +42,36 @@ public class AdminController {
     // Get all blood donations for approval
     @GetMapping("/blood-donations")
     public ResponseEntity<List<Donation>> getBloodDonations() {
-        List<Donation> donations = donationRepository.findAllWithUserOrderByDateDesc();
+        List<Donation> donations = donationRepository.findByStatus("Chờ duyệt");
         return ResponseEntity.ok(donations);
     }
 
     // === API CHÍNH CHO CÁC TRANG QUẢN LÝ HIẾN MÁU ===
     @GetMapping("/donations/status/{status}")
-    public ResponseEntity<List<Donation>> getDonationsByStatus(@PathVariable String status) {
+    public ResponseEntity<List<DonationResponse>> getDonationsByStatus(@PathVariable String status) {
         List<Donation> donations = donationRepository.findByStatus(status);
-        return ResponseEntity.ok(donations);
+        List<DonationResponse> donationResponses = donations.stream().map(donation -> {
+            User user = donation.getUser();
+            return new DonationResponse(
+                    donation.getDonationId(),
+                    user,
+                    null,
+                    donation.getDonationType() != null ? donation.getDonationType().name() : null,
+                    donation.getAmount(),
+                    donation.getDate() != null ? new java.sql.Date(donation.getDate().getTime()) : null,
+                    donation.getStatus());
+        }).collect(Collectors.toList());
+        return ResponseEntity.ok(donationResponses);
     }
 
-    // API mới: Cập nhật trạng thái của một lượt hiến máu
-    @PostMapping("/donations/{donationId}/update-status")
-    public ResponseEntity<?> updateDonationStatus(@PathVariable Integer donationId,
-            @RequestBody Map<String, String> body) {
-        try {
-            String newStatus = body.get("status");
-            Donation donation = donationRepository.findById(donationId)
-                    .orElseThrow(() -> new RuntimeException("Donation not found with id: " + donationId));
-
-            donation.setStatus(newStatus);
-            donationRepository.save(donation);
-
-            return ResponseEntity
-                    .ok(Collections.singletonMap("message", "Donation status updated successfully to " + newStatus));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Error updating donation status: " + e.getMessage());
-        }
+    // Endpoint để cập nhật trạng thái của một yêu cầu hiến máu
+    @PutMapping("/donations/{id}/status")
+    public ResponseEntity<Void> updateDonationStatus(@PathVariable Integer id, @RequestBody String status) {
+        Donation donation = donationRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Donation not found"));
+        donation.setStatus(status);
+        donationRepository.save(donation);
+        return ResponseEntity.ok().build();
     }
 
     // API Lấy Lịch sử Hiến máu (có thể dùng lại API theo status)
@@ -84,7 +86,7 @@ public class AdminController {
 
     // API Lấy các lượt đã duyệt (Chờ khám) (có thể dùng lại API theo status)
     @GetMapping("/approved-donations")
-    public ResponseEntity<List<Donation>> getApprovedDonations() {
+    public ResponseEntity<List<DonationResponse>> getApprovedDonations() {
         return getDonationsByStatus("Chờ khám");
     }
 
@@ -109,7 +111,7 @@ public class AdminController {
                     user != null ? user.getBloodType() : "N/A",
                     d.getAmount(),
                     d.getStatus(),
-                    d.getDate(),
+                    d.getDate() != null ? new java.sql.Date(d.getDate().getTime()) : null,
                     user != null ? user.getGender() : "N/A",
                     user != null ? user.getEmail() : "N/A");
         }).collect(Collectors.toList()));
@@ -140,7 +142,7 @@ public class AdminController {
                     contact,
                     r.getBloodTypeNeeded(),
                     r.getQuantity(),
-                    r.getStatus().toString(),
+                    r.getStatus().toVietnamese(),
                     sqlDate,
                     gender,
                     email);
@@ -232,43 +234,27 @@ public class AdminController {
         }
     }
 
-    // Delete donation
     @DeleteMapping("/donations/{id}")
-    public ResponseEntity<?> deleteDonation(@PathVariable Integer id) {
-        try {
-            donationRepository.deleteById(id);
-            return ResponseEntity.ok().body("Donation deleted successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error deleting donation: " + e.getMessage());
-        }
+    public ResponseEntity<Void> deleteDonation(@PathVariable Integer id) {
+        donationRepository.deleteById(id);
+        return ResponseEntity.ok().build();
     }
 
     // Delete blood request
     @DeleteMapping("/blood-requests/{id}")
     public ResponseEntity<?> deleteBloodRequest(@PathVariable Integer id) {
-        try {
-            donationRequestRepository.deleteById(id);
-            return ResponseEntity.ok().body("Blood request deleted successfully");
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().body("Error deleting blood request: " + e.getMessage());
-        }
+        donationRequestRepository.deleteById(id);
+        return ResponseEntity.ok().body("Blood request deleted successfully");
     }
 
     // Approve blood request
     @PostMapping("/blood-requests/{id}/approve")
     public ResponseEntity<?> approveBloodRequest(@PathVariable Integer id) {
-        try {
-            DonationRequest request = donationRequestRepository.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Donation request not found with id: " + id));
-
-            request.setStatus(DonationRequest.RequestStatus.fulfilled);
-            donationRequestRepository.save(request);
-
-            return ResponseEntity.ok(Map.of("message", "Blood request approved successfully"));
-        } catch (Exception e) {
-            e.printStackTrace();
-            return ResponseEntity.badRequest().body("Error approving blood request: " + e.getMessage());
-        }
+        DonationRequest request = donationRequestRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Donation request not found with id: " + id));
+        request.setStatus(DonationRequest.RequestStatus.fulfilled);
+        donationRequestRepository.save(request);
+        return ResponseEntity.ok(Map.of("message", "Blood request approved successfully"));
     }
 
     @GetMapping("/health-centers")

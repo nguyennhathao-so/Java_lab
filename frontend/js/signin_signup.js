@@ -133,6 +133,9 @@ $(document).ready(function () {
               localStorage.setItem('authToken', response.token);
               localStorage.setItem('userEmail', response.email);
               localStorage.setItem('userName', response.fullName);
+              localStorage.setItem('userPhone', response.phone);
+              localStorage.setItem('userAddress', response.address);
+              localStorage.setItem('userGender', response.gender);
               localStorage.setItem('role', response.role?.toUpperCase());
 
               alert('Đăng ký thành công!');
@@ -194,6 +197,9 @@ $(document).ready(function () {
           localStorage.setItem('authToken', response.token);
           localStorage.setItem('userEmail', response.email);
           localStorage.setItem('userName', response.fullName);
+          localStorage.setItem('userPhone', response.phone);
+          localStorage.setItem('userAddress', response.address);
+          localStorage.setItem('userGender', response.gender);
           localStorage.setItem('role', response.role?.toUpperCase());
 
           if (response.user) {

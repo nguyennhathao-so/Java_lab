@@ -51,7 +51,11 @@
                     <label for="amount">Số Lượng Máu Hiến (ml)</label>
                     <input type="number" id="amount" placeholder="Nhập số lượng máu thực tế">
 
-                    <button type="submit" class="submit-button">CẬP NHẬT</button>
+                    <div class="button-group" style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button type="submit" class="submit-button" style="flex: 1;">CẬP NHẬT & HOÀN THÀNH</button>
+                        <button type="button" id="cancel-button" class="cancel-button"
+                            style="flex: 1; background-color: #f44336;">HỦY BỎ</button>
+                    </div>
                 </form>
             </section>
         </main>
@@ -83,6 +87,21 @@
                 window.location.href = 'approve.html'; // Quay lại trang trước
                 return;
             }
+
+            // Xử lý sự kiện hủy bỏ
+            const cancelButton = document.getElementById('cancel-button');
+            cancelButton.addEventListener('click', async () => {
+                if (confirm('Bạn có chắc chắn muốn hủy lượt hiến máu này không?')) {
+                    try {
+                        await adminApiService.updateDonationStatus(donationId, 'Đã hủy');
+                        alert('Đã hủy lượt hiến máu thành công.');
+                        window.location.href = 'blood_donations_history.html';
+                    } catch (error) {
+                        console.error('Lỗi khi hủy:', error);
+                        alert('Có lỗi xảy ra khi hủy. Vui lòng thử lại.');
+                    }
+                }
+            });
 
             // Xử lý sự kiện submit form
             const form = document.querySelector('form');

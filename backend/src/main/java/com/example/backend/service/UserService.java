@@ -36,7 +36,7 @@ public class UserService {
 
         // Tạo user mới
         User user = new User();
-        user.setName(request.getFullName());
+        user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPhone(request.getPhoneNumber());
@@ -59,7 +59,8 @@ public class UserService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Email hoặc mật khẩu không đúng!"));
         if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return new LoginResponse("token", user.getRole().getRoleName(), user.getName(), user.getEmail());
+            return new LoginResponse("token", user.getRole().getRoleName(), user.getName(), user.getEmail(),
+                    user.getPhone(), user.getAddress(), user.getGender());
         } else {
             throw new RuntimeException("Email hoặc mật khẩu không đúng!");
         }

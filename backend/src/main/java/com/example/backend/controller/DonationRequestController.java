@@ -12,10 +12,12 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/donation-requests")
+@RequestMapping("/api/admin")
 @CrossOrigin(origins = { "http://localhost:8081", "http://127.0.0.1:8081" })
 public class DonationRequestController {
 
@@ -24,6 +26,12 @@ public class DonationRequestController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @GetMapping
+    public ResponseEntity<List<DonationRequest>> getAllDonationRequests() {
+        List<DonationRequest> requests = donationRequestRepository.findAll();
+        return ResponseEntity.ok(requests);
+    }
 
     @PostMapping
     public ResponseEntity<?> createDonationRequest(@RequestBody DonationRequest request) {
@@ -40,4 +48,5 @@ public class DonationRequestController {
 
         return new ResponseEntity<>(savedRequest, HttpStatus.CREATED);
     }
+
 }

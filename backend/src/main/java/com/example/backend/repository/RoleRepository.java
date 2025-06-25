@@ -6,6 +6,6 @@ import com.example.backend.entity.Role;
 
 import java.util.Optional;
 
-public interface RoleRepository extends JpaRepository<Role, Integer> {
+public interface RoleRepository extends JpaRepository<Role, String> {
     Optional<Role> findByRoleName(String roleName);
 }

@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DonationRepository extends JpaRepository<Donation, Integer> {
+public interface DonationRepository extends JpaRepository<Donation, String> {
 
     @Query("SELECT d FROM Donation d JOIN FETCH d.user u ORDER BY d.date DESC")
     List<Donation> findAllWithUserOrderByDateDesc();
 
-    List<Donation> findByUser_UserId(Integer userId);
+    List<Donation> findByUser_UserId(String userId);
 }

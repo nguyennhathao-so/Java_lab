@@ -87,6 +87,10 @@
         background: #fff9f9;
     }
 
+    .notification-item.read {
+        background: #f0f0f0;
+    }
+
     .notification-item.success {
         border-left-color: #4CAF50;
     }
@@ -206,6 +210,16 @@
         color: #666;
     }
 
+    .noti-btn.secondary.unread-btn {
+        background: #c62828;
+        color: #fff;
+    }
+
+    .noti-btn.secondary.read-btn {
+        background: #f5f5f5;
+        color: #666;
+    }
+
     .noti-status {
         display: flex;
         align-items: center;
@@ -255,112 +269,11 @@
                 <button class="filter-btn active" data-type="all">Tất cả</button>
                 <button class="filter-btn" data-type="request">Yêu cầu</button>
                 <button class="filter-btn" data-type="reminder">Nhắc nhở</button>
-                <button class="filter-btn" data-type="health">Sức khỏe</button>
             </div>
 
             <div class="thongbao-container">
                 <div class="notification-list">
-                    <!-- Thông báo yêu cầu được duyệt -->
-                    <div class="notification-item success unread" data-type="request">
-                        <div class="noti-header">
-                            <div class="noti-icon">✓</div>
-                            <div class="noti-title">Yêu cầu hiến máu được chấp nhận</div>
-                            <div class="noti-time">2 giờ trước</div>
-                        </div>
-                        <div class="noti-content">
-                            <p>Yêu cầu hiến máu của bạn tại <strong>Bệnh viện Chợ Rẫy</strong> đã được chấp nhận.</p>
-                            <p><strong>Thời gian:</strong> 09:00, 20/03/2024</p>
-                            <p><strong>Ghi chú từ nhân viên:</strong> Hồ sơ của bạn đã đạt yêu cầu. Vui lòng đến đúng giờ và mang theo CCCD/CMND.</p>
-                        </div>
-                        <div class="noti-footer">
-                            <div class="noti-actions">
-                                <a href="#" class="noti-btn primary">Xem chi tiết lịch hẹn</a>
-                                <button class="noti-btn secondary">Đánh dấu đã đọc</button>
-                            </div>
-                            <div class="noti-status">
-                                <span class="status-dot"></span>
-                                <span>Đã duyệt</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Thông báo yêu cầu bị từ chối -->
-                    <div class="notification-item danger unread" data-type="request">
-                        <div class="noti-header">
-                            <div class="noti-icon">✕</div>
-                            <div class="noti-title">Yêu cầu hiến máu không được chấp nhận</div>
-                            <div class="noti-time">1 ngày trước</div>
-                        </div>
-                        <div class="noti-content">
-                            <p>Rất tiếc, yêu cầu hiến máu của bạn chưa được chấp nhận vào lúc này.</p>
-                            <p><strong>Lý do:</strong> Khoảng cách thời gian từ lần hiến máu trước chưa đủ 3 tháng.</p>
-                            <p><strong>Ghi chú từ nhân viên:</strong> Bạn có thể đăng ký lại sau ngày 15/06/2024.</p>
-                        </div>
-                        <div class="noti-footer">
-                            <div class="noti-actions">
-                                <a href="#" class="noti-btn primary">Xem lịch sử hiến máu</a>
-                                <button class="noti-btn secondary">Đánh dấu đã đọc</button>
-                            </div>
-                            <div class="noti-status">
-                                <span class="status-dot"></span>
-                                <span>Từ chối</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Thông báo nhắc nhở hiến máu -->
-                    <div class="notification-item warning" data-type="reminder">
-                        <div class="noti-header">
-                            <div class="noti-icon">⏰</div>
-                            <div class="noti-title">Đã đến thời gian có thể hiến máu</div>
-                            <div class="noti-time">3 ngày trước</div>
-                        </div>
-                        <div class="noti-content">
-                            <p>Xin chào! Đã 3 tháng kể từ lần hiến máu trước của bạn.</p>
-                            <p>Bạn đã đủ điều kiện để tham gia hiến máu lại từ ngày <strong>15/03/2024</strong>.</p>
-                            <p><strong>Lần hiến máu trước:</strong></p>
-                            <ul>
-                                <li>Ngày hiến: 15/12/2023</li>
-                                <li>Lượng máu: 350ml</li>
-                                <li>Địa điểm: Trung tâm Hiến máu Nhân đạo</li>
-                            </ul>
-                        </div>
-                        <div class="noti-footer">
-                            <div class="noti-actions">
-                                <a href="#" class="noti-btn primary">Đặt lịch hiến máu</a>
-                            </div>
-                            <div class="noti-status">
-                                <span class="status-dot"></span>
-                                <span>Nhắc nhở</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Thông báo theo dõi sức khỏe -->
-                    <div class="notification-item" data-type="health">
-                        <div class="noti-header">
-                            <div class="noti-icon">❤️</div>
-                            <div class="noti-title">Cập nhật tình trạng sức khỏe</div>
-                            <div class="noti-time">5 ngày trước</div>
-                        </div>
-                        <div class="noti-content">
-                            <p>Đã 15 ngày kể từ lần hiến máu gần nhất của bạn. Vui lòng cập nhật tình trạng sức khỏe:</p>
-                            <ul>
-                                <li>Kiểm tra các triệu chứng bất thường</li>
-                                <li>Ghi nhận mức độ hồi phục</li>
-                                <li>Cập nhật chế độ dinh dưỡng</li>
-                            </ul>
-                        </div>
-                        <div class="noti-footer">
-                            <div class="noti-actions">
-                                <a href="#" class="noti-btn primary">Cập nhật sức khỏe</a>
-                            </div>
-                            <div class="noti-status">
-                                <span class="status-dot"></span>
-                                <span>Theo dõi sức khỏe</span>
-                            </div>
-                        </div>
-                    </div>
+                    <!-- Thông báo sẽ được render động bằng JS -->
                 </div>
             </div>
         </section>
@@ -369,10 +282,33 @@
     <!-- Footer -->
     <div id="footer"></div>
 
+    <!-- Modal lịch sử yêu cầu -->
+    <div id="historyModal" class="modal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.3);align-items:center;justify-content:center;">
+      <div style="background:#fff;padding:32px 24px;border-radius:12px;max-width:600px;width:100%;box-shadow:0 2px 16px rgba(0,0,0,0.2);position:relative;">
+        <h3 style="margin-bottom:16px;font-size:20px;color:#c62828;">Lịch sử yêu cầu</h3>
+        <table style="width:100%;border-collapse:collapse;">
+          <thead>
+            <tr style="background:#f5f5f5;">
+              <th style="padding:8px 12px;border:1px solid #eee;">STT</th>
+              <th style="padding:8px 12px;border:1px solid #eee;">Loại</th>
+              <th style="padding:8px 12px;border:1px solid #eee;">Ngày yêu cầu</th>
+              <th style="padding:8px 12px;border:1px solid #eee;">Trạng thái</th>
+            </tr>
+          </thead>
+          <tbody id="historyTableBody">
+            <!-- Dữ liệu sẽ được render bằng JS -->
+          </tbody>
+        </table>
+        <button onclick="closeHistoryModal()" style="margin-top:20px;padding:8px 20px;background:#c62828;color:#fff;border:none;border-radius:4px;">Đóng</button>
+        <span style="position:absolute;top:12px;right:18px;cursor:pointer;font-size:22px;" onclick="closeHistoryModal()">&times;</span>
+      </div>
+    </div>
+
     <!-- JS -->
     <script src="./js/jquery-3.7.1.min.js"></script>
     <script src="./js/component.js"></script>
     <script src="./js/api.js"></script>
+    <script src="./js/admin-api.js"></script>
     <script>
         // Xử lý bộ lọc thông báo
         document.querySelectorAll('.filter-btn').forEach(btn => {
@@ -384,8 +320,21 @@
                 // Lọc thông báo
                 const type = btn.dataset.type;
                 document.querySelectorAll('.notification-item').forEach(item => {
-                    if (type === 'all' || item.dataset.type === type) {
+                    const messageType = item.getAttribute('data-message-type');
+                    if (type === 'all') {
                         item.style.display = 'block';
+                    } else if (type === 'request') {
+                        if (messageType === 'approved' || messageType === 'rejected') {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    } else if (type === 'reminder') {
+                        if (messageType === 'reminder') {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
                     } else {
                         item.style.display = 'none';
                     }
@@ -393,13 +342,170 @@
             });
         });
 
-        // Xử lý đánh dấu đã đọc
-        document.querySelectorAll('.noti-btn.secondary').forEach(btn => {
-            btn.addEventListener('click', function() {
-                const notificationItem = this.closest('.notification-item');
-                notificationItem.classList.remove('unread');
-            });
+        // Hàm tính thời gian tương đối
+        function getRelativeTime(createdAt) {
+            const now = new Date();
+            const created = new Date(createdAt);
+            const diffMs = now - created;
+            const diffMins = Math.floor(diffMs / 60000);
+            if (diffMins < 60) return `${diffMins} phút trước`;
+            const diffHours = Math.floor(diffMins / 60);
+            if (diffHours < 24) return `${diffHours} giờ trước`;
+            const diffDays = Math.floor(diffHours / 24);
+            return `${diffDays} ngày trước`;
+        }
+
+        // Fetch và render notification từ backend
+        document.addEventListener("DOMContentLoaded", async () => {
+            const notificationList = document.querySelector('.notification-list');
+            notificationList.innerHTML = `
+                <div class="notification-item skeleton" style="opacity:0.5">
+                    <div class="noti-header">
+                        <div class="noti-icon">🔔</div>
+                        <div class="noti-title" style="background:#eee;width:60%;height:18px;border-radius:4px;"></div>
+                        <div class="noti-time" style="background:#eee;width:80px;height:14px;border-radius:4px;"></div>
+                    </div>
+                    <div class="noti-content">
+                        <div style="background:#eee;height:14px;width:90%;margin-bottom:8px;border-radius:4px;"></div>
+                        <div style="background:#eee;height:14px;width:60%;border-radius:4px;"></div>
+                    </div>
+                    <div class="noti-footer">
+                        <div class="noti-actions">
+                            <button class="noti-btn secondary unread-btn" style="opacity:0.7">Đánh dấu đã đọc</button>
+                        </div>
+                        <div class="noti-status">
+                            <span class="status-dot"></span>
+                            <span style="background:#eee;width:40px;height:14px;display:inline-block;border-radius:4px;"></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="notification-item skeleton" style="opacity:0.5">
+                    <div class="noti-header">
+                        <div class="noti-icon">🔔</div>
+                        <div class="noti-title" style="background:#eee;width:50%;height:18px;border-radius:4px;"></div>
+                        <div class="noti-time" style="background:#eee;width:60px;height:14px;border-radius:4px;"></div>
+                    </div>
+                    <div class="noti-content">
+                        <div style="background:#eee;height:14px;width:80%;margin-bottom:8px;border-radius:4px;"></div>
+                        <div style="background:#eee;height:14px;width:50%;border-radius:4px;"></div>
+                    </div>
+                    <div class="noti-footer">
+                        <div class="noti-actions">
+                            <button class="noti-btn secondary unread-btn" style="opacity:0.7">Đánh dấu đã đọc</button>
+                        </div>
+                        <div class="noti-status">
+                            <span class="status-dot"></span>
+                            <span style="background:#eee;width:40px;height:14px;display:inline-block;border-radius:4px;"></span>
+                        </div>
+                    </div>
+                </div>
+            `;
+
+            try {
+                const userId = localStorage.getItem('userId') || localStorage.getItem('user_id');
+                const notifications = await adminApiService.getNotificationsByUserId(userId);
+                if (!notifications.length) {
+                    notificationList.innerHTML = '<div class="no-notifications">Không có thông báo nào.</div>';
+                    return;
+                }
+                notificationList.innerHTML = '';
+                notifications.forEach(noti => {
+                    const statusClass = noti.status === 'unread' ? 'unread' : 'read';
+                    let typeClass = '';
+                    let icon = '🔔';
+                    if (noti.messageType === 'approved') {
+                        typeClass = 'success';
+                        icon = '✓';
+                    } else if (noti.messageType === 'rejected') {
+                        typeClass = 'danger';
+                        icon = '✕';
+                    } else if (noti.messageType === 'reminder') {
+                        typeClass = 'warning';
+                        icon = '⏰';
+                    }
+                    let actionBtn = '';
+                    if (noti.messageType === 'reminder') {
+                        actionBtn = `<button class="noti-btn primary" onclick="window.location.href='services.html'">Đăng ký hiến máu</button>`;
+                    } else if (noti.messageType === 'approved' || noti.messageType === 'rejected') {
+                        actionBtn = `<button class="noti-btn primary" onclick="showHistoryModal()">Xem lịch sử yêu cầu</button>`;
+                    }
+                    // Thêm nội dung cố định cho từng loại thông báo
+                    let extraContent = '';
+                    if (noti.messageType === 'approved') {
+                        extraContent = `<p><strong>Lưu ý:</strong> Vui lòng mang theo giấy tờ tùy thân (CMND/CCCD), đến đúng giờ và tuân thủ hướng dẫn của nhân viên y tế.</p>`;
+                    } else if (noti.messageType === 'rejected') {
+                        extraContent = `<p>Bạn chưa đủ thời gian hiến máu hoặc có thể liên hệ admin qua <a href="mailto:staff@gmail.com">staff@gmail.com</a> để biết thêm thông tin chi tiết.</p>`;
+                    } else if (noti.messageType === 'reminder') {
+                        extraContent = `<p>Sau thời gian chờ, bạn đã có thể đăng ký hiến máu lại để giúp đỡ cộng đồng.</p>`;
+                    }
+                    notificationList.innerHTML += `
+                        <div class="notification-item ${statusClass} ${typeClass}" data-type="request" data-message-type="${noti.messageType}">
+                            <div class="noti-header">
+                                <div class="noti-icon">${icon}</div>
+                                <div class="noti-title">${noti.message}</div>
+                                <div class="noti-time">${getRelativeTime(noti.createdAt)}</div>
+                            </div>
+                            <div class="noti-content">
+                                ${noti.staffMessage ? `<p><strong>Ghi chú nhân viên:</strong> ${noti.staffMessage}</p>` : ''}
+                                ${extraContent}
+                            </div>
+                            <div class="noti-footer">
+                                <div class="noti-actions">
+                                    ${actionBtn}
+                                </div>
+                                <div class="noti-status">
+                                    <span class="status-dot"></span>
+                                    <span>${noti.messageType === 'approved' ? 'Duyệt' : (noti.messageType === 'rejected' ? 'Từ chối' : (noti.messageType === 'reminder' ? 'Nhắc nhở' : ''))}</span>
+                                </div>
+                            </div>
+                        </div>
+                    `;
+                });
+
+                // Gắn lại sự kiện đánh dấu đã đọc
+                document.querySelectorAll('.noti-btn.secondary').forEach(btn => {
+                    btn.addEventListener('click', function() {
+                        const notificationItem = this.closest('.notification-item');
+                        notificationItem.classList.remove('unread');
+                        notificationItem.classList.add('read');
+                        this.classList.remove('unread-btn');
+                        this.classList.add('read-btn');
+                        this.textContent = 'Đã đọc';
+                        // TODO: Gọi API cập nhật trạng thái nếu cần
+                    });
+                });
+            } catch (e) {
+                notificationList.innerHTML = '<div class="no-notifications">Lỗi tải thông báo.</div>';
+            }
         });
+
+        // Hàm show modal lịch sử yêu cầu
+        function showHistoryModal() {
+          const userId = localStorage.getItem('userId') || localStorage.getItem('user_id') || 'US1';
+          const tbody = document.getElementById('historyTableBody');
+          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Đang tải...</td></tr>';
+          adminApiService.getDonationRegistrationsByUserId(userId).then(historyData => {
+            tbody.innerHTML = '';
+            if (!historyData.length) {
+              tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Không có dữ liệu</td></tr>';
+              return;
+            }
+            historyData.forEach((row, idx) => {
+              tbody.innerHTML += `<tr>
+                <td style='padding:8px 12px;border:1px solid #eee;text-align:center;'>${idx+1}</td>
+                <td style='padding:8px 12px;border:1px solid #eee;'>${row.type}</td>
+                <td style='padding:8px 12px;border:1px solid #eee;'>${row.registrationDate || row.registration_date}</td>
+                <td style='padding:8px 12px;border:1px solid #eee;'>${row.status}</td>
+              </tr>`;
+            });
+          }).catch(() => {
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Lỗi tải dữ liệu</td></tr>';
+          });
+          document.getElementById('historyModal').style.display = 'flex';
+        }
+        function closeHistoryModal() {
+          document.getElementById('historyModal').style.display = 'none';
+        }
     </script>
 </body>
 </html>

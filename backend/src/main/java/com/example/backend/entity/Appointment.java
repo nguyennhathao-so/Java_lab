@@ -6,17 +6,19 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
 import java.sql.Date;
+import com.example.backend.config.EntityIdListener;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "appointments")
+@EntityListeners(EntityIdListener.class)
 public class Appointment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "appointment_id")
-    private Integer appointmentId;
+    private String appointmentId;
 
     @ManyToOne
     @JoinColumn(name = "user_id", nullable = false)

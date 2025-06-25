@@ -134,6 +134,9 @@ $(document).ready(function () {
               localStorage.setItem('userEmail', response.email);
               localStorage.setItem('userName', response.fullName);
               localStorage.setItem('role', response.role?.toUpperCase());
+              if (response.userId) {
+                localStorage.setItem('userId', response.userId);
+              }
 
               alert('Đăng ký thành công!');
               window.location.href = 'home.html';
@@ -195,6 +198,9 @@ $(document).ready(function () {
           localStorage.setItem('userEmail', response.email);
           localStorage.setItem('userName', response.fullName);
           localStorage.setItem('role', response.role?.toUpperCase());
+          if (response.userId) {
+            localStorage.setItem('userId', response.userId);
+          }
 
           if (response.user) {
             localStorage.setItem('userData', JSON.stringify(response.user));

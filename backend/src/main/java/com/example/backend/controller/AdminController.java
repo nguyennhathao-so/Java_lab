@@ -4,10 +4,14 @@ import com.example.backend.entity.Donation;
 import com.example.backend.entity.DonationRequest;
 import com.example.backend.entity.BloodInventory;
 import com.example.backend.entity.User;
+import com.example.backend.entity.Notification;
+import com.example.backend.entity.DonationRegistration;
 import com.example.backend.repository.DonationRepository;
 import com.example.backend.repository.DonationRequestRepository;
 import com.example.backend.repository.BloodInventoryRepository;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.repository.NotificationRepository;
+import com.example.backend.repository.DonationRegistrationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,7 +22,6 @@ import java.util.HashMap;
 
 @RestController
 @RequestMapping("/api/admin")
-@CrossOrigin(origins = { "http://localhost:8081", "http://127.0.0.1:8081" })
 public class AdminController {
 
     @Autowired
@@ -32,6 +35,12 @@ public class AdminController {
 
     @Autowired
     private UserRepository userRepository;
+
+    @Autowired
+    private NotificationRepository notificationRepository;
+
+    @Autowired
+    private DonationRegistrationRepository donationRegistrationRepository;
 
     // Get all blood donations for approval
     @GetMapping("/blood-donations")
@@ -82,7 +91,7 @@ public class AdminController {
         }
 
         response.put("bloodTypeCounts", bloodTypeCounts);
-        response.put("totalUnits", bloodTypeCounts.values().stream().mapToInt(Integer::intValue).sum());
+        response.put("totalUnits", bloodTypeCounts.values().stream().mapToLong(Integer::longValue).sum());
 
         return ResponseEntity.ok(response);
     }
@@ -108,7 +117,7 @@ public class AdminController {
 
     // Delete donation
     @DeleteMapping("/donations/{id}")
-    public ResponseEntity<?> deleteDonation(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteDonation(@PathVariable String id) {
         try {
             donationRepository.deleteById(id);
             return ResponseEntity.ok().body("Donation deleted successfully");
@@ -119,7 +128,7 @@ public class AdminController {
 
     // Approve donation
     @PostMapping("/donations/{id}/approve")
-    public ResponseEntity<?> approveDonation(@PathVariable Integer id) {
+    public ResponseEntity<?> approveDonation(@PathVariable String id) {
         try {
             // For now, just return success - you can implement actual approval logic later
             return ResponseEntity.ok().body("Donation approved successfully");
@@ -130,7 +139,7 @@ public class AdminController {
 
     // Delete blood request
     @DeleteMapping("/blood-requests/{id}")
-    public ResponseEntity<?> deleteBloodRequest(@PathVariable Integer id) {
+    public ResponseEntity<?> deleteBloodRequest(@PathVariable String id) {
         try {
             donationRequestRepository.deleteById(id);
             return ResponseEntity.ok().body("Blood request deleted successfully");
@@ -141,12 +150,54 @@ public class AdminController {
 
     // Approve blood request
     @PostMapping("/blood-requests/{id}/approve")
-    public ResponseEntity<?> approveBloodRequest(@PathVariable Integer id) {
+    public ResponseEntity<?> approveBloodRequest(@PathVariable String id) {
         try {
             // For now, just return success - you can implement actual approval logic later
             return ResponseEntity.ok().body("Blood request approved successfully");
         } catch (Exception e) {
             return ResponseEntity.badRequest().body("Error approving blood request: " + e.getMessage());
         }
+    }
+
+    // Get total user count
+    @GetMapping("/users/count")
+    public ResponseEntity<Map<String, Long>> getUserCount() {
+        long userCount = userRepository.count();
+        Map<String, Long> response = new HashMap<>();
+        response.put("userCount", userCount);
+        return ResponseEntity.ok(response);
+    }
+
+    // Get total requests count from donations and donation_requests
+    @GetMapping("/requests/count")
+    public ResponseEntity<Map<String, Long>> getTotalRequestsCount() {
+        long donationCount = donationRepository.count();
+        long donationRequestCount = donationRequestRepository.count();
+        long totalRequests = donationCount + donationRequestCount;
+        
+        Map<String, Long> response = new HashMap<>();
+        response.put("totalRequests", totalRequests);
+        return ResponseEntity.ok(response);
+    }
+
+    // Get all notifications (admin)
+    @GetMapping("/notifications")
+    public ResponseEntity<List<Notification>> getAllNotifications() {
+        List<Notification> notifications = notificationRepository.findAllByOrderByCreatedAtDesc();
+        return ResponseEntity.ok(notifications);
+    }
+
+    // Lấy lịch sử đăng ký hiến/cần máu của user
+    @GetMapping("/donation-registrations/{userId}")
+    public ResponseEntity<List<DonationRegistration>> getDonationRegistrations(@PathVariable String userId) {
+        List<DonationRegistration> list = donationRegistrationRepository.findByUser_UserIdOrderByRegistrationDateDesc(userId);
+        return ResponseEntity.ok(list);
+    }
+
+    // Get notifications by user
+    @GetMapping("/notifications/user/{userId}")
+    public ResponseEntity<List<Notification>> getNotificationsByUser(@PathVariable String userId) {
+        List<Notification> notifications = notificationRepository.findByUser_UserIdOrderByCreatedAtDesc(userId);
+        return ResponseEntity.ok(notifications);
     }
 }

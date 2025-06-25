@@ -4,17 +4,19 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import com.example.backend.config.EntityIdListener;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "health_centers")
+@EntityListeners(EntityIdListener.class)
 public class HealthCenter {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "center_id")
-    private Integer centerId;
+    private String centerId;
 
     @Column(name = "name", nullable = false)
     private String name;

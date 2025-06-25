@@ -6,17 +6,20 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.sql.Date;
 import java.sql.Timestamp;
+import com.example.backend.config.EntityIdListener;
+import org.hibernate.annotations.CreationTimestamp;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "users")
+@EntityListeners(EntityIdListener.class)
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "user_id")
-    private Integer userId;
+    private String userId;
 
     @Column(name = "name", nullable = false)
     private String name;
@@ -45,6 +48,7 @@ public class User {
     @Column(name = "status")
     private String status;
 
+    @CreationTimestamp
     @Column(name = "created_at")
     private Timestamp createdAt;
 
@@ -56,4 +60,8 @@ public class User {
 
     @Column(name = "address", columnDefinition = "text")
     private String address;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "user")
+    private java.util.List<DonationRegistration> donationRegistrations;
 }

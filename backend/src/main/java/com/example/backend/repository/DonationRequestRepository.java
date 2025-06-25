@@ -7,10 +7,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DonationRequestRepository extends JpaRepository<DonationRequest, Integer> {
+public interface DonationRequestRepository extends JpaRepository<DonationRequest, String> {
 
     @Query("SELECT dr FROM DonationRequest dr JOIN FETCH dr.center c ORDER BY dr.createdAt DESC")
     List<DonationRequest> findAllWithCenterOrderByCreatedAtDesc();
 
-    List<DonationRequest> findByStatus(DonationRequest.RequestStatus status);
+    List<DonationRequest> findByStatus(String status);
 }

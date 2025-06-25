@@ -5,17 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.sql.Date;
+import com.example.backend.config.EntityIdListener;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "medical_records")
+@EntityListeners(EntityIdListener.class)
 public class MedicalRecord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "record_id")
-    private Integer recordId;
+    private String recordId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

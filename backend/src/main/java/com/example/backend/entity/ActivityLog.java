@@ -5,17 +5,18 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.sql.Timestamp;
+import com.example.backend.config.EntityIdListener;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "activity_logs")
+@EntityListeners(EntityIdListener.class)
 public class ActivityLog {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "log_id")
-    private Integer logId;
+    private String logId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

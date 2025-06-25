@@ -59,7 +59,7 @@ public class UserService {
         User user = userRepository.findByEmail(request.getEmail())
                 .orElseThrow(() -> new RuntimeException("Email hoặc mật khẩu không đúng!"));
         if (passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return new LoginResponse("token", user.getRole().getRoleName(), user.getName(), user.getEmail());
+            return new LoginResponse("token", user.getRole().getRoleName(), user.getName(), user.getEmail(), user.getUserId());
         } else {
             throw new RuntimeException("Email hoặc mật khẩu không đúng!");
         }

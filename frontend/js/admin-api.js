@@ -46,5 +46,19 @@ const adminApiService = {
             bloodType: bloodType,
             quantity: quantity
         });
+    },
+
+    // Notifications
+    async getNotifications() {
+        return await apiService.getData('/api/admin/notifications');
+    },
+
+    // Lấy lịch sử đăng ký hiến/cần máu của user
+    async getDonationRegistrationsByUserId(userId) {
+        return await apiService.getData(`/api/admin/donation-registrations/${userId}`);
+    },
+
+    async getNotificationsByUserId(userId) {
+        return await apiService.getData(`/api/admin/notifications/user/${userId}`);
     }
 }; 

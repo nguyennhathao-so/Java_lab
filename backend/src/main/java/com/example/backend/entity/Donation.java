@@ -5,17 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.sql.Date;
+import com.example.backend.config.EntityIdListener;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "donations")
+@EntityListeners(EntityIdListener.class)
 public class Donation {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "donation_id")
-    private Integer donationId;
+    private String donationId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")

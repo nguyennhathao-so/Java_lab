@@ -5,17 +5,19 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import java.sql.Date;
+import com.example.backend.config.EntityIdListener;
 
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
 @Table(name = "blood_inventory")
+@EntityListeners(EntityIdListener.class)
 public class BloodInventory {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "inventory_id")
-    private Integer inventoryId;
+    private String inventoryId;
 
     @ManyToOne
     @JoinColumn(name = "center_id", nullable = false)

@@ -13,9 +13,8 @@ import java.sql.Timestamp;
 @Table(name = "notifications")
 public class Notification {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "notification_id")
-    private Integer notificationId;
+    private String notificationId;
 
     @ManyToOne
     @JoinColumn(name = "user_id")
@@ -29,4 +28,10 @@ public class Notification {
 
     @Column(name = "created_at")
     private Timestamp createdAt;
+
+    @Column(name = "message_type")
+    private String messageType;
+
+    @Column(name = "staff_message", columnDefinition = "text")
+    private String staffMessage;
 } 

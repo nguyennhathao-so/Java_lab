@@ -78,6 +78,17 @@ const adminApiService = {
 
     async getHistory() {
         return await apiService.getData('/api/admin/history');
+    },
+
+    getDonationRequestsByStatus: async function (status) {
+        const response = await fetch(`http://localhost:8082/api/admin/blood-requests?status=${encodeURIComponent(status)}`, {
+            headers: {
+                'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+            },
+            credentials: 'include'
+        });
+        if (!response.ok) throw new Error('Lỗi khi lấy danh sách yêu cầu hiến máu');
+        return await response.json();
     }
 };
 

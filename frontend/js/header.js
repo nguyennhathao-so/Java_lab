@@ -16,7 +16,7 @@ $(document).ready(function () {
         // User is logged in
         guestView.style.display = 'none';
         userView.style.display = 'block';
-        userName.textContent = user.fullName;
+        userName.textContent = user.name;
 
         // Show admin link if user is admin
         if (user.role === 'ADMIN') {
@@ -61,7 +61,7 @@ function initHeaderAuth() {
     if (token && user) {
         guestView.style.display = 'none';
         userView.style.display = 'block';
-        userName.textContent = user.fullName;
+        userName.textContent = user.name;
         if (user.role === 'ADMIN') {
             adminLink.style.display = 'block';
         }

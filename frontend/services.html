@@ -230,6 +230,21 @@
     .btn-submit:hover {
       background: #b71c1c;
     }
+
+    .blood-form label {
+      display: block;
+      margin: 8px 0 4px 0;
+      font-weight: 500;
+    }
+
+    .blood-form input[type="text"],
+    .blood-form input[type="tel"],
+    .blood-form input[type="number"],
+    .blood-form input[type="datetime-local"],
+    .blood-form select {
+      width: 100%;
+      margin-bottom: 10px;
+    }
   </style>
 
   <!-- JS -->
@@ -310,7 +325,7 @@
               <option value="platelets">Tiểu cầu</option>
               <option value="plasma">Huyết tương</option>
             </select>
-            <input type="datetime-local" id="donation-date" class="form-input" required>
+            <input type="date" id="donation-date" name="donationDate" required>
           </div>
           <button type="submit" class="btn-submit">Đăng Ký</button>
         </form>
@@ -437,38 +452,40 @@
           <h2>ĐĂNG KÝ CẦN MÁU</h2>
         </div>
         <form id="needBloodForm">
-          <div class="form-row">
-            <input type="number" class="form-input" id="needBloodQuantity" placeholder="Nhập Số Lượng Cần (ml)">
-            <select class="form-input" id="needBloodType">
-              <option value="" disabled selected>Chọn Nhóm Máu</option>
-              <option value="A+">A+</option>
-              <option value="A-">A-</option>
-              <option value="B+">B+</option>
-              <option value="B-">B-</option>
-              <option value="AB+">AB+</option>
-              <option value="AB-">AB-</option>
-              <option value="O+">O+</option>
-              <option value="O-">O-</option>
-            </select>
-          </div>
-          <div class="form-row">
-            <div class="radio-group" style="width: 100%">
-              <label>Mức độ khẩn cấp:</label>
-              <label>
-                <input type="radio" name="urgency" value="high">
-                <span>Cao</span>
-              </label>
-              <label>
-                <input type="radio" name="urgency" value="medium" checked>
-                <span>Trung bình</span>
-              </label>
-              <label>
-                <input type="radio" name="urgency" value="low">
-                <span>Thấp</span>
-              </label>
+          <div style="display: flex; gap: 20px;">
+            <div style="flex: 1;">
+              <label>Tên Người Cần</label>
+              <input type="text" class="form-input" id="needName" placeholder="Nhập Tên Người" required>
+              <label>Nhóm Máu Cần</label>
+              <select class="form-input" id="needBloodType" required>
+                <option value="" disabled selected>Chọn Nhóm Máu</option>
+                <option value="A+">A+</option>
+                <option value="A-">A-</option>
+                <option value="B+">B+</option>
+                <option value="B-">B-</option>
+                <option value="AB+">AB+</option>
+                <option value="AB-">AB-</option>
+                <option value="O+">O+</option>
+                <option value="O-">O-</option>
+              </select>
+              <label>Vị Trí Hiện Tại</label>
+              <input type="text" class="form-input" id="needLocation" placeholder="Nhập Vị Trí">
+              <label>Số Lượng Máu Cần (ml)</label>
+              <input type="number" class="form-input" id="needBloodQuantity" placeholder="Nhập Số Lượng Cần" required>
+            </div>
+            <div style="flex: 1;">
+              <label>Số Điện Thoại</label>
+              <input type="tel" class="form-input" id="needPhone" placeholder="Số Điện Thoại" required>
+              <label>Thời Gian Khẩn Cấp</label>
+              <input type="datetime-local" class="form-input" id="needUrgentTime">
+              <label>Khẩn Cấp Không?</label>
+              <div style="margin-bottom: 16px;">
+                <label><input type="radio" name="isUrgent" value="yes" checked> Có</label>
+                <label style="margin-left: 16px;"><input type="radio" name="isUrgent" value="no"> Không</label>
+              </div>
             </div>
           </div>
-          <button type="submit" class="btn-submit">Đăng Ký</button>
+          <button type="submit" class="btn-submit" style="margin-top: 20px;">Đăng Ký</button>
         </form>
       </div>
     </div>
@@ -547,22 +564,31 @@
         donationForm.addEventListener('submit', async function (event) {
           event.preventDefault();
 
-          const donationData = {
-            donationDate: document.getElementById('donation-date').value,
-            donationType: document.getElementById('donation-type').value
-          };
+          const donationDateInput = document.getElementById('donation-date');
+          const donationTypeInput = document.getElementById('donation-type');
+          if (!donationDateInput || !donationTypeInput) {
+            alert('Thiếu trường ngày hoặc loại hiến máu trong form!');
+            return;
+          }
+          const donationDate = donationDateInput.value;
+          const donationType = donationTypeInput.value;
 
-          if (!donationData.donationDate || !donationData.donationType) {
-            alert('Vui lòng điền đầy đủ thông tin ngày và loại hiến máu.');
+          if (!donationDate || !donationType) {
+            alert('Thiếu trường ngày hoặc loại hiến máu trong form!');
             return;
           }
 
+          const requestData = {
+            bloodTypeNeeded: donationType,
+            desiredDate: donationDate,
+            requestType: 'donate'
+          };
+
           try {
-            await apiService.postData('/api/donations', donationData);
-            alert('Đăng ký hiến máu thành công! Yêu cầu của bạn đã được gửi đi và đang chờ duyệt.');
+            await apiService.postData('/api/donation-requests', requestData);
+            alert('Đăng ký yêu cầu hiến máu thành công!');
             donationForm.reset();
           } catch (error) {
-            console.error('Lỗi khi đăng ký hiến máu:', error);
             alert('Có lỗi xảy ra khi đăng ký. Vui lòng thử lại.');
           }
         });

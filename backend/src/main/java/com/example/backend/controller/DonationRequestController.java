@@ -4,6 +4,7 @@ import com.example.backend.entity.DonationRequest;
 import com.example.backend.entity.User;
 import com.example.backend.repository.DonationRequestRepository;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.dto.DonationRequestDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ import java.util.List;
 import java.util.Map;
 
 @RestController
-@RequestMapping("/api/admin")
+@RequestMapping("/api/donation-requests")
 @CrossOrigin(origins = { "http://localhost:8081", "http://127.0.0.1:8081" })
 public class DonationRequestController {
 
@@ -34,19 +35,38 @@ public class DonationRequestController {
     }
 
     @PostMapping
-    public ResponseEntity<?> createDonationRequest(@RequestBody DonationRequest request) {
+    public ResponseEntity<?> createDonationRequest(@RequestBody DonationRequestDto dto) {
+        System.out.println("DTO requestType: " + dto.getRequestType());
+        DonationRequest request = new DonationRequest();
+        request.setBloodTypeNeeded(dto.getBloodTypeNeeded());
+        request.setQuantity(dto.getQuantity());
+
+        // Xử lý urgency level
+        if (dto.getUrgencyLevel() != null && !dto.getUrgencyLevel().isBlank()) {
+            request.setUrgencyLevel(DonationRequest.UrgencyLevel.fromString(dto.getUrgencyLevel()));
+        } else {
+            request.setUrgencyLevel(DonationRequest.UrgencyLevel.medium); // mặc định
+        }
+
+        // Xử lý request type
+        if (dto.getRequestType() != null && !dto.getRequestType().isBlank()) {
+            request.setRequestType(DonationRequest.RequestType.valueOf(dto.getRequestType()));
+        } else {
+            request.setRequestType(DonationRequest.RequestType.donate); // mặc định là hiến máu
+        }
+
+        request.setStatus(DonationRequest.RequestStatus.open);
+        request.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         String userEmail = authentication.getName();
         User user = userRepository.findByEmail(userEmail)
                 .orElseThrow(() -> new RuntimeException("User not found with email: " + userEmail));
-
         request.setUser(user);
-        request.setStatus(DonationRequest.RequestStatus.open);
-        request.setCreatedAt(new Timestamp(System.currentTimeMillis()));
 
-        DonationRequest savedRequest = donationRequestRepository.save(request);
-
-        return new ResponseEntity<>(savedRequest, HttpStatus.CREATED);
+        donationRequestRepository.save(request);
+        System.out.println("Entity requestType: " + request.getRequestType());
+        return ResponseEntity.ok("Yêu cầu hiến máu đã được ghi nhận!");
     }
 
 }

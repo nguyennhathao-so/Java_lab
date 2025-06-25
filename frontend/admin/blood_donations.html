@@ -75,30 +75,33 @@
             const tbody = document.querySelector('tbody');
             try {
                 // Bước 1: Gọi API để lấy danh sách yêu cầu "Chờ duyệt"
-                const donations = await adminApiService.getDonationsByStatus('Chờ duyệt');
+                const allRequests = await adminApiService.getDonationRequestsByStatus('open');
 
-                if (donations.length === 0) {
+                // Bước 2: Lọc chỉ lấy các yêu cầu HIẾN MÁU (donate)
+                const donateRequests = allRequests.filter(req => req.requestType === 'donate');
+
+                if (donateRequests.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="8" class="text-center">Không có yêu cầu hiến máu nào cần duyệt.</td></tr>';
                     return;
                 }
 
-                // Bước 2: Xóa nội dung cũ và điền dữ liệu mới, đảm bảo đúng các trường
+                // Bước 3: Xóa nội dung cũ và điền dữ liệu mới, đảm bảo đúng các trường
                 tbody.innerHTML = '';
-                donations.forEach((donation, index) => {
-                    const user = donation.user || {};
-                    const requestDate = donation.createdAt ? new Date(donation.createdAt).toLocaleString('vi-VN') : 'N/A';
+                donateRequests.forEach((req, idx) => {
+                    const user = req.user || {};
+                    const requestDate = req.createdAt ? new Date(req.createdAt).toLocaleString('vi-VN') : 'N/A';
                     const row = `
                         <tr>
-                            <td>${index + 1}</td>
-                            <td>${donation.donationId}</td>
+                            <td>${idx + 1}</td>
+                            <td>${req.requestId}</td>
                             <td>${user.name || 'N/A'}</td>
                             <td>${user.phone || 'N/A'}</td>
                             <td>${requestDate}</td>
                             <td>${user.gender || 'N/A'}</td>
                             <td>${user.bloodType || 'N/A'}</td>
                             <td class="action-buttons">
-                                <button class="delete" onclick="deleteRequest(${donation.requestId})">Xóa</button>
-                                <button class="accept" onclick="approveRequest(${donation.requestId})">Đồng ý</button>
+                                <button class="delete" onclick="deleteRequest(${req.requestId})">Xóa</button>
+                                <button class="accept" onclick="approveRequest(${req.requestId})">Đồng ý</button>
                             </td>
                         </tr>`;
                     tbody.innerHTML += row;

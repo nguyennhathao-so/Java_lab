@@ -9,8 +9,10 @@ import com.example.backend.repository.*;
 import com.example.backend.dto.HistoryItem;
 import com.example.backend.dto.DonationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
 import java.util.Map;
@@ -121,32 +123,39 @@ public class AdminController {
                 .findByStatus(DonationRequest.RequestStatus.fulfilled);
         List<DonationRequest> closedRequests = donationRequestRepository
                 .findByStatus(DonationRequest.RequestStatus.closed);
+        List<DonationRequest> approvedRequests = donationRequestRepository
+                .findByStatus(DonationRequest.RequestStatus.approved);
         List<DonationRequest> requestHistory = new ArrayList<>();
         requestHistory.addAll(fulfilledRequests);
         requestHistory.addAll(closedRequests);
+        requestHistory.addAll(approvedRequests);
 
-        history.addAll(requestHistory.stream().map(r -> {
-            HealthCenter center = r.getCenter();
-            User user = r.getUser();
-            java.sql.Date sqlDate = r.getCreatedAt() != null ? new java.sql.Date(r.getCreatedAt().getTime()) : null;
+        history.addAll(requestHistory.stream()
+                .filter(r -> r.getRequestType() == DonationRequest.RequestType.receive)
+                .map(r -> {
+                    HealthCenter center = r.getCenter();
+                    User user = r.getUser();
+                    java.sql.Date sqlDate = r.getCreatedAt() != null ? new java.sql.Date(r.getCreatedAt().getTime())
+                            : null;
 
-            String name = user != null ? user.getName() : (center != null ? center.getName() : "N/A");
-            String contact = user != null ? user.getPhone() : (center != null ? center.getContactInfo() : "N/A");
-            String gender = user != null ? user.getGender() : "N/A";
-            String email = user != null ? user.getEmail() : "N/A";
+                    String name = user != null ? user.getName() : (center != null ? center.getName() : "N/A");
+                    String contact = user != null ? user.getPhone()
+                            : (center != null ? center.getContactInfo() : "N/A");
+                    String gender = user != null ? user.getGender() : "N/A";
+                    String email = user != null ? user.getEmail() : "N/A";
 
-            return new HistoryItem(
-                    "Cần máu",
-                    r.getRequestId(),
-                    name,
-                    contact,
-                    r.getBloodTypeNeeded(),
-                    r.getQuantity(),
-                    r.getStatus().toVietnamese(),
-                    sqlDate,
-                    gender,
-                    email);
-        }).collect(Collectors.toList()));
+                    return new HistoryItem(
+                            "Cần máu",
+                            r.getRequestId(),
+                            name,
+                            contact,
+                            r.getBloodTypeNeeded(),
+                            r.getQuantity(),
+                            r.getStatus().toVietnamese(),
+                            sqlDate,
+                            gender,
+                            email);
+                }).collect(Collectors.toList()));
 
         // Sắp xếp theo ngày giảm dần
         history.sort((a, b) -> {
@@ -164,8 +173,16 @@ public class AdminController {
 
     // Get blood requests (need blood)
     @GetMapping("/blood-requests")
-    public List<DonationRequest> getOpenRequests() {
-        return donationRequestRepository.findByStatusWithUserAndCenter(DonationRequest.RequestStatus.open);
+    public List<DonationRequest> getOpenRequests(@RequestParam(required = false) String status) {
+        try {
+            if (status != null) {
+                DonationRequest.RequestStatus enumStatus = DonationRequest.RequestStatus.valueOf(status);
+                return donationRequestRepository.findByStatusWithUserAndCenter(enumStatus);
+            }
+            return donationRequestRepository.findByStatusWithUserAndCenter(DonationRequest.RequestStatus.open);
+        } catch (IllegalArgumentException e) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Trạng thái không hợp lệ: " + status);
+        }
     }
 
     // Get blood inventory summary
@@ -252,9 +269,27 @@ public class AdminController {
     public ResponseEntity<?> approveBloodRequest(@PathVariable Integer id) {
         DonationRequest request = donationRequestRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Donation request not found with id: " + id));
-        request.setStatus(DonationRequest.RequestStatus.fulfilled);
+
+        if (request.getRequestType() == DonationRequest.RequestType.receive) {
+            // Cần máu: chỉ cập nhật status
+            request.setStatus(DonationRequest.RequestStatus.fulfilled);
+            donationRequestRepository.save(request);
+            return ResponseEntity.ok(Map.of("message", "Blood request fulfilled (no donation created)"));
+        }
+
+        // Hiến máu: tạo bản ghi mới ở donations
+        request.setStatus(DonationRequest.RequestStatus.approved);
         donationRequestRepository.save(request);
-        return ResponseEntity.ok(Map.of("message", "Blood request approved successfully"));
+
+        Donation donation = new Donation();
+        donation.setUser(request.getUser());
+        donation.setRequest(request);
+        donation.setDonationType(Donation.DonationType.valueOf(request.getBloodTypeNeeded())); // hoặc mapping phù hợp
+        donation.setDate(new java.sql.Timestamp(System.currentTimeMillis()));
+        donation.setStatus("Chờ khám");
+        donationRepository.save(donation);
+
+        return ResponseEntity.ok(Map.of("message", "Blood request approved and donation created successfully"));
     }
 
     @GetMapping("/health-centers")

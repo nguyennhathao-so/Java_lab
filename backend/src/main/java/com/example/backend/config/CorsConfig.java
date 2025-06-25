@@ -2,35 +2,31 @@ package com.example.backend.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.Ordered;
+import org.springframework.core.annotation.Order;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 
 @Configuration
 public class CorsConfig {
-    
+
     @Bean
+    @Order(Ordered.HIGHEST_PRECEDENCE) // ✅ Ưu tiên cao nhất
     public CorsFilter corsFilter() {
-        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        
-        // Allow all origins for development - in production, specify your frontend URL
-        config.addAllowedOrigin("*");
-        
-        // Allow common HTTP methods
+        config.setAllowCredentials(true);
+        config.addAllowedOrigin("http://localhost:8081");
+        config.addAllowedHeader("Authorization");
+        config.addAllowedHeader("Content-Type");
         config.addAllowedMethod("GET");
         config.addAllowedMethod("POST");
         config.addAllowedMethod("PUT");
         config.addAllowedMethod("DELETE");
         config.addAllowedMethod("OPTIONS");
-        
-        // Allow all headers
-        config.addAllowedHeader("*");
-        
-        // Allow credentials
-        config.setAllowCredentials(true);
-        
+
+        UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
     }
-} 
+}

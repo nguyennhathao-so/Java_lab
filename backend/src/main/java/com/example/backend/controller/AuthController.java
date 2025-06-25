@@ -7,6 +7,8 @@ import com.example.backend.repository.HealthCenterRepository;
 import com.example.backend.dto.LoginRequest;
 import com.example.backend.security.JwtTokenProvider;
 import com.example.backend.service.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -74,7 +76,15 @@ public class AuthController {
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Email hoặc mật khẩu không đúng!");
+        }
+    }
+
+    public class Main {
+        public static void main(String[] args) {
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            System.out.println(encoder.encode("1"));
         }
     }
 }

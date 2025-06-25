@@ -96,23 +96,30 @@
     <script>
         async function loadBloodRequests() {
             try {
-                const requests = await adminApiService.getBloodRequests();
+                const allRequests = await adminApiService.getBloodRequests();
+
+                // Lọc chỉ lấy các yêu cầu CẦN MÁU (receive)
+                const receiveRequests = allRequests.filter(request => request.requestType === 'receive');
+
                 const tbody = document.getElementById('requestsTableBody');
                 tbody.innerHTML = '';
 
-                if (requests.length === 0) {
+                if (receiveRequests.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="9" style="text-align: center;">Không có yêu cầu cần máu nào.</td></tr>';
                     return;
                 }
 
-                requests.forEach((request, index) => {
+                receiveRequests.forEach((request, index) => {
                     const center = request.center;
+                    const user = request.user;
+                    const name = center?.name || 'N/A';
+                    const phone = center?.contactInfo || 'N/A';
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${index + 1}</td>
                         <td>${request.requestId}</td>
-                        <td>${center ? center.name : 'N/A'}</td>
-                        <td>${center ? center.contactInfo : 'N/A'}</td>
+                        <td>${name}</td>
+                        <td>${phone}</td>
                         <td>${request.createdAt ? new Date(request.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</td>
                         <td>${request.bloodTypeNeeded || 'N/A'}</td>
                         <td>${request.quantity || 'N/A'}</td>

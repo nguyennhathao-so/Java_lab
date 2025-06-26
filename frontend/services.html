@@ -394,13 +394,22 @@
           <img src="./assets/images/icon/distance-apart-svgrepo-com.svg" alt="Icon">
           <h2>TÌM KIẾM MÁU THEO KHOẢNG CÁCH</h2>
         </div>
-        <form class="search-form">
-          <select>
+        <form id="distanceSearchForm" class="search-form">
+          <select id="bloodType" name="bloodType">
             <option value="">Nhập Nhóm Máu</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
           </select>
-          <input type="text" placeholder="Khoảng Cách Tối Đa (km)">
-          <input type="text" placeholder="Nhập Tên">
-          <input type="text" placeholder="Vị Trí Hiện (Địa Chỉ Hoặc Tọa Độ)">
+          <input type="number" id="radius" name="radius" placeholder="Khoảng Cách Tối Đa (km)" required>
+          <input type="text" id="lat" name="lat" placeholder="Vĩ Độ (Latitude)" required>
+          <input type="text" id="lng" name="lng" placeholder="Kinh Độ (Longitude)" required>
+          <button type="submit" class="btn-submit" style="grid-column: span 2;">Tìm Kiếm</button>
         </form>
 
         <table class="search-results">
@@ -503,6 +512,42 @@
     // fetch('http://localhost:8080/api/users/USER_ID/blood-type')
     //   .then(res => res.text())
     //   .then(bloodType => { /* hiển thị lên trang */ })
+
+    document.getElementById('distanceSearchForm').onsubmit = async function(e) {
+      e.preventDefault();
+      const bloodType = document.getElementById('bloodType').value;
+      const radius = document.getElementById('radius').value;
+      const lat = document.getElementById('lat').value;
+      const lng = document.getElementById('lng').value;
+
+      let url = `http://localhost:8080/api/blood/search?lat=${lat}&lng=${lng}&radius=${radius}`;
+      if (bloodType) url += `&bloodType=${encodeURIComponent(bloodType)}`;
+
+      const res = await fetch(url);
+      const data = await res.json();
+
+      // Hiển thị kết quả lên bảng
+      const tbody = document.querySelector('.search-results tbody');
+      tbody.innerHTML = '';
+      if (data.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="4">Không tìm thấy kết quả phù hợp</td></tr>';
+        return;
+      }
+      data.forEach(item => {
+        const center = item.center;
+        const inventories = item.inventories;
+        inventories.forEach(inv => {
+          const row = document.createElement('tr');
+          row.innerHTML = `
+            <td>${center.name}</td>
+            <td>Kho máu</td>
+            <td>${center.latitude}, ${center.longitude}</td>
+            <td>${inv.bloodType} - ${inv.quantity} đơn vị</td>
+          `;
+          tbody.appendChild(row);
+        });
+      });
+    };
   </script>
 </body>
 </html>

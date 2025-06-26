@@ -53,6 +53,12 @@ CREATE TABLE IF NOT EXISTS `health_centers` (
   `address` varchar(255) DEFAULT NULL,
   `contact_info` varchar(100) DEFAULT NULL,
   `location` point DEFAULT NULL,
+  `latitude` DOUBLE NOT NULL DEFAULT 0,
+  `longitude` DOUBLE NOT NULL DEFAULT 0,
+  `manager_name` VARCHAR(100) DEFAULT NULL,
+  `open_time` TIME DEFAULT NULL,
+  `close_time` TIME DEFAULT NULL,
+  `description` TEXT DEFAULT NULL,
   PRIMARY KEY (`center_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -205,10 +211,10 @@ VALUES
 ('US3', 'Nguyen Van C', 'c@gmail.com', '$2b$10$examplehash', 'O+', 'RL1', '0987654320', 'Nữ', 'Hồ Chí Minh');
 
 -- Bảng health_centers
-INSERT INTO health_centers (center_id, name, address, contact_info)
+INSERT INTO health_centers (center_id, name, address, contact_info, latitude, longitude, manager_name, open_time, close_time, description)
 VALUES
-('HC1', 'Trung tâm 1', '123 Đường A, Hà Nội', '0123456789'),
-('HC2', 'Trung tâm 2', '456 Đường B, Hồ Chí Minh', '0987654321');
+('HC1', 'Trung tâm 1', '123 Đường A, Hà Nội', '0123456789', 21.028511, 105.804817, 'Nguyễn Văn Quản', '08:00:00', '17:00:00', 'Trung tâm hiến máu lớn nhất Hà Nội'),
+('HC2', 'Trung tâm 2', '456 Đường B, Hồ Chí Minh', '0987654321', 10.762622, 106.660172, 'Trần Thị Quản', '07:30:00', '16:30:00', 'Trung tâm hiến máu lớn nhất TP.HCM');
 
 -- Bảng blood_types
 INSERT INTO blood_types (blood_type, can_donate_to, can_receive_from) VALUES
@@ -276,5 +282,12 @@ INSERT INTO donation_registrations (id, user_id, registration_date, type, status
 ('DRG2', 'US1', '2024-06-10', 'Cần máu', 'Từ chối'),
 ('DRG3', 'US2', '2024-06-05', 'Hiến máu', 'Đã duyệt'),
 ('DRG4', 'US3', '2024-06-12', 'Cần máu', 'Đã duyệt');
+
+-- Cập nhật bảng health_centers
+ALTER TABLE health_centers
+ADD COLUMN manager_name VARCHAR(100) DEFAULT NULL,
+ADD COLUMN open_time TIME DEFAULT NULL,
+ADD COLUMN close_time TIME DEFAULT NULL,
+ADD COLUMN description TEXT DEFAULT NULL;
 
 

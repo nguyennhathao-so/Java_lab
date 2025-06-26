@@ -1,6 +1,7 @@
 package com.example.backend.repository;
 
 import com.example.backend.entity.BloodInventory;
+import com.example.backend.entity.HealthCenter;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -16,4 +17,8 @@ public interface BloodInventoryRepository extends JpaRepository<BloodInventory, 
     List<Object[]> getBloodTypeSummary();
 
     List<BloodInventory> findByBloodTypeAndStatus(String bloodType, String status);
+
+    List<BloodInventory> findByCenterAndBloodType(HealthCenter center, String bloodType);
+
+    List<BloodInventory> findByCenter(HealthCenter center);
 }

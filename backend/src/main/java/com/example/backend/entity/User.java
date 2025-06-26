@@ -64,4 +64,8 @@ public class User {
     @JsonIgnore
     @OneToMany(mappedBy = "user")
     private java.util.List<DonationRegistration> donationRegistrations;
+
+    public String getBloodType() {
+        return this.bloodType;
+    }
 }

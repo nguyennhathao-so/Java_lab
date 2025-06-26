@@ -184,6 +184,14 @@ CREATE TABLE IF NOT EXISTS donation_registrations (
   FOREIGN KEY (user_id) REFERENCES users(user_id)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
+-- Bảng services
+CREATE TABLE IF NOT EXISTS services (
+    id BIGINT PRIMARY KEY AUTO_INCREMENT,
+    name VARCHAR(255) NOT NULL,
+    description TEXT,
+    icon VARCHAR(255)
+);
+
 -- DỮ LIỆU MẪU CHO CÁC BẢNG CHÍNH
 
 -- Bảng roles

@@ -2,7 +2,7 @@
 const API_BASE_URL = 'http://localhost:8082';
 
 function getAuthHeaders() {
-    const token = localStorage.getItem('authToken'); // Sửa thành authToken
+    const token = localStorage.getItem('authToken');
     const headers = {
         'Content-Type': 'application/json',
     };

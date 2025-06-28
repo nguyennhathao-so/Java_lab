@@ -45,6 +45,9 @@ public class DonationRequest {
     @Column(name = "created_at")
     private Timestamp createdAt;
 
+    @Column(name = "desired_date")
+    private Timestamp desiredDate;
+
     @ManyToOne
     @JoinColumn(name = "user_id")
     @JsonManagedReference

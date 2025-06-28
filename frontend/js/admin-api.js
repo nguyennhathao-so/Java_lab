@@ -40,13 +40,16 @@ const adminApiService = {
         return await apiService.postData('/api/donation-requests', requestData, true);
     },
 
-    async updateBloodInventory(bloodType, quantity, centerId) {
+    async updateBloodInventory(bloodType, quantity) {
+        const token = localStorage.getItem('authToken');
         return fetch('http://localhost:8082/api/admin/blood-inventory/update', {
             method: 'POST',
-            headers: { 'Content-Type': 'application/json' },
-            body: JSON.stringify({ bloodType, quantity, centerId }),
-            credentials: 'include' // ✅ THÊM VÀO
-
+            headers: {
+                'Content-Type': 'application/json',
+                ...(token ? { 'Authorization': `Bearer ${token}` } : {})
+            },
+            body: JSON.stringify({ bloodType, quantity }),
+            credentials: 'include'
         }).then(res => {
             if (!res.ok) throw new Error('Lỗi server');
             return res.json();
@@ -54,14 +57,7 @@ const adminApiService = {
     },
 
     async getHealthCenters() {
-        const res = await fetch('http://localhost:8082/api/admin/health-centers', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            credentials: 'include' // ✅ Đúng chỗ
-        });
-        return res.json();
+        return await apiService.getData('/api/admin/health-centers');
     },
 
     async updateBloodInventoryWithCenter(bloodType, quantity, centerId) {
@@ -90,20 +86,4 @@ const adminApiService = {
         if (!response.ok) throw new Error('Lỗi khi lấy danh sách yêu cầu hiến máu');
         return await response.json();
     }
-};
-
-async function loadHealthCenters() {
-    const select = document.getElementById('centerSelect');
-    if (!select) return;
-    const res = await fetch('http://localhost:8082/api/admin/health-centers');
-    const centers = await res.json();
-    select.innerHTML = '<option value="" disabled selected>Chọn trung tâm</option>';
-    centers.forEach(center => {
-        const option = document.createElement('option');
-        option.value = center.centerId;
-        option.textContent = center.name + (center.address ? ' - ' + center.address : '');
-        select.appendChild(option);
-    });
-}
-
-document.addEventListener('DOMContentLoaded', loadHealthCenters); 
+}; 

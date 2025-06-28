@@ -179,6 +179,7 @@ CREATE TABLE `donation_requests` (
   `urgency_level` enum('low','medium','high') DEFAULT 'medium',
   `status` enum('open','fulfilled','closed','approved') DEFAULT 'open',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `desired_date` datetime DEFAULT NULL,
   `request_type` enum('donate','receive') not null DEFAULT 'donate',
   PRIMARY KEY (`request_id`),
   KEY `user_id` (`user_id`),

@@ -249,8 +249,10 @@
 
   <!-- JS -->
   <script src="js/jquery-3.7.1.min.js"></script>
-  <script src="js/api.js"></script>
-  <script src="js/admin-api.js"></script>
+  <script src="js/api.js" defer></script>
+  <script src="js/admin-api.js" defer></script>
+  <script src="js/component.js" defer></script>
+  <script src="js/form-toggle.js" defer></script>
   <script>
     // Check if user is authenticated
     function checkAuth() {
@@ -266,8 +268,6 @@
     // Run check when page loads
     document.addEventListener('DOMContentLoaded', checkAuth);
   </script>
-  <script src="js/component.js"></script>
-  <script src="js/form-toggle.js"></script>
 </head>
 
 <body>
@@ -495,15 +495,36 @@
   <div id="footer"></div>
 
   <script>
-    function scrollToSection(id) {
-      const section = document.getElementById(id);
-      if (section) {
-        section.scrollIntoView({ behavior: 'smooth' });
-      }
-    }
+    // Đợi tất cả script load xong
+    window.addEventListener('load', function () {
+      console.log('All resources loaded');
 
-    document.addEventListener('DOMContentLoaded', function () {
-      const fillInput = (elementId, storageKey) => {
+      // Kiểm tra các service đã được load
+      if (typeof apiService === 'undefined') {
+        console.error('apiService not loaded');
+        return;
+      }
+
+      if (typeof adminApiService === 'undefined') {
+        console.error('adminApiService not loaded');
+        return;
+      }
+
+      // Debug script để kiểm tra việc load các file
+      console.log('Services.html loaded');
+      console.log('apiService available:', typeof apiService !== 'undefined');
+      console.log('adminApiService available:', typeof adminApiService !== 'undefined');
+      console.log('jQuery available:', typeof $ !== 'undefined');
+
+      function scrollToSection(id) {
+        const section = document.getElementById(id);
+        if (section) {
+          section.scrollIntoView({ behavior: 'smooth' });
+        }
+      }
+
+      // Hàm fillInput được di chuyển ra ngoài để có thể sử dụng trong event listener
+      function fillInput(elementId, storageKey) {
         const element = document.getElementById(elementId);
         if (element) {
           const value = localStorage.getItem(storageKey);
@@ -513,14 +534,22 @@
           } else {
             element.value = ''; // Ensure it's an empty string otherwise
           }
+        } else {
+          console.warn(`Element with id '${elementId}' not found`);
         }
-      };
+      }
 
+      // Tự động điền thông tin cho form đăng ký hiến máu
       fillInput('donation-name', 'userName');
       fillInput('donation-email', 'userEmail');
       fillInput('donation-phone', 'userPhone');
       fillInput('donation-address', 'userAddress');
 
+      // Tự động điền thông tin cho form đăng ký cần máu
+      fillInput('needName', 'userName');
+      fillInput('needPhone', 'userPhone');
+
+      // Xử lý gender select
       const gender = localStorage.getItem('userGender');
       const genderSelect = document.getElementById('donation-gender');
       if (genderSelect && gender && gender !== 'null' && gender !== 'undefined') {
@@ -532,9 +561,28 @@
         needBloodForm.addEventListener('submit', async function (event) {
           event.preventDefault();
 
-          const quantity = document.getElementById('needBloodQuantity').value;
-          const bloodType = document.getElementById('needBloodType').value;
-          const urgencyLevel = document.querySelector('input[name="urgency"]:checked').value;
+          // Kiểm tra apiService đã được load chưa
+          if (typeof apiService === 'undefined') {
+            alert('Hệ thống đang tải, vui lòng thử lại sau.');
+            return;
+          }
+
+          // Lấy các element và kiểm tra null
+          const quantityElement = document.getElementById('needBloodQuantity');
+          const bloodTypeElement = document.getElementById('needBloodType');
+          const urgentTimeElement = document.getElementById('needUrgentTime');
+          const urgentRadio = document.querySelector('input[name="isUrgent"]:checked');
+
+          // Kiểm tra các element có tồn tại không
+          if (!quantityElement || !bloodTypeElement) {
+            alert('Có lỗi trong form. Vui lòng tải lại trang.');
+            return;
+          }
+
+          const quantity = quantityElement.value;
+          const bloodType = bloodTypeElement.value;
+          const urgencyLevel = urgentRadio ? (urgentRadio.value === 'yes' ? 'high' : 'medium') : 'medium';
+          const urgentTime = urgentTimeElement ? urgentTimeElement.value : null;
 
           if (!quantity || !bloodType) {
             alert('Vui lòng điền đầy đủ thông tin số lượng và nhóm máu.');
@@ -544,13 +592,21 @@
           const requestData = {
             quantity: parseInt(quantity, 10),
             bloodTypeNeeded: bloodType,
-            urgencyLevel: urgencyLevel
+            urgencyLevel: urgencyLevel,
+            requestType: 'receive', // Đánh dấu đây là yêu cầu cần máu
+            desiredDate: urgentTime || null
           };
 
           try {
-            const result = await adminApiService.createDonationRequest(requestData);
+            const result = await apiService.postData('/api/donation-requests', requestData);
             alert('Đăng ký yêu cầu cần máu thành công!');
-            needBloodForm.reset();
+            // Kiểm tra form trước khi reset
+            if (needBloodForm) {
+              needBloodForm.reset();
+              // Tự động điền lại thông tin sau khi reset
+              fillInput('needName', 'userName');
+              fillInput('needPhone', 'userPhone');
+            }
           } catch (error) {
             console.error('Lỗi khi tạo yêu cầu:', error);
             alert('Đã xảy ra lỗi. Vui lòng thử lại.');
@@ -564,12 +620,21 @@
         donationForm.addEventListener('submit', async function (event) {
           event.preventDefault();
 
+          // Kiểm tra apiService đã được load chưa
+          if (typeof apiService === 'undefined') {
+            alert('Hệ thống đang tải, vui lòng thử lại sau.');
+            return;
+          }
+
+          // Lấy các element và kiểm tra null
           const donationDateInput = document.getElementById('donation-date');
           const donationTypeInput = document.getElementById('donation-type');
+
           if (!donationDateInput || !donationTypeInput) {
             alert('Thiếu trường ngày hoặc loại hiến máu trong form!');
             return;
           }
+
           const donationDate = donationDateInput.value;
           const donationType = donationTypeInput.value;
 
@@ -587,12 +652,23 @@
           try {
             await apiService.postData('/api/donation-requests', requestData);
             alert('Đăng ký yêu cầu hiến máu thành công!');
-            donationForm.reset();
+            // Kiểm tra form trước khi reset
+            if (donationForm) {
+              donationForm.reset();
+              // Tự động điền lại thông tin sau khi reset
+              fillInput('donation-name', 'userName');
+              fillInput('donation-email', 'userEmail');
+              fillInput('donation-phone', 'userPhone');
+              fillInput('donation-address', 'userAddress');
+            }
           } catch (error) {
             alert('Có lỗi xảy ra khi đăng ký. Vui lòng thử lại.');
           }
         });
       }
+
+      // Thêm scrollToSection vào window object để có thể gọi từ onclick
+      window.scrollToSection = scrollToSection;
     });
   </script>
 </body>

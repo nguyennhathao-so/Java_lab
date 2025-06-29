@@ -7,7 +7,7 @@ const adminApiService = {
 
     // API chung để cập nhật status của donation
     async updateDonationStatus(id, newStatus) {
-        return await apiService.postData(`/api/admin/donations/${id}/update-status`, { status: newStatus });
+        return await apiService.putData(`/api/admin/donations/${id}/status`, { status: newStatus });
     },
 
     async completeDonation(id, data) {

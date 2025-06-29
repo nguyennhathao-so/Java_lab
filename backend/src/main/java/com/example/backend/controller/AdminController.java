@@ -68,12 +68,21 @@ public class AdminController {
 
     // Endpoint để cập nhật trạng thái của một yêu cầu hiến máu
     @PutMapping("/donations/{id}/status")
-    public ResponseEntity<Void> updateDonationStatus(@PathVariable Integer id, @RequestBody String status) {
+    public ResponseEntity<Map<String, String>> updateDonationStatus(@PathVariable Integer id,
+            @RequestBody Map<String, String> request) {
         Donation donation = donationRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Donation not found"));
+        String status = request.get("status");
+        if (status == null || status.trim().isEmpty()) {
+            throw new RuntimeException("Status cannot be null or empty");
+        }
         donation.setStatus(status);
         donationRepository.save(donation);
-        return ResponseEntity.ok().build();
+
+        Map<String, String> response = new HashMap<>();
+        response.put("message", "Status updated successfully");
+        response.put("status", status);
+        return ResponseEntity.ok(response);
     }
 
     // API Lấy Lịch sử Hiến máu (có thể dùng lại API theo status)

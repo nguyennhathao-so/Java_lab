@@ -90,16 +90,10 @@
 
             // Xử lý sự kiện hủy bỏ
             const cancelButton = document.getElementById('cancel-button');
-            cancelButton.addEventListener('click', async () => {
-                if (confirm('Bạn có chắc chắn muốn hủy lượt hiến máu này không?')) {
-                    try {
-                        await adminApiService.updateDonationStatus(donationId, 'Đã hủy');
-                        alert('Đã hủy lượt hiến máu thành công.');
-                        window.location.href = 'blood_donations_history.html';
-                    } catch (error) {
-                        console.error('Lỗi khi hủy:', error);
-                        alert('Có lỗi xảy ra khi hủy. Vui lòng thử lại.');
-                    }
+            cancelButton.addEventListener('click', () => {
+                if (confirm('Bạn có chắc chắn muốn hủy việc cập nhật này không?')) {
+                    // Chỉ quay lại trang duyệt hiến máu, không thay đổi gì cả
+                    window.location.href = 'approve.html';
                 }
             });
 

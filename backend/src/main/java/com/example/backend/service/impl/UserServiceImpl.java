@@ -63,4 +63,9 @@ public class UserServiceImpl implements IUserService {
     public boolean isPhoneNumberExists(String phone) {
         return userRepository.existsByPhone(phone);
     }
+
+    @Override
+    public void deleteUserById(String id) {
+        userRepository.deleteById(id);
+    }
 }

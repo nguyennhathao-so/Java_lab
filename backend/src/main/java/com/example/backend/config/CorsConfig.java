@@ -5,6 +5,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
+import java.util.Arrays;
 
 @Configuration
 public class CorsConfig {
@@ -14,8 +15,8 @@ public class CorsConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         
-        // Allow all origins for development - in production, specify your frontend URL
-        config.addAllowedOrigin("*");
+        // Allow only frontend origins for development
+        config.setAllowedOrigins(Arrays.asList("http://localhost:8081", "http://127.0.0.1:8081"));
         
         // Allow common HTTP methods
         config.addAllowedMethod("GET");

@@ -86,7 +86,9 @@ const apiService = {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            return await response.json();
+            // Nếu response có body thì trả về JSON, không thì return true
+            const text = await response.text();
+            return text ? JSON.parse(text) : true;
         } catch (error) {
             console.error('Error deleting data:', error);
             throw error;

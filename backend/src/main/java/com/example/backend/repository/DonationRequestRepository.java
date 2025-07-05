@@ -18,4 +18,6 @@ public interface DonationRequestRepository extends JpaRepository<DonationRequest
 
     @Query("SELECT dr FROM DonationRequest dr LEFT JOIN FETCH dr.user u LEFT JOIN FETCH dr.center c WHERE dr.status = :status ORDER BY dr.createdAt DESC")
     List<DonationRequest> findByStatusWithUserAndCenter(@Param("status") DonationRequest.RequestStatus status);
+
+    long countByStatus(DonationRequest.RequestStatus status);
 }

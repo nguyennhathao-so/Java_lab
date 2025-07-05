@@ -15,6 +15,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
+import com.example.backend.service.ReminderService;
 
 import java.util.List;
 import java.util.Map;
@@ -47,6 +48,9 @@ public class AdminController {
 
     @Autowired
     private HealthCenterRepository healthCenterRepository;
+
+    @Autowired
+    private ReminderService reminderService;
 
     // Get all blood donations for approval
     @GetMapping("/blood-donations")
@@ -393,6 +397,8 @@ public class AdminController {
     // Get notifications by user
     @GetMapping("/notifications/user/{userId}")
     public ResponseEntity<List<Notification>> getNotificationsByUser(@PathVariable String userId) {
+        // Gọi reminderService để kiểm tra và sinh reminder nếu cần
+        userRepository.findById(userId).ifPresent(reminderService::checkAndCreateReminderForUser);
         List<Notification> notifications = notificationRepository.findByUser_UserIdOrderByCreatedAtDesc(userId);
         return ResponseEntity.ok(notifications);
     }
@@ -426,5 +432,11 @@ public class AdminController {
     public ResponseEntity<?> deleteUser(@PathVariable("id") String id) {
         userRepository.deleteById(id);
         return ResponseEntity.ok().build();
+    }
+
+    @GetMapping("/requests/approved/count")
+    public ResponseEntity<Map<String, Long>> getApprovedRequestsCount() {
+        long count = donationRequestRepository.countByStatus(DonationRequest.RequestStatus.approved);
+        return ResponseEntity.ok(Collections.singletonMap("approvedRequests", count));
     }
 }

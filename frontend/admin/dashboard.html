@@ -27,13 +27,21 @@
 
     <!-- js -->
     <script src="../js/jquery-3.7.1.min.js"></script>
+    <script src="../js/admin-api.js"></script>
     <script src="../js/component_admin.js"></script>
     <script src="../js/blood_donations_history_admin.js"></script>
 
     <script>
         // Hàm để lấy dữ liệu blood inventory từ API
         function loadBloodInventory() {
-            fetch('http://localhost:8082/api/admin/blood-inventory')
+            fetch('http://localhost:8082/api/admin/blood-inventory', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+                },
+                credentials: 'include'
+            })
                 .then(response => response.json())
                 .then(data => {
                     console.log('Blood inventory data:', data);
@@ -73,46 +81,83 @@
             loadBloodInventory();
             loadUserCount();
             loadTotalRequestsCount();
+            loadApprovedRequestsCount();
         });
 
         // Hàm để lấy tổng số người dùng
         function loadUserCount() {
-            fetch('http://localhost:8082/api/admin/users/count')
-                .then(response => response.json())
-                .then(data => {
-                    console.log('User count data:', data);
-                    const userCountElement = document.getElementById('total-users-count');
-                    if (userCountElement && data.userCount !== undefined) {
-                        userCountElement.textContent = data.userCount;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading user count:', error);
-                    const userCountElement = document.getElementById('total-users-count');
-                    if (userCountElement) {
-                        userCountElement.textContent = 'N/A';
-                    }
-                });
+            fetch('http://localhost:8082/api/admin/users/count', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('User count data:', data);
+                const userCountElement = document.getElementById('total-users-count');
+                if (userCountElement && data.userCount !== undefined) {
+                    userCountElement.textContent = data.userCount;
+                }
+            })
+            .catch(error => {
+                console.error('Error loading user count:', error);
+                const userCountElement = document.getElementById('total-users-count');
+                if (userCountElement) {
+                    userCountElement.textContent = 'N/A';
+                }
+            });
         }
 
         // Hàm để lấy tổng số yêu cầu
         function loadTotalRequestsCount() {
-            fetch('http://localhost:8082/api/admin/requests/count')
-                .then(response => response.json())
-                .then(data => {
-                    console.log('Total requests data:', data);
-                    const totalRequestsElement = document.getElementById('total-requests-count');
-                    if (totalRequestsElement && data.totalRequests !== undefined) {
-                        totalRequestsElement.textContent = data.totalRequests;
-                    }
-                })
-                .catch(error => {
-                    console.error('Error loading total requests count:', error);
-                    const totalRequestsElement = document.getElementById('total-requests-count');
-                    if (totalRequestsElement) {
-                        totalRequestsElement.textContent = 'N/A';
-                    }
-                });
+            fetch('http://localhost:8082/api/admin/requests/count', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                console.log('Total requests data:', data);
+                const totalRequestsElement = document.getElementById('total-requests-count');
+                if (totalRequestsElement && data.totalRequests !== undefined) {
+                    totalRequestsElement.textContent = data.totalRequests;
+                }
+            })
+            .catch(error => {
+                console.error('Error loading total requests count:', error);
+                const totalRequestsElement = document.getElementById('total-requests-count');
+                if (totalRequestsElement) {
+                    totalRequestsElement.textContent = 'N/A';
+                }
+            });
+        }
+
+        // Hàm để lấy tổng số yêu cầu được duyệt
+        function loadApprovedRequestsCount() {
+            fetch('http://localhost:8082/api/admin/requests/approved/count', {
+                method: 'GET',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+                }
+            })
+            .then(response => response.json())
+            .then(data => {
+                const approvedRequestsElement = document.getElementById('approved-requests-count');
+                if (approvedRequestsElement && data.approvedRequests !== undefined) {
+                    approvedRequestsElement.textContent = data.approvedRequests;
+                }
+            })
+            .catch(error => {
+                const approvedRequestsElement = document.getElementById('approved-requests-count');
+                if (approvedRequestsElement) {
+                    approvedRequestsElement.textContent = 'N/A';
+                }
+            });
         }
     </script>
 
@@ -280,17 +325,17 @@
                 <div class="summary-stats">
                     <div class="stat-card">
                         <p>Tổng số yêu cầu</p>
-                        <strong id="total-requests-count">16</strong>
+                        <strong id="total-requests-count"></strong>
                         <img src="../assets/images/icon_admin/timer 1.png" alt="icon" />
                     </div>
                     <div class="stat-card">
                         <p>Tổng số người dùng</p>
-                        <strong id="total-users-count">300</strong>
+                        <strong id="total-users-count"></strong>
                         <img src="../assets/images/icon_admin/community (1) 2.png" alt="icon" />
                     </div>
                     <div class="stat-card">
                         <p>Yêu cầu được phê duyệt</p>
-                        <strong>15</strong>
+                        <strong id="approved-requests-count"></strong>
                         <img src="../assets/images/icon_admin/user-check 1.png" alt="icon" />
                     </div>
                     <div class="stat-card">

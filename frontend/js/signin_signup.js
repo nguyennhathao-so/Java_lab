@@ -132,7 +132,7 @@ $(document).ready(function () {
             if (response.token) {
               localStorage.setItem('authToken', response.token);
               localStorage.setItem('userEmail', response.email);
-              localStorage.setItem('userName', response.name);
+              localStorage.setItem('userName', response.fullName || response.name || (response.user && response.user.name) || '');
               localStorage.setItem('userPhone', response.phone);
               localStorage.setItem('userAddress', response.address);
               localStorage.setItem('userGender', response.gender);
@@ -199,7 +199,7 @@ $(document).ready(function () {
         if (response.token) {
           localStorage.setItem('authToken', response.token);
           localStorage.setItem('userEmail', response.email);
-          localStorage.setItem('userName', response.name);
+          localStorage.setItem('userName', response.fullName || response.name || (response.user && response.user.name) || '');
           localStorage.setItem('userPhone', response.phone);
           localStorage.setItem('userAddress', response.address);
           localStorage.setItem('userGender', response.gender);

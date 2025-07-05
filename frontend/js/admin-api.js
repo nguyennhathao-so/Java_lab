@@ -107,5 +107,14 @@ const adminApiService = {
   // Donation Request (nếu cần cho frontend)
   async createDonationRequest(requestData) {
     return await apiService.postData('/api/donation-requests', requestData, true);
+  },
+
+  // New function
+  async getTotalRequestsCount() {
+    return await apiService.getData("/api/admin/requests/count");
+  },
+
+  async getTotalUsersCount() {
+    return await apiService.getData("/api/admin/users/count");
   }
 };

@@ -39,7 +39,7 @@ public class UserServiceImpl implements IUserService {
 
         // Tạo user mới
         User user = new User();
-        user.setName(request.getFullName());
+        user.setName(request.getName());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setPhone(request.getPhoneNumber());

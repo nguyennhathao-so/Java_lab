@@ -41,7 +41,7 @@
         <div id="slide-bar"></div>
         <main class="main-content">
             <header class="header">
-                <h1>LỊCH SỬ HIẾN MÁU</h1>
+                <h1>LỊCH SỬ YÊU CẦU</h1>
                 <div class="admin-info" style="display: flex; align-items: center; gap: 10px;">
                     <span>Admin</span>
                     <img src="../assets/images/icon_admin/logout.png" alt="logout" style="width:20px">
@@ -53,12 +53,15 @@
                         <tr style="user-select: none;">
                             <th>STT</th>
                             <th>ID</th>
-                            <th>Tên</th>
-                            <th>SDT</th>
-                            <td>Giới tính</td>
+                            <th>Loại yêu cầu</th>
+                            <th>Tên (Người hiến/Trung tâm)</th>
+                            <th>Email</th>
+                            <th>Liên hệ</th>
+                            <th>Giới tính</th>
                             <th>Nhóm máu</th>
-                            <th>Đơn vị (ml)</th>
-                            <th>Ghi chú</th>
+                            <th>Số lượng (ml)</th>
+                            <th>Ngày</th>
+                            <th>Trạng thái</th>
                         </tr>
                     </thead>
                     <tbody id="historyTableBody">
@@ -70,35 +73,43 @@
     </div>
 
     <script>
-        // Load blood donations history
-        async function loadBloodDonationsHistory() {
+        // Load combined history
+        async function loadHistory() {
             try {
-                const donations = await adminApiService.getBloodDonationsHistory();
+                const historyItems = await adminApiService.getHistory();
                 const tbody = document.getElementById('historyTableBody');
                 tbody.innerHTML = '';
 
-                donations.forEach((donation, index) => {
+                if (historyItems.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="11" style="text-align: center;">Chưa có lịch sử yêu cầu.</td></tr>';
+                    return;
+                }
+
+                historyItems.forEach((item, index) => {
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${index + 1}</td>
-                        <td>${donation.donationId}</td>
-                        <td>${donation.user ? donation.user.name : 'N/A'}</td>
-                        <td>${donation.user ? donation.user.phone : 'N/A'}</td>
-                        <td>${donation.user ? donation.user.gender : 'N/A'}</td>
-                        <td>${donation.user ? donation.user.bloodType : 'N/A'}</td>
-                        <td>${donation.amount || 'N/A'}</td>
-                        <td>Thành công</td>
+                        <td>${item.id}</td>
+                        <td>${item.type}</td>
+                        <td>${item.name || 'N/A'}</td>
+                        <td>${item.email || 'N/A'}</td>
+                        <td>${item.contact || 'N/A'}</td>
+                        <td>${item.gender || 'N/A'}</td>
+                        <td>${item.bloodType || 'N/A'}</td>
+                        <td>${item.amount || 'N/A'}</td>
+                        <td>${item.date ? new Date(item.date).toLocaleDateString('vi-VN') : 'N/A'}</td>
+                        <td>${item.status}</td>
                     `;
                     tbody.appendChild(row);
                 });
             } catch (error) {
-                console.error('Error loading blood donations history:', error);
-                document.getElementById('historyTableBody').innerHTML = '<tr><td colspan="8">Không thể tải dữ liệu</td></tr>';
+                console.error('Error loading history:', error);
+                document.getElementById('historyTableBody').innerHTML = '<tr><td colspan="11">Không thể tải dữ liệu</td></tr>';
             }
         }
 
         // Load data when page loads
-        document.addEventListener('DOMContentLoaded', loadBloodDonationsHistory);
+        document.addEventListener('DOMContentLoaded', loadHistory);
     </script>
 </body>
 

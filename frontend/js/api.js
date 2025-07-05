@@ -1,6 +1,17 @@
 // API base URL - change this to match your backend URL
 const API_BASE_URL = 'http://localhost:8082';
 
+function getAuthHeaders() {
+    const token = localStorage.getItem('authToken');
+    const headers = {
+        'Content-Type': 'application/json',
+    };
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+    return headers;
+}
+
 // Example API service
 const apiService = {
     // GET request example
@@ -8,10 +19,8 @@ const apiService = {
         try {
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include' // Include cookies if needed
+                headers: getAuthHeaders(),
+                credentials: 'include'
             });
 
             if (!response.ok) {
@@ -30,10 +39,8 @@ const apiService = {
         try {
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include', // Include cookies if needed
+                headers: getAuthHeaders(),
+                credentials: 'include',
                 body: JSON.stringify(data)
             });
 
@@ -41,7 +48,12 @@ const apiService = {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            return await response.json();
+            const contentType = response.headers.get("Content-Type");
+            if (contentType && contentType.includes("application/json")) {
+                return await response.json();
+            } else {
+                return await response.text();
+            }
         } catch (error) {
             console.error('Error posting data:', error);
             throw error;
@@ -53,10 +65,8 @@ const apiService = {
         try {
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
                 method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include', // Include cookies if needed
+                headers: getAuthHeaders(),
+                credentials: 'include',
                 body: JSON.stringify(data)
             });
 
@@ -64,7 +74,12 @@ const apiService = {
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
 
-            return await response.json();
+            const contentType = response.headers.get("Content-Type");
+            if (contentType && contentType.includes("application/json")) {
+                return await response.json();
+            } else {
+                return await response.text();
+            }
         } catch (error) {
             console.error('Error updating data:', error);
             throw error;
@@ -75,21 +90,27 @@ const apiService = {
     async deleteData(endpoint) {
         try {
             const response = await fetch(`${API_BASE_URL}${endpoint}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                },
-                credentials: 'include' // Include cookies if needed
+                method: "DELETE",
+                headers: getAuthHeaders(),
+                credentials: "include"
             });
 
             if (!response.ok) {
-                throw new Error(`HTTP error! status: ${response.status}`);
+                const errorText = await response.text();
+                throw new Error(errorText || "Lỗi server");
             }
 
-            return await response.json();
+            const contentType = response.headers.get("Content-Type");
+            if (contentType && contentType.includes("application/json")) {
+                return await response.json();
+            } else {
+                return await response.text();
+            }
         } catch (error) {
-            console.error('Error deleting data:', error);
+            console.error("Error deleting data:", error);
             throw error;
         }
     }
+
+
 }; 

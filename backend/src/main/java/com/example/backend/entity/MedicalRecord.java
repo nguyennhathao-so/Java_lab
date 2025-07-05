@@ -37,4 +37,4 @@ public class MedicalRecord {
 
     @Column(name = "notes", columnDefinition = "text")
     private String notes;
-} 
+}

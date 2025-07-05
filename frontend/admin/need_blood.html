@@ -50,10 +50,11 @@
                         <tr style="user-select: none;">
                             <th>STT</th>
                             <th>ID</th>
-                            <th>Tên</th>
-                            <th>SDT</th>
-                            <th>Giới tính</th>
-                            <th>Thời gian</th>
+                            <th>Tên người cần máu</th>
+                            <th>Số điện thoại</th>
+                            <th>Email</th>
+                            <th>Thời gian tạo</th>
+                            <th>Thời gian khẩn cấp</th>
                             <th>Nhóm máu</th>
                             <th>Số lượng (ml)</th>
                             <th>Trạng thái</th>
@@ -66,8 +67,9 @@
                             <td>9011</td>
                             <td>name 1</td>
                             <td>11116711111</td>
-                            <td>Nam</td>
+                            <td>name1@example.com</td>
                             <td>29/3/2011</td>
+                            <td>Khẩn cấp</td>
                             <td>A+</td>
                             <td>40</td>
                             <td>Khẩn cấp</td>
@@ -81,8 +83,9 @@
                             <td>5455</td>
                             <td>name 2</td>
                             <td>45543543</td>
-                            <td>Nữ</td>
+                            <td>name2@example.com</td>
                             <td>29/3/2011</td>
+                            <td>Không</td>
                             <td>AB+</td>
                             <td>50</td>
                             <td>Không</td>
@@ -99,22 +102,40 @@
     <script>
         async function loadBloodRequests() {
             try {
-                const requests = await adminApiService.getBloodRequests();
+                const allRequests = await adminApiService.getBloodRequests();
+
+                // Lọc chỉ lấy các yêu cầu CẦN MÁU (receive)
+                const receiveRequests = allRequests.filter(request => request.requestType === 'receive');
+
                 const tbody = document.getElementById('requestsTableBody');
                 tbody.innerHTML = '';
-                requests.forEach((request, index) => {
+
+                if (receiveRequests.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="11" style="text-align: center;">Không có yêu cầu cần máu nào.</td></tr>';
+                    return;
+                }
+
+                receiveRequests.forEach((request, index) => {
+                    const center = request.center;
+                    const user = request.user;
+                    // Ưu tiên hiển thị thông tin người dùng cho yêu cầu cần máu
+                    const name = user?.name || center?.name || 'N/A';
+                    const phone = user?.phone || center?.contactInfo || 'N/A';
+                    const email = user?.email || 'N/A';
+                    const urgentTime = request.desiredDate ? new Date(request.desiredDate).toLocaleDateString('vi-VN') : 'N/A';
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${index + 1}</td>
                         <td>${request.requestId}</td>
-                        <td>${request.center ? request.center.name : 'N/A'}</td>
-                        <td>${request.center ? request.center.contactInfo : 'N/A'}</td>
-                        <td>N/A</td>
+                        <td>${name}</td>
+                        <td>${phone}</td>
+                        <td>${email}</td>
                         <td>${request.createdAt ? new Date(request.createdAt).toLocaleDateString('vi-VN') : 'N/A'}</td>
+                        <td>${urgentTime}</td>
                         <td>${request.bloodTypeNeeded || 'N/A'}</td>
                         <td>${request.quantity || 'N/A'}</td>
                         <td>${request.urgencyLevel === 'high' ? 'Khẩn cấp' : 'Bình thường'}</td>
-                        <td>
+                        <td class="action-buttons">
                             <button class="delete" onclick="deleteBloodRequest(${request.requestId})">Xóa</button>
                             <button class="accept" onclick="approveBloodRequest(${request.requestId})">Đồng ý</button>
                         </td>
@@ -123,13 +144,35 @@
                 });
             } catch (error) {
                 console.error('Error loading blood requests:', error);
-                document.getElementById('requestsTableBody').innerHTML = '<tr><td colspan="10">Không thể tải dữ liệu</td></tr>';
+                document.getElementById('requestsTableBody').innerHTML = '<tr><td colspan="11">Không thể tải dữ liệu</td></tr>';
             }
         }
 
-        // Dummy functions for buttons (bạn có thể bổ sung logic sau)
-        function deleteBloodRequest(id) { alert('Xóa: ' + id); }
-        function approveBloodRequest(id) { alert('Duyệt: ' + id); }
+        async function deleteBloodRequest(id) {
+            if (confirm(`Bạn có chắc chắn muốn xóa yêu cầu #${id}?`)) {
+                try {
+                    await adminApiService.deleteBloodRequest(id);
+                    alert('Đã xóa yêu cầu thành công.');
+                    loadBloodRequests(); // Tải lại danh sách
+                } catch (error) {
+                    console.error('Lỗi khi xóa yêu cầu:', error);
+                    alert('Có lỗi xảy ra khi xóa yêu cầu.');
+                }
+            }
+        }
+
+        async function approveBloodRequest(id) {
+            if (confirm(`Bạn có chắc chắn muốn duyệt yêu cầu #${id}? Yêu cầu sẽ được chuyển vào lịch sử.`)) {
+                try {
+                    await adminApiService.approveBloodRequest(id);
+                    alert('Yêu cầu đã được duyệt thành công!');
+                    loadBloodRequests(); // Tải lại danh sách
+                } catch (error) {
+                    console.error('Lỗi khi duyệt yêu cầu:', error);
+                    alert('Có lỗi xảy ra khi duyệt yêu cầu.');
+                }
+            }
+        }
 
         document.addEventListener('DOMContentLoaded', loadBloodRequests);
     </script>

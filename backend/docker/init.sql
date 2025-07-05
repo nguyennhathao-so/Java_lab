@@ -59,15 +59,20 @@ CREATE TABLE IF NOT EXISTS `health_centers` (
 -- Bảng donation_requests
 CREATE TABLE IF NOT EXISTS `donation_requests` (
   `request_id` varchar(10) NOT NULL,
+  `user_id` varchar(10) DEFAULT NULL,
   `center_id` varchar(10) DEFAULT NULL,
   `blood_type_needed` varchar(3) DEFAULT NULL,
   `quantity` int DEFAULT NULL,
   `urgency_level` enum('low','medium','high') DEFAULT 'medium',
-  `status` enum('open','fulfilled','closed') DEFAULT 'open',
+  `status` enum('open','fulfilled','closed','approved') DEFAULT 'open',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `desired_date` datetime DEFAULT NULL,
+  `request_type` enum('donate','receive') NOT NULL DEFAULT 'donate',
   PRIMARY KEY (`request_id`),
+  KEY `user_id` (`user_id`),
   KEY `center_id` (`center_id`),
-  CONSTRAINT `donation_requests_ibfk_1` FOREIGN KEY (`center_id`) REFERENCES `health_centers` (`center_id`)
+  CONSTRAINT `donation_requests_ibfk_1` FOREIGN KEY (`center_id`) REFERENCES `health_centers` (`center_id`),
+  CONSTRAINT `donation_requests_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng donations
@@ -78,6 +83,7 @@ CREATE TABLE IF NOT EXISTS `donations` (
   `donation_type` enum('whole','platelets','plasma') DEFAULT NULL,
   `amount` int DEFAULT NULL,
   `date` date DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`donation_id`),
   KEY `user_id` (`user_id`),
   KEY `request_id` (`request_id`),
@@ -226,16 +232,16 @@ VALUES
 ('BI8', 'HC2', 'AB-', 'whole', 5, 'available');
 
 -- Bảng donation_requests
-INSERT INTO donation_requests (request_id, center_id, blood_type_needed, quantity, urgency_level, status)
+INSERT INTO donation_requests (request_id, user_id, center_id, blood_type_needed, quantity, urgency_level, status, request_type)
 VALUES
-('DR1', 'HC1', 'A+', 2, 'high', 'open'),
-('DR2', 'HC2', 'B-', 1, 'medium', 'open');
+('DR1', 'US1', 'HC1', 'A+', 2, 'high', 'open', 'donate'),
+('DR2', 'US2', 'HC2', 'B-', 1, 'medium', 'open', 'receive');
 
 -- Bảng donations
-INSERT INTO donations (donation_id, user_id, donation_type, amount, date)
+INSERT INTO donations (donation_id, user_id, donation_type, amount, date, status)
 VALUES
-('DN1', 'US1', 'whole', 350, '2024-06-01'),
-('DN2', 'US2', 'whole', 450, '2024-06-02');
+('DN1', 'US1', 'whole', 350, '2024-06-01', 'completed'),
+('DN2', 'US2', 'whole', 450, '2024-06-02', 'completed');
 
 -- Bảng activity_logs
 INSERT INTO activity_logs (log_id, user_id, action, ip_address)

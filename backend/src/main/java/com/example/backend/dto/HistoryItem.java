@@ -11,7 +11,7 @@ import java.sql.Date;
 @AllArgsConstructor
 public class HistoryItem {
     private String type; // "Hiến máu" hoặc "Cần máu"
-    private Integer id;
+    private String id;
     private String name; // Tên người dùng hoặc tên trung tâm
     private String contact; // SĐT người dùng hoặc liên hệ trung tâm
     private String bloodType;

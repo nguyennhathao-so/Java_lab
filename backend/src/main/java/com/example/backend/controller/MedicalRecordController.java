@@ -26,7 +26,7 @@ public class MedicalRecordController {
     @PostMapping("")
     public ResponseEntity<?> createMedicalRecord(@RequestBody Map<String, Object> request) {
         try {
-            Long userId = ((Number) request.get("user_id")).longValue();
+            String userId = (String) request.get("user_id");
             String diseaseHistory = (String) request.get("disease_history");
             User user = userRepository.findById(userId).orElse(null);
 
@@ -45,7 +45,7 @@ public class MedicalRecordController {
 
     // Lấy record mới nhất của user
     @GetMapping("/user/{userId}/latest")
-    public ResponseEntity<?> getLatestMedicalRecord(@PathVariable Integer userId) {
+    public ResponseEntity<?> getLatestMedicalRecord(@PathVariable String userId) {
         MedicalRecord record = medicalRecordRepository.findTopByUser_UserIdOrderByCheckedDateDesc(userId);
         return ResponseEntity.ok(record);
     }

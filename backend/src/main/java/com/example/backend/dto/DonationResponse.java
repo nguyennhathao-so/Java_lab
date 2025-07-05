@@ -4,7 +4,7 @@ import com.example.backend.entity.User;
 import java.util.Date;
 
 public class DonationResponse {
-    private Integer donationId;
+    private String donationId;
     private User user;
     private Integer requestId;
     private String donationType;
@@ -16,7 +16,7 @@ public class DonationResponse {
     public DonationResponse() {
     }
 
-    public DonationResponse(Integer donationId, User user, Integer requestId, String donationType, Integer amount,
+    public DonationResponse(String donationId, User user, Integer requestId, String donationType, Integer amount,
             Date date, String status) {
         this.donationId = donationId;
         this.user = user;
@@ -28,11 +28,11 @@ public class DonationResponse {
     }
 
     // Getters and Setters
-    public Integer getDonationId() {
+    public String getDonationId() {
         return donationId;
     }
 
-    public void setDonationId(Integer donationId) {
+    public void setDonationId(String donationId) {
         this.donationId = donationId;
     }
 

@@ -100,11 +100,17 @@ const apiService = {
                 throw new Error(errorText || "Lỗi server");
             }
 
+            // Xử lý response body một cách an toàn và nhất quán
             const contentType = response.headers.get("Content-Type");
-            if (contentType && contentType.includes("application/json")) {
-                return await response.json();
+            const text = await response.text();
+            
+            // Nếu có content và là JSON thì parse, không thì trả về text hoặc true
+            if (text && contentType && contentType.includes("application/json")) {
+                return JSON.parse(text);
+            } else if (text) {
+                return text;
             } else {
-                return await response.text();
+                return true; // Trả về true khi DELETE thành công nhưng không có response body
             }
         } catch (error) {
             console.error("Error deleting data:", error);

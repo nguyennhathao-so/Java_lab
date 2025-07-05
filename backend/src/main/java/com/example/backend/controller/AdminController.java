@@ -396,4 +396,35 @@ public class AdminController {
         List<Notification> notifications = notificationRepository.findByUser_UserIdOrderByCreatedAtDesc(userId);
         return ResponseEntity.ok(notifications);
     }
+
+    // Get all users (for admin)
+    @GetMapping("/users")
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userRepository.findAll();
+        return ResponseEntity.ok(users);
+    }
+
+    // Cập nhật thông tin người dùng
+    @PutMapping("/users/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody User userData) {
+        return userRepository.findById(id)
+            .map(user -> {
+                user.setName(userData.getName());
+                user.setEmail(userData.getEmail());
+                user.setPassword(userData.getPassword());
+                user.setPhone(userData.getPhone());
+                user.setAddress(userData.getAddress());
+                user.setGender(userData.getGender());
+                user.setBloodType(userData.getBloodType());
+                userRepository.save(user);
+                return ResponseEntity.ok(user);
+            })
+            .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @DeleteMapping("/users/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable("id") String id) {
+        userRepository.deleteById(id);
+        return ResponseEntity.ok().build();
+    }
 }

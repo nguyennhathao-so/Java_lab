@@ -220,4 +220,10 @@ text-transform: uppercase;
   line-height: normal;
 }
 
+.forum-list {
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
 

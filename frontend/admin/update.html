@@ -124,6 +124,53 @@
                     alert('Có lỗi xảy ra khi cập nhật. Vui lòng thử lại.');
                 }
             });
+
+            // Lấy thông tin donation trước
+            fetch(`http://localhost:8082/api/admin/donations/${donationId}`, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+                }
+            })
+                .then(response => response.json())
+                .then(donationData => {
+                    // Gán số lượng máu
+                    document.getElementById('amount').value = donationData.amount || 350;
+
+                    // Lấy userId từ donationData
+                    const userId = donationData.user && donationData.user.userId;
+                    if (!userId) {
+                        document.getElementById('illness').value = "Chưa cập nhật";
+                        return;
+                    }
+
+                    // Gọi API lấy notes gần nhất
+                    fetch(`http://localhost:8082/api/admin/medical-records/last/${userId}`, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+                        }
+                    })
+                        .then(response => {
+                            if (response.status === 204) { // No Content
+                                document.getElementById('illness').value = "Chưa cập nhật";
+                                return null;
+                            }
+                            return response.json();
+                        })
+                        .then(medicalData => {
+                            if (medicalData && medicalData.notes) {
+                                document.getElementById('illness').value = medicalData.notes;
+                            } else if (medicalData !== null) {
+                                document.getElementById('illness').value = "Chưa cập nhật";
+                            }
+                        })
+                        .catch(() => {
+                            document.getElementById('illness').value = "Chưa cập nhật";
+                        });
+                })
+                .catch(() => {
+                    document.getElementById('amount').value = 350;
+                    document.getElementById('illness').value = "Chưa cập nhật";
+                });
         });
     </script>
 </body>

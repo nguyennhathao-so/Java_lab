@@ -7,6 +7,7 @@ import com.example.backend.entity.BloodInventory;
 import com.example.backend.entity.User;
 import com.example.backend.entity.Notification;
 import com.example.backend.entity.DonationRegistration;
+import com.example.backend.entity.MedicalRecord;
 import com.example.backend.repository.*;
 import com.example.backend.dto.HistoryItem;
 import com.example.backend.dto.DonationResponse;
@@ -52,6 +53,9 @@ public class AdminController {
     @Autowired
     private ReminderService reminderService;
 
+    @Autowired
+    private MedicalRecordRepository medicalRecordRepository;
+
     // Get all blood donations for approval
     @GetMapping("/blood-donations")
     public ResponseEntity<List<Donation>> getBloodDonations() {
@@ -62,7 +66,9 @@ public class AdminController {
     // === API CHÍNH CHO CÁC TRANG QUẢN LÝ HIẾN MÁU ===
     @GetMapping("/donations/status/{status}")
     public ResponseEntity<List<DonationResponse>> getDonationsByStatus(@PathVariable String status) {
-        List<Donation> donations = donationRepository.findByStatus(status);
+        // Decode URL encoding
+        String decodedStatus = java.net.URLDecoder.decode(status, java.nio.charset.StandardCharsets.UTF_8);
+        List<Donation> donations = donationRepository.findByStatus(decodedStatus);
         List<DonationResponse> donationResponses = donations.stream().map(donation -> {
             User user = donation.getUser();
             return new DonationResponse(
@@ -195,13 +201,32 @@ public class AdminController {
     @GetMapping("/blood-requests")
     public List<DonationRequest> getOpenRequests(@RequestParam(required = false) String status) {
         try {
+            System.out.println("DEBUG: getOpenRequests được gọi với status: " + status);
+
+            List<DonationRequest> requests;
             if (status != null) {
                 DonationRequest.RequestStatus enumStatus = DonationRequest.RequestStatus.valueOf(status);
-                return donationRequestRepository.findByStatusWithUserAndCenter(enumStatus);
+                requests = donationRequestRepository.findByStatusWithUserAndCenter(enumStatus);
+            } else {
+                requests = donationRequestRepository.findByStatusWithUserAndCenter(DonationRequest.RequestStatus.open);
             }
-            return donationRequestRepository.findByStatusWithUserAndCenter(DonationRequest.RequestStatus.open);
+
+            System.out.println("DEBUG: Tìm thấy " + requests.size() + " requests");
+            for (DonationRequest req : requests) {
+                System.out.println("DEBUG: Request ID: " + req.getRequestId() +
+                        ", Type: " + req.getRequestType() +
+                        ", Status: " + req.getStatus() +
+                        ", User: " + (req.getUser() != null ? req.getUser().getEmail() : "null"));
+            }
+
+            return requests;
         } catch (IllegalArgumentException e) {
+            System.err.println("ERROR: Trạng thái không hợp lệ: " + status);
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Trạng thái không hợp lệ: " + status);
+        } catch (Exception e) {
+            System.err.println("ERROR trong getOpenRequests: " + e.getMessage());
+            e.printStackTrace();
+            throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Lỗi server: " + e.getMessage());
         }
     }
 
@@ -237,14 +262,10 @@ public class AdminController {
         try {
             String bloodType = (String) request.get("bloodType");
             Integer quantity = (Integer) request.get("quantity");
-            String centerId = (String) request.get("centerId");
 
-            HealthCenter center = healthCenterRepository.findById(centerId)
-                    .orElseThrow(() -> new RuntimeException("Health center not found"));
-
+            // Không cần centerId nữa
             List<BloodInventory> inventories = bloodInventoryRepository
-                    .findByBloodTypeAndStatus(bloodType, "available")
-                    .stream().filter(inv -> inv.getCenter().getCenterId().equals(centerId)).toList();
+                    .findByBloodTypeAndStatus(bloodType, BloodInventory.InventoryStatus.available);
 
             BloodInventory inventory = null;
             if (!inventories.isEmpty()) {
@@ -252,7 +273,6 @@ public class AdminController {
                 inventory.setQuantity(inventory.getQuantity() + quantity);
             } else {
                 inventory = new BloodInventory();
-                inventory.setCenter(center);
                 inventory.setBloodType(bloodType);
                 inventory.setComponentType(BloodInventory.ComponentType.whole);
                 inventory.setQuantity(quantity);
@@ -267,6 +287,7 @@ public class AdminController {
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Error updating blood inventory: " + e.getMessage());
         }
     }
@@ -277,6 +298,7 @@ public class AdminController {
             donationRepository.deleteById(id);
             return ResponseEntity.ok().body("Donation deleted successfully");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Error deleting donation: " + e.getMessage());
         }
     }
@@ -288,6 +310,7 @@ public class AdminController {
             // For now, just return success - you can implement actual approval logic later
             return ResponseEntity.ok().body("Donation approved successfully");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Error approving donation: " + e.getMessage());
         }
     }
@@ -299,6 +322,7 @@ public class AdminController {
             donationRequestRepository.deleteById(id);
             return ResponseEntity.ok().body("Blood request deleted successfully");
         } catch (Exception e) {
+            e.printStackTrace();
             return ResponseEntity.badRequest().body("Error deleting blood request: " + e.getMessage());
         }
     }
@@ -306,29 +330,43 @@ public class AdminController {
     // Approve blood request
     @PostMapping("/blood-requests/{id}/approve")
     public ResponseEntity<?> approveBloodRequest(@PathVariable String id) {
-        DonationRequest request = donationRequestRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Donation request not found with id: " + id));
+        System.out.println("==> [DEBUG] Approve API called, id = " + id);
+        try {
+            DonationRequest request = donationRequestRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Donation request not found with id: " + id));
 
-        if (request.getRequestType() == DonationRequest.RequestType.receive) {
-            // Cần máu: chỉ cập nhật status
-            request.setStatus(DonationRequest.RequestStatus.fulfilled);
+            System.out.println(
+                    "[DEBUG] Found request: " + request.getRequestId() + ", type: " + request.getRequestType());
+
+            if (request.getRequestType() == DonationRequest.RequestType.receive) {
+                request.setStatus(DonationRequest.RequestStatus.fulfilled);
+                donationRequestRepository.save(request);
+                System.out.println("[DEBUG] Request is 'receive', set to fulfilled");
+                return ResponseEntity.ok(Map.of("message", "Yêu cầu cần máu đã được chuyển vào lịch sử"));
+            }
+
+            System.out.println("[DEBUG] Request is 'donate', processing donation...");
+            request.setStatus(DonationRequest.RequestStatus.approved);
             donationRequestRepository.save(request);
-            return ResponseEntity.ok(Map.of("message", "Blood request fulfilled (no donation created)"));
+            System.out.println("[DEBUG] Request status updated to approved");
+
+            Donation donation = new Donation();
+            donation.setDonationId("DN" + System.currentTimeMillis());
+            donation.setUser(request.getUser());
+            donation.setRequest(request);
+            donation.setDonationType(Donation.DonationType.whole);
+            donation.setDate(new java.sql.Timestamp(System.currentTimeMillis()));
+            donation.setStatus("Chờ khám");
+            donation.setAmount(request.getQuantity());
+            donationRepository.save(donation);
+            System.out.println("[DEBUG] Donation created with ID: " + donation.getDonationId());
+
+            return ResponseEntity
+                    .ok(Map.of("message", "Yêu cầu hiến máu đã được duyệt và chuyển sang trang duyệt yêu cầu"));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(500).body("Error: " + e.getMessage());
         }
-
-        // Hiến máu: tạo bản ghi mới ở donations
-        request.setStatus(DonationRequest.RequestStatus.approved);
-        donationRequestRepository.save(request);
-
-        Donation donation = new Donation();
-        donation.setUser(request.getUser());
-        donation.setRequest(request);
-        donation.setDonationType(Donation.DonationType.valueOf(request.getBloodTypeNeeded())); // hoặc mapping phù hợp
-        donation.setDate(new java.sql.Timestamp(System.currentTimeMillis()));
-        donation.setStatus("Chờ khám");
-        donationRepository.save(donation);
-
-        return ResponseEntity.ok(Map.of("message", "Blood request approved and donation created successfully"));
     }
 
     @GetMapping("/health-centers")
@@ -350,6 +388,19 @@ public class AdminController {
             // Cập nhật trạng thái và lưu
             donation.setStatus("Hoàn thành");
             donationRepository.save(donation);
+
+            // === Thêm medical record nếu có notes (bệnh) ===
+            if (payload.containsKey("notes")) {
+                String notes = (String) payload.get("notes");
+                if (notes != null && !notes.trim().isEmpty()) {
+                    MedicalRecord record = new MedicalRecord();
+                    record.setRecordId("MR" + System.currentTimeMillis());
+                    record.setUser(donation.getUser());
+                    record.setNotes(notes);
+                    record.setCheckedDate(new java.sql.Date(System.currentTimeMillis()));
+                    medicalRecordRepository.save(record);
+                }
+            }
 
             return ResponseEntity.ok(Collections.singletonMap("message", "Donation completed successfully"));
 
@@ -374,7 +425,7 @@ public class AdminController {
         long donationCount = donationRepository.count();
         long donationRequestCount = donationRequestRepository.count();
         long totalRequests = donationCount + donationRequestCount;
-        
+
         Map<String, Long> response = new HashMap<>();
         response.put("totalRequests", totalRequests);
         return ResponseEntity.ok(response);
@@ -390,7 +441,8 @@ public class AdminController {
     // Lấy lịch sử đăng ký hiến/cần máu của user
     @GetMapping("/donation-registrations/{userId}")
     public ResponseEntity<List<DonationRegistration>> getDonationRegistrations(@PathVariable String userId) {
-        List<DonationRegistration> list = donationRegistrationRepository.findByUser_UserIdOrderByRegistrationDateDesc(userId);
+        List<DonationRegistration> list = donationRegistrationRepository
+                .findByUser_UserIdOrderByRegistrationDateDesc(userId);
         return ResponseEntity.ok(list);
     }
 
@@ -414,18 +466,18 @@ public class AdminController {
     @PutMapping("/users/{id}")
     public ResponseEntity<?> updateUser(@PathVariable String id, @RequestBody User userData) {
         return userRepository.findById(id)
-            .map(user -> {
-                user.setName(userData.getName());
-                user.setEmail(userData.getEmail());
-                user.setPassword(userData.getPassword());
-                user.setPhone(userData.getPhone());
-                user.setAddress(userData.getAddress());
-                user.setGender(userData.getGender());
-                user.setBloodType(userData.getBloodType());
-                userRepository.save(user);
-                return ResponseEntity.ok(user);
-            })
-            .orElseGet(() -> ResponseEntity.notFound().build());
+                .map(user -> {
+                    user.setName(userData.getName());
+                    user.setEmail(userData.getEmail());
+                    user.setPassword(userData.getPassword());
+                    user.setPhone(userData.getPhone());
+                    user.setAddress(userData.getAddress());
+                    user.setGender(userData.getGender());
+                    user.setBloodType(userData.getBloodType());
+                    userRepository.save(user);
+                    return ResponseEntity.ok(user);
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @DeleteMapping("/users/{id}")
@@ -438,5 +490,28 @@ public class AdminController {
     public ResponseEntity<Map<String, Long>> getApprovedRequestsCount() {
         long count = donationRequestRepository.countByStatus(DonationRequest.RequestStatus.approved);
         return ResponseEntity.ok(Collections.singletonMap("approvedRequests", count));
+    }
+
+    // Test endpoint để kiểm tra authentication
+    @PostMapping("/test-auth")
+    public ResponseEntity<?> testAuth() {
+        return ResponseEntity.ok(Map.of("message", "Authentication working!"));
+    }
+
+    @GetMapping("/donations/{id}")
+    public ResponseEntity<Donation> getDonationById(@PathVariable String id) {
+        return donationRepository.findById(id)
+                .map(ResponseEntity::ok)
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
+    @GetMapping("/medical-records/last/{userId}")
+    public ResponseEntity<MedicalRecord> getLastMedicalRecord(@PathVariable String userId) {
+        MedicalRecord record = medicalRecordRepository.findTopByUser_UserIdOrderByCheckedDateDescRecordIdDesc(userId);
+        if (record != null) {
+            return ResponseEntity.ok(record);
+        } else {
+            return ResponseEntity.noContent().build();
+        }
     }
 }

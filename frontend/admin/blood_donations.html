@@ -100,8 +100,8 @@
                             <td>${user.gender || 'N/A'}</td>
                             <td>${user.bloodType || 'N/A'}</td>
                             <td class="action-buttons">
-                                <button class="delete" onclick="deleteRequest(${req.requestId})">Xóa</button>
-                                <button class="accept" onclick="approveRequest(${req.requestId})">Đồng ý</button>
+                                <button class="delete" onclick="deleteRequest('${req.requestId}')">Xóa</button>
+                                <button class="accept" onclick="approveRequest('${req.requestId}')">Đồng ý</button>
                             </td>
                         </tr>`;
                     tbody.innerHTML += row;
@@ -116,14 +116,23 @@
         async function approveRequest(id) {
             if (confirm('Bạn có chắc chắn muốn duyệt yêu cầu này không?')) {
                 try {
-                    await adminApiService.approveBloodRequest(id);
-                    alert('Đã duyệt yêu cầu thành công!');
+                    console.log('Approving request:', id);
+                    console.log('Auth token:', localStorage.getItem('authToken'));
+
+                    const result = await adminApiService.approveBloodRequest(id);
+                    console.log('Approve result:', result);
+
+                    alert('✔️ Đã duyệt yêu cầu thành công!');
                     loadAndRenderDonations(); // reload lại bảng
                 } catch (error) {
-                    alert('Có lỗi xảy ra khi duyệt. Vui lòng thử lại.');
+                    console.error('❌ Approve error:', error);
+                    console.error('Error details:', error.response || error);
+                    alert('❌ Duyệt thất bại: ' + error.message);
+                    // KHÔNG reload bảng nếu có lỗi
                 }
             }
         }
+
 
         // Hàm xử lý khi nhấn nút "Xóa"
         async function deleteRequest(id) {
@@ -137,6 +146,32 @@
                 }
             }
         }
+
+        // Test function để kiểm tra authentication
+        // async function testAuth() {
+        //     try {
+        //         const response = await fetch('http://localhost:8082/api/admin/test-auth', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             credentials: 'include'
+        //         });
+
+        //         if (response.ok) {
+        //             const result = await response.json();
+        //             console.log('Auth test successful:', result);
+        //             alert('Authentication working!');
+        //         } else {
+        //             console.error('Auth test failed:', response.status);
+        //             alert('Authentication failed: ' + response.status);
+        //         }
+        //     } catch (error) {
+        //         console.error('Auth test error:', error);
+        //         alert('Auth test error: ' + error.message);
+        //     }
+        // }
 
         // Chạy hàm tải dữ liệu khi trang được tải lần đầu
         document.addEventListener('DOMContentLoaded', loadAndRenderDonations);

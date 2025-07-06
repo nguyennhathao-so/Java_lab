@@ -6,6 +6,6 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DonationRegistrationRepository extends JpaRepository<DonationRegistration, Long> {
+public interface DonationRegistrationRepository extends JpaRepository<DonationRegistration, String> {
     List<DonationRegistration> findByUser_UserIdOrderByRegistrationDateDesc(String userId);
-} 
+}

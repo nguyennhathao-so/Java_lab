@@ -21,7 +21,6 @@ import com.example.backend.entity.DonationRequest.UrgencyLevel;
 public class DonationRequest {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "request_id")
     private String requestId;
 

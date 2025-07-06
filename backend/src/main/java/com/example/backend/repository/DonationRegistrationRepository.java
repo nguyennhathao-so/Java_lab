@@ -8,4 +8,5 @@ import java.util.List;
 @Repository
 public interface DonationRegistrationRepository extends JpaRepository<DonationRegistration, Long> {
     List<DonationRegistration> findByUser_UserIdOrderByRegistrationDateDesc(String userId);
+    List<DonationRegistration> findByStatus(String status);
 } 

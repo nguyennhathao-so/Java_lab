@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `blood_type` varchar(3) NOT NULL,
   `role_id` varchar(10) NOT NULL,
   `last_donation_date` date DEFAULT NULL,
-  `location` point DEFAULT NULL,
+  `location` varchar(50) DEFAULT NULL,
   `status` enum('active','inactive') DEFAULT 'active',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `phone` varchar(15) DEFAULT NULL,
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS `health_centers` (
   `name` varchar(100) NOT NULL,
   `address` varchar(255) DEFAULT NULL,
   `contact_info` varchar(100) DEFAULT NULL,
-  `location` point DEFAULT NULL,
+  `location` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`center_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -196,17 +196,18 @@ CREATE TABLE IF NOT EXISTS donation_registrations (
 INSERT INTO roles (role_id, role_name) VALUES ('RL1', 'USER'), ('RL2', 'ADMIN'), ('RL3', 'STAFF');
 
 -- Bảng users
-INSERT INTO users (user_id, name, email, password, blood_type, role_id, phone, gender, address)
+INSERT INTO users (user_id, name, email, password, blood_type, role_id, phone, gender, address, location)
 VALUES
-('US1', 'Nguyen Van A', 'a@gmail.com', '$2a$10$examplehash', 'A+', 'RL1', '0123456789', 'Nam', 'Hà Nội'),
-('US2', 'Nguyen Van B', 'b@gmail.com', '$2a$10$examplehash', 'B-', 'RL2', '0987654321', 'Nữ', 'Hồ Chí Minh'),
-('US3', 'Nguyen Van C', 'c@gmail.com', '$2b$10$examplehash', 'O+', 'RL1', '0987654320', 'Nữ', 'Hồ Chí Minh');
+('US1', 'Nguyen Van A', 'a@gmail.com', '$2a$10$examplehash', 'A+', 'RL1', '0123456789', 'Nam', 'Hà Nội', '21.0285,105.8542'),
+('US2', 'Nguyen Van B', 'b@gmail.com', '$2a$10$examplehash', 'B-', 'RL2', '0987654321', 'Nữ', 'Hồ Chí Minh', '10.8231,106.6297'),
+('US3', 'Nguyen Van C', 'c@gmail.com', '$2b$10$examplehash', 'O+', 'RL1', '0987654320', 'Nữ', 'Hồ Chí Minh', '10.8231,106.6297');
 
 -- Bảng health_centers
-INSERT INTO health_centers (center_id, name, address, contact_info)
-VALUES
-('HC1', 'Trung tâm 1', '123 Đường A, Hà Nội', '0123456789'),
-('HC2', 'Trung tâm 2', '456 Đường B, Hồ Chí Minh', '0987654321');
+INSERT INTO health_centers (center_id, name, address, contact_info, location) VALUES
+('HC1', 'QUẬN HOÀN KIẾM', '26 Lương Ngọc Quyến, HN', '(024) 3718 3154', '21.0341,105.8525'),
+('HC2', 'QUẬN THANH XUÂN', '132 Quan Nhân, Hà Nội', '(024) 3207 9699', '21.0061,105.8122'),
+('HC3', 'QUẬN ĐỐNG ĐA', 'Số 10, Ngõ 122, Đường Láng', '(024) 3203 0032', '21.0172,105.8165'),
+('HC4', 'HUYỆN THANH TRÌ', 'BV ĐK Nông nghiệp, Km13+500, Ngọc Hồi, Hà Nội', '(024) 3200 0407', '20.9477,105.8571');
 
 -- Bảng blood_types
 INSERT INTO blood_types (blood_type, can_donate_to, can_receive_from) VALUES

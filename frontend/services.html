@@ -397,16 +397,29 @@
         <form class="search-form">
           <select>
             <option value="">Nhập Nhóm Máu</option>
+            <option value="A+">A+</option>
+            <option value="A-">A-</option>
+            <option value="B+">B+</option>
+            <option value="B-">B-</option>
+            <option value="AB+">AB+</option>
+            <option value="AB-">AB-</option>
+            <option value="O+">O+</option>
+            <option value="O-">O-</option>
           </select>
-          <input type="text" placeholder="Khoảng Cách Tối Đa (km)">
-          <input type="text" placeholder="Nhập Tên">
-          <input type="text" placeholder="Vị Trí Hiện (Địa Chỉ Hoặc Tọa Độ)">
+          <div class="form-row">
+            <input type="text" placeholder="Khoảng Cách Tối Đa (km)" class="form-input">
+          </div>
+          <div class="form-row">
+            <input type="text" placeholder="Vị Trí Hiện (Địa Chỉ Hoặc Tọa Độ)" class="form-input">
+          </div>
         </form>
 
         <table class="search-results">
           <thead>
             <tr>
               <th>Tên</th>
+              <th>Số điện thoại</th>
+              <th>Kiểu máu</th>
               <th>Loại</th>
               <th>Địa điểm</th>
               <th>Khoảng cách</th>
@@ -415,14 +428,18 @@
           <tbody>
             <tr>
               <td>Nguyễn Văn A</td>
+              <td>0123456789</td>
+              <td>A+</td>
               <td>Người Hiến Máu</td>
-              <td>10.7770, 106.7010</td>
+              <td>26 Lương Ngọc Quyến, HN</td>
               <td>0.5 Km</td>
             </tr>
             <tr>
               <td>Trần Thị B</td>
+              <td>0987654321</td>
+              <td>O-</td>
               <td>Người Cần Máu</td>
-              <td>10.7800, 106.7050</td>
+              <td>132 Quan Nhân, Hà Nội</td>
               <td>2.3 Km</td>
             </tr>
           </tbody>
@@ -491,6 +508,52 @@
         section.scrollIntoView({ behavior: 'smooth' });
       }
     }
+  </script>
+
+  <script>
+    document.querySelector('.distance-search .btn-submit').onclick = async function(e) {
+      e.preventDefault();
+      // Lấy giá trị input
+      const bloodType = document.querySelector('.distance-search select').value;
+      const maxDistance = document.querySelector('.distance-search input[placeholder="Khoảng Cách Tối Đa (km)"]').value;
+      const location = document.querySelector('.distance-search input[placeholder="Vị Trí Hiện (Địa Chỉ Hoặc Tọa Độ)"]').value;
+
+      if (!bloodType || !maxDistance || !location) {
+        alert('Vui lòng nhập đầy đủ thông tin!');
+        return;
+      }
+
+      // Gửi request
+      const res = await fetch('http://localhost:8082/api/search-donors', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+        },
+        body: JSON.stringify({
+          bloodType,
+          location,
+          maxDistance: parseFloat(maxDistance)
+        })
+      });
+      const data = await res.json();
+
+      // Render kết quả
+      const tbody = document.querySelector('.search-results tbody');
+      tbody.innerHTML = '';
+      data.forEach(item => {
+        const tr = document.createElement('tr');
+        tr.innerHTML = `
+          <td>${item.name}</td>
+          <td>${item.phone}</td>
+          <td>${item.bloodType}</td>
+          <td>${item.type}</td>
+          <td>${item.address}</td>
+          <td>${item.distance} Km</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    };
   </script>
 </body>
 </html>

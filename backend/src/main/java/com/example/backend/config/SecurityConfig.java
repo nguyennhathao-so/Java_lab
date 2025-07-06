@@ -31,6 +31,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/admin/notifications/user/**").authenticated()
                         .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "STAFF")
                         .requestMatchers("/api/donation-requests/**").hasAnyRole("USER", "ADMIN")
+                        .requestMatchers("/api/search-donors").authenticated()
                         .anyRequest().authenticated())
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

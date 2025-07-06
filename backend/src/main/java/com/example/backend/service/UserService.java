@@ -23,6 +23,9 @@ public class UserService {
     @Autowired
     private RoleRepository roleRepository;
 
+    @Autowired
+    private GeocodingService geocodingService;
+
     public void register(RegisterRequest request) {
         // Kiểm tra email đã tồn tại
         if (userRepository.existsByEmail(request.getEmail())) {
@@ -43,6 +46,22 @@ public class UserService {
         user.setAddress(request.getAddress());
         user.setGender(request.getGender());
         user.setBloodType(request.getBloodType());
+        
+        // Chuyển đổi địa chỉ thành tọa độ sử dụng Nominatim API
+        if (request.getAddress() != null && !request.getAddress().trim().isEmpty()) {
+            try {
+                String coordinates = geocodingService.geocodeAddressWithTimeout(request.getAddress());
+                if (coordinates != null) {
+                    user.setLocation(coordinates);
+                    System.out.println("Đã chuyển đổi địa chỉ '" + request.getAddress() + "' thành tọa độ: " + coordinates);
+                } else {
+                    System.out.println("Không thể chuyển đổi địa chỉ: " + request.getAddress());
+                }
+            } catch (Exception e) {
+                System.err.println("Lỗi khi chuyển đổi địa chỉ: " + e.getMessage());
+                // Không throw exception để không làm gián đoạn quá trình đăng ký
+            }
+        }
 
         Role userRole = roleRepository.findByRoleName("USER")
                 .orElseThrow(() -> new RuntimeException("Role USER not found"));

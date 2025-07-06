@@ -137,6 +137,14 @@
       background-size: 15px;
     }
 
+    #blood-component-select {
+      display: none;
+    }
+
+    #blood-component-select.show {
+      display: block;
+    }
+
     .radio-group {
       display: flex;
       gap: 30px;
@@ -250,6 +258,7 @@
   </script>
   <script src="js/component.js"></script>
   <script src="js/form-toggle.js"></script>
+  <script src="js/blood-compatibility-local.js"></script>
 </head>
 
 <body>
@@ -324,8 +333,8 @@
           <h2>TRA CỨU NHÓM MÁU</h2>
         </div>
         <form>
-          <select>
-            <option value="">Nhập Nhóm Máu</option>
+          <select id="blood-type-select">
+            <option value="">Chọn Nhóm Máu</option>
             <option value="A+">A+</option>
             <option value="A-">A-</option>
             <option value="B+">B+</option>
@@ -338,19 +347,19 @@
 
           <div class="radio-group">
             <label>
-              <input type="radio" name="type" checked>
+              <input type="radio" name="transfusion-type" value="Toàn Phần" checked>
               Toàn Phần
             </label>
             <label>
-              <input type="radio" name="type">
+              <input type="radio" name="transfusion-type" value="Theo Thành Phần Máu">
               Theo Thành Phần Máu
             </label>
           </div>
 
-          <select>
-            <option value="">Nhập Loại Thành Phần Máu</option>
-            <option value="hong-cau">Hồng Cầu</option>
-            <option value="tieu-cau">Tiểu Cầu</option>
+          <select id="blood-component-select">
+            <option value="">Chọn Loại Thành Phần Máu</option>
+            <option value="Hồng Cầu">Hồng Cầu</option>
+            <option value="Tiểu Cầu">Tiểu Cầu</option>
           </select>
 
           <table class="blood-table">
@@ -362,29 +371,14 @@
                 <th>Nhóm máu có thể nhận</th>
               </tr>
             </thead>
-            <tbody>
+            <tbody id="blood-compatibility-results">
               <tr>
-                <td>A+</td>
-                <td>Toàn Phần</td>
-                <td>-</td>
-                <td>A+, A-, O+, O-</td>
-              </tr>
-              <tr>
-                <td>A+</td>
-                <td>Theo Thành Phần Máu</td>
-                <td>Hồng Cầu</td>
-                <td>A+, A-, O+, O-</td>
-              </tr>
-              <tr>
-                <td>A+</td>
-                <td>Theo Thành Phần Máu</td>
-                <td>Tiểu Cầu</td>
-                <td>A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên A+)</td>
+                <td colspan="4" style="text-align: center; color: #666;">Vui lòng chọn nhóm máu và loại truyền máu</td>
               </tr>
             </tbody>
           </table>
 
-          <button type="submit" class="btn-submit">Tra Cứu</button>
+          <button type="button" class="btn-submit" onclick="updateResults()">Tra Cứu</button>
         </form>
       </div>
 

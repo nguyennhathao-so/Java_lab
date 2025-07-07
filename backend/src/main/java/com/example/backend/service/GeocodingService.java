@@ -22,6 +22,58 @@ public class GeocodingService {
     }
     
     /**
+     * Test URL geocoding và trả về dữ liệu thực tế
+     * @param address Địa chỉ cần test
+     * @return Dữ liệu JSON từ Nominatim API
+     */
+    public String testGeocodingUrl(String address) {
+        if (address == null || address.trim().isEmpty()) {
+            return "Error: Address is empty";
+        }
+        
+        try {
+            // Build URI để log ra URL thực tế (đã encode)
+            String url = org.springframework.web.util.UriComponentsBuilder.fromHttpUrl(NOMINATIM_BASE_URL)
+                    .path("/search")
+                    .queryParam("q", address)
+                    .queryParam("format", "json")
+                    .queryParam("limit", "1")
+                    .queryParam("addressdetails", "1")
+                    .build()
+                    .encode()
+                    .toUriString();
+            
+            System.out.println("Testing Geocoding URL: " + url);
+            
+            // Gọi API và lấy response dạng String để xem dữ liệu thực tế
+            String response = webClient.get()
+                    .uri(uriBuilder -> uriBuilder
+                            .path("/search")
+                            .queryParam("q", address)
+                            .queryParam("format", "json")
+                            .queryParam("limit", "1")
+                            .queryParam("addressdetails", "1")
+                            .build())
+                    .retrieve()
+                    .bodyToMono(String.class)
+                    .timeout(java.time.Duration.ofSeconds(10))
+                    .block();
+            
+            if (response != null && !response.isEmpty()) {
+                System.out.println("Response from Nominatim: " + response);
+                return "URL: " + url + "\n\nResponse: " + response;
+            } else {
+                return "URL: " + url + "\n\nResponse: Empty response from API";
+            }
+            
+        } catch (Exception e) {
+            String errorMsg = "Error testing geocoding URL for address: " + address + " - " + e.getMessage();
+            System.err.println(errorMsg);
+            return "Error: " + errorMsg;
+        }
+    }
+    
+    /**
      * Chuyển đổi địa chỉ thành tọa độ sử dụng Nominatim API
      * @param address Địa chỉ cần chuyển đổi
      * @return Tọa độ dạng "latitude,longitude" hoặc null nếu không tìm thấy
@@ -70,6 +122,18 @@ public class GeocodingService {
         }
         
         try {
+            // Build URI để log ra URL thực tế (đã encode)
+            String url = org.springframework.web.util.UriComponentsBuilder.fromHttpUrl(NOMINATIM_BASE_URL)
+                    .path("/search")
+                    .queryParam("q", address)
+                    .queryParam("format", "json")
+                    .queryParam("limit", "1")
+                    .queryParam("addressdetails", "1")
+                    .build()
+                    .encode()
+                    .toUriString();
+            System.out.println("Geocoding URL: " + url);
+
             List<NominatimResponse> responses = webClient.get()
                     .uri(uriBuilder -> uriBuilder
                             .path("/search")

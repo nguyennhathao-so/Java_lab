@@ -10,7 +10,7 @@ public class WebClientConfig {
     @Bean
     public WebClient webClient() {
         return WebClient.builder()
-                .defaultHeader("User-Agent", "BloodDonationApp/1.0")
+                .defaultHeader("User-Agent", "BloodDonationApp/1.0 (https://github.com/your-repo; contact@example.com)")
                 .build();
     }
 } 

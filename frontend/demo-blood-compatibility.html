@@ -216,9 +216,21 @@
     </div>
 
     <script>
-        // Blood Compatibility Data
-        const BLOOD_COMPATIBILITY_DATA = {
-            "bloodCompatibilityData": [
+        // Blood Compatibility Data - Load từ file JSON
+        let BLOOD_COMPATIBILITY_DATA = { bloodCompatibilityData: [] };
+        
+        // Load dữ liệu từ file JSON
+        fetch('./js/blood-compatibility-data.json')
+            .then(response => response.json())
+            .then(data => {
+                BLOOD_COMPATIBILITY_DATA = data;
+                console.log('✅ Đã load dữ liệu từ blood-compatibility-data.json');
+            })
+            .catch(error => {
+                console.error('❌ Lỗi khi load dữ liệu:', error);
+                // Fallback data nếu không load được file
+                BLOOD_COMPATIBILITY_DATA = {
+                    "bloodCompatibilityData": [
                 {
                     "receiverBloodType": "A+",
                     "transfusionType": "Toàn Phần",
@@ -364,7 +376,8 @@
                     "compatibleBloodTypes": "A-, B-, AB-, O- (Ưu Tiên O-)"
                 }
             ]
-        };
+                };
+            });
 
         // Initialize form
         document.addEventListener('DOMContentLoaded', function() {

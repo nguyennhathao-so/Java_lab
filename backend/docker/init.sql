@@ -285,54 +285,103 @@ INSERT INTO donation_registrations (id, user_id, registration_date, type, status
 ('DRG4', 'US3', '2024-06-12', 'Cần máu', 'Đã duyệt');
 
 -- Dữ liệu mẫu cho blood_compatibility
-INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) VALUES
+-- Insert dữ liệu cho bảng blood_compatibility
+-- Định dạng: receiver_blood_type, transfusion_type, blood_component, compatible_blood_types
+
 -- A+ Toàn Phần
-('A+', 'Toàn Phần', NULL, 'A+, A-, O+, O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('A+', 'Toàn Phần', NULL, 'A+, A-, O+, O-');
+
 -- A+ Theo Thành Phần Máu - Hồng Cầu
-('A+', 'Theo Thành Phần Máu', 'Hồng Cầu', 'A+, A-, O+, O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('A+', 'Theo Thành Phần Máu', 'Hồng Cầu', 'A+, A-, O+, O-');
+
 -- A+ Theo Thành Phần Máu - Tiểu Cầu
-('A+', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên A+)'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('A+', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên A+)');
+
 -- A- Toàn Phần
-('A-', 'Toàn Phần', NULL, 'A-, O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('A-', 'Toàn Phần', NULL, 'A-, O-');
+
 -- A- Theo Thành Phần Máu - Hồng Cầu
-('A-', 'Theo Thành Phần Máu', 'Hồng Cầu', 'A-, O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('A-', 'Theo Thành Phần Máu', 'Hồng Cầu', 'A-, O-');
+
 -- A- Theo Thành Phần Máu - Tiểu Cầu
-('A-', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A-, B-, AB-, O- (Ưu Tiên A-)'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('A-', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A-, B-, AB-, O- (Ưu Tiên A-)');
+
 -- B+ Toàn Phần
-('B+', 'Toàn Phần', NULL, 'B+, B-, O+, O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('B+', 'Toàn Phần', NULL, 'B+, B-, O+, O-');
+
 -- B+ Theo Thành Phần Máu - Hồng Cầu
-('B+', 'Theo Thành Phần Máu', 'Hồng Cầu', 'B+, B-, O+, O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('B+', 'Theo Thành Phần Máu', 'Hồng Cầu', 'B+, B-, O+, O-');
+
 -- B+ Theo Thành Phần Máu - Tiểu Cầu
-('B+', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên B+)'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('B+', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên B+)');
+
 -- B- Toàn Phần
-('B-', 'Toàn Phần', NULL, 'B-, O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('B-', 'Toàn Phần', NULL, 'B-, O-');
+
 -- B- Theo Thành Phần Máu - Hồng Cầu
-('B-', 'Theo Thành Phần Máu', 'Hồng Cầu', 'B-, O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('B-', 'Theo Thành Phần Máu', 'Hồng Cầu', 'B-, O-');
+
 -- B- Theo Thành Phần Máu - Tiểu Cầu
-('B-', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A-, B-, AB-, O- (Ưu Tiên B-)'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('B-', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A-, B-, AB-, O- (Ưu Tiên B-)');
+
 -- AB+ Toàn Phần
-('AB+', 'Toàn Phần', NULL, 'A+, A-, B+, B-, AB+, AB-, O+, O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('AB+', 'Toàn Phần', NULL, 'A+, A-, B+, B-, AB+, AB-, O+, O-');
+
 -- AB+ Theo Thành Phần Máu - Hồng Cầu
-('AB+', 'Theo Thành Phần Máu', 'Hồng Cầu', 'A+, A-, B+, B-, AB+, AB-, O+, O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('AB+', 'Theo Thành Phần Máu', 'Hồng Cầu', 'A+, A-, B+, B-, AB+, AB-, O+, O-');
+
 -- AB+ Theo Thành Phần Máu - Tiểu Cầu
-('AB+', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên AB+)'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('AB+', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên AB+)');
+
 -- AB- Toàn Phần
-('AB-', 'Toàn Phần', NULL, 'A-, B-, AB-, O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('AB-', 'Toàn Phần', NULL, 'A-, B-, AB-, O-');
+
 -- AB- Theo Thành Phần Máu - Hồng Cầu
-('AB-', 'Theo Thành Phần Máu', 'Hồng Cầu', 'A-, B-, AB-, O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('AB-', 'Theo Thành Phần Máu', 'Hồng Cầu', 'A-, B-, AB-, O-');
+
 -- AB- Theo Thành Phần Máu - Tiểu Cầu
-('AB-', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A-, B-, AB-, O- (Ưu Tiên AB-)'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('AB-', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A-, B-, AB-, O- (Ưu Tiên AB-)');
+
 -- O+ Toàn Phần
-('O+', 'Toàn Phần', NULL, 'O+, O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('O+', 'Toàn Phần', NULL, 'O+, O-');
+
 -- O+ Theo Thành Phần Máu - Hồng Cầu
-('O+', 'Theo Thành Phần Máu', 'Hồng Cầu', 'O+, O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('O+', 'Theo Thành Phần Máu', 'Hồng Cầu', 'O+, O-');
+
 -- O+ Theo Thành Phần Máu - Tiểu Cầu
-('O+', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên O+)'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('O+', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên O+)');
+
 -- O- Toàn Phần
-('O-', 'Toàn Phần', NULL, 'O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('O-', 'Toàn Phần', NULL, 'O-');
+
 -- O- Theo Thành Phần Máu - Hồng Cầu
-('O-', 'Theo Thành Phần Máu', 'Hồng Cầu', 'O-'),
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('O-', 'Theo Thành Phần Máu', 'Hồng Cầu', 'O-');
+
 -- O- Theo Thành Phần Máu - Tiểu Cầu
-('O-', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A-, B-, AB-, O- (Ưu Tiên O-)');
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('O-', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A-, B-, AB-, O- (Ưu Tiên O-)');
 
 

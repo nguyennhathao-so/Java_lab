@@ -347,8 +347,20 @@
     </div>
 
     <script>
-        // Dữ liệu tương thích máu
-        const bloodCompatibilityData = [
+        // Dữ liệu tương thích máu - Load từ file JSON
+        let bloodCompatibilityData = [];
+        
+        // Load dữ liệu từ file JSON
+        fetch('./js/blood-compatibility-data.json')
+            .then(response => response.json())
+            .then(data => {
+                bloodCompatibilityData = data.bloodCompatibilityData;
+                console.log('✅ Đã load dữ liệu từ blood-compatibility-data.json');
+            })
+            .catch(error => {
+                console.error('❌ Lỗi khi load dữ liệu:', error);
+                // Fallback data nếu không load được file
+                bloodCompatibilityData = [
             {
                 receiverBloodType: "A+",
                 transfusionType: "Toàn Phần",
@@ -493,7 +505,8 @@
                 bloodComponent: "Tiểu Cầu",
                 compatibleBloodTypes: "A-, B-, AB-, O- (Ưu Tiên O-)"
             }
-        ];
+                ];
+            });
 
         // DOM Elements
         const form = document.getElementById('bloodCompatibilityForm');
@@ -509,6 +522,11 @@
             transfusionTypeRadios.forEach(radio => {
                 radio.addEventListener('change', toggleBloodComponentSection);
             });
+            
+            // Đảm bảo dữ liệu đã được load trước khi sử dụng
+            if (bloodCompatibilityData.length === 0) {
+                console.log('⏳ Đang chờ load dữ liệu...');
+            }
         });
 
         // Ngăn form tự động submit và chỉ tra cứu khi nhấn nút

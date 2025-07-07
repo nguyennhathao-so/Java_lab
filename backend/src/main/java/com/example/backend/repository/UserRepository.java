@@ -18,4 +18,10 @@ public interface UserRepository extends JpaRepository<User, String> {
     Optional<User> findByEmailIgnoreCase(String email);
 
     List<User> findByLastDonationDateIsNotNull();
+    
+    // Method để lấy tất cả users
+    List<User> findAll();
+    
+    // Method để save user
+    User save(User user);
 }

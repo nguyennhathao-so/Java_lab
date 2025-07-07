@@ -13,6 +13,7 @@ import com.example.backend.dto.DonationResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.server.ResponseStatusException;
 import com.example.backend.service.ReminderService;
@@ -51,6 +52,18 @@ public class AdminController {
 
     @Autowired
     private ReminderService reminderService;
+
+    @Autowired
+    private ActivityLogRepository activityLogRepository;
+
+    @Autowired
+    private MedicalRecordRepository medicalRecordRepository;
+
+    @Autowired
+    private BlogRepository blogRepository;
+
+    @Autowired
+    private AppointmentRepository appointmentRepository;
 
     // Get all blood donations for approval
     @GetMapping("/blood-donations")
@@ -429,9 +442,44 @@ public class AdminController {
     }
 
     @DeleteMapping("/users/{id}")
+    @Transactional
     public ResponseEntity<?> deleteUser(@PathVariable("id") String id) {
-        userRepository.deleteById(id);
-        return ResponseEntity.ok().build();
+        try {
+            // Kiểm tra user có tồn tại không
+            User user = userRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
+            
+            // Xóa các bản ghi phụ thuộc trước khi xóa user
+            // 1. Xóa activity logs
+            activityLogRepository.deleteByUserId(id);
+            
+            // 2. Xóa notifications
+            notificationRepository.deleteByUserId(id);
+            
+            // 3. Xóa donation registrations
+            donationRegistrationRepository.deleteByUserId(id);
+            
+            // 4. Xóa medical records
+            medicalRecordRepository.deleteByUserId(id);
+            
+            // 5. Xóa blogs
+            blogRepository.deleteByAuthorId(id);
+            
+            // 6. Xóa appointments
+            appointmentRepository.deleteByUserId(id);
+            
+            // 7. Xóa donations
+            donationRepository.deleteByUserId(id);
+            
+            // 8. Xóa donation requests
+            donationRequestRepository.deleteByUserId(id);
+            
+            // Xóa user
+            userRepository.deleteById(id);
+            return ResponseEntity.ok().body("User deleted successfully");
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().body("Error deleting user: " + e.getMessage());
+        }
     }
 
     @GetMapping("/requests/approved/count")

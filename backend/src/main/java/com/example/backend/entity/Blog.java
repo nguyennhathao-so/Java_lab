@@ -15,11 +15,10 @@ import com.example.backend.config.EntityIdListener;
 @EntityListeners(EntityIdListener.class)
 public class Blog {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "blog_id")
     private String blogId;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "author_id")
     private User author;
 

@@ -1,0 +1,465 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - Tra Cứu Nhóm Máu</title>
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+        }
+        
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            padding: 30px;
+        }
+        
+        h1 {
+            text-align: center;
+            color: #d32f2f;
+            margin-bottom: 30px;
+        }
+        
+        .form-section {
+            margin-bottom: 30px;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: #333;
+        }
+        
+        select, input[type="radio"] {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 16px;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #d32f2f;
+        }
+        
+        .radio-group {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 16px;
+            color: #333;
+            cursor: pointer;
+        }
+        
+        .radio-group input[type="radio"] {
+            width: auto;
+        }
+        
+        .blood-component-select {
+            display: none;
+        }
+        
+        .blood-component-select.show {
+            display: block;
+        }
+        
+        .results-section {
+            margin-top: 30px;
+        }
+        
+        .blood-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        .blood-table th,
+        .blood-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: center;
+        }
+        
+        .blood-table th {
+            background: #f8bebe;
+            font-weight: 500;
+            color: #d32f2f;
+        }
+        
+        .btn-search {
+            background: #d32f2f;
+            color: white;
+            border: none;
+            padding: 12px 30px;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            margin-top: 20px;
+        }
+        
+        .btn-search:hover {
+            background: #b71c1c;
+        }
+        
+        .info-box {
+            background: #e3f2fd;
+            border: 1px solid #2196f3;
+            border-radius: 6px;
+            padding: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .info-box h3 {
+            margin: 0 0 10px 0;
+            color: #1976d2;
+        }
+        
+        .info-box p {
+            margin: 5px 0;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔍 DEMO - TRA CỨU NHÓM MÁU</h1>
+        
+        <div class="info-box">
+            <h3>📋 Hướng dẫn sử dụng:</h3>
+            <p>1. Chọn <strong>Nhóm máu</strong> người nhận (A+, A-, B+, B-, AB+, AB-, O+, O-)</p>
+            <p>2. Chọn <strong>Loại truyền máu</strong> (Toàn Phần / Theo Thành Phần Máu)</p>
+            <p>3. Nếu chọn "Theo Thành Phần Máu", chọn <strong>Thành phần máu</strong> (Hồng Cầu / Tiểu Cầu)</p>
+            <p>4. Xem kết quả <strong>Nhóm máu có thể nhận</strong> trong bảng bên dưới</p>
+        </div>
+        
+        <div class="form-section">
+            <div class="form-group">
+                <label for="blood-type-select">🏥 Nhóm máu người nhận:</label>
+                <select id="blood-type-select">
+                    <option value="">-- Chọn nhóm máu --</option>
+                    <option value="A+">A+</option>
+                    <option value="A-">A-</option>
+                    <option value="B+">B+</option>
+                    <option value="B-">B-</option>
+                    <option value="AB+">AB+</option>
+                    <option value="AB-">AB-</option>
+                    <option value="O+">O+</option>
+                    <option value="O-">O-</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label>💉 Loại truyền máu:</label>
+                <div class="radio-group">
+                    <label>
+                        <input type="radio" name="transfusion-type" value="Toàn Phần" checked>
+                        Toàn Phần
+                    </label>
+                    <label>
+                        <input type="radio" name="transfusion-type" value="Theo Thành Phần Máu">
+                        Theo Thành Phần Máu
+                    </label>
+                </div>
+            </div>
+            
+            <div class="form-group blood-component-select" id="blood-component-select">
+                <label for="blood-component">🩸 Thành phần máu:</label>
+                <select id="blood-component">
+                    <option value="">-- Chọn thành phần máu --</option>
+                    <option value="Hồng Cầu">Hồng Cầu</option>
+                    <option value="Tiểu Cầu">Tiểu Cầu</option>
+                </select>
+            </div>
+            
+            <button class="btn-search" onclick="searchBloodCompatibility()">🔍 Tra Cứu</button>
+        </div>
+        
+        <div class="results-section">
+            <h3>📊 Kết quả tra cứu:</h3>
+            <table class="blood-table">
+                <thead>
+                    <tr>
+                        <th>Nhóm máu người nhận</th>
+                        <th>Loại truyền máu</th>
+                        <th>Thành phần máu</th>
+                        <th>Nhóm máu có thể nhận</th>
+                    </tr>
+                </thead>
+                <tbody id="blood-compatibility-results">
+                    <tr>
+                        <td colspan="4" style="text-align: center; color: #666;">
+                            Vui lòng chọn nhóm máu và loại truyền máu để tra cứu
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+
+    <script>
+        // Blood Compatibility Data - Load từ file JSON
+        let BLOOD_COMPATIBILITY_DATA = { bloodCompatibilityData: [] };
+        
+        // Load dữ liệu từ file JSON
+        fetch('./js/blood-compatibility-data.json')
+            .then(response => response.json())
+            .then(data => {
+                BLOOD_COMPATIBILITY_DATA = data;
+                console.log('✅ Đã load dữ liệu từ blood-compatibility-data.json');
+            })
+            .catch(error => {
+                console.error('❌ Lỗi khi load dữ liệu:', error);
+                // Fallback data nếu không load được file
+                BLOOD_COMPATIBILITY_DATA = {
+                    "bloodCompatibilityData": [
+                {
+                    "receiverBloodType": "A+",
+                    "transfusionType": "Toàn Phần",
+                    "bloodComponent": "",
+                    "compatibleBloodTypes": "A+, A-, O+, O-"
+                },
+                {
+                    "receiverBloodType": "A+",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Hồng Cầu",
+                    "compatibleBloodTypes": "A+, A-, O+, O-"
+                },
+                {
+                    "receiverBloodType": "A+",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Tiểu Cầu",
+                    "compatibleBloodTypes": "A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên A+)"
+                },
+                {
+                    "receiverBloodType": "A-",
+                    "transfusionType": "Toàn Phần",
+                    "bloodComponent": "",
+                    "compatibleBloodTypes": "A-, O-"
+                },
+                {
+                    "receiverBloodType": "A-",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Hồng Cầu",
+                    "compatibleBloodTypes": "A-, O-"
+                },
+                {
+                    "receiverBloodType": "A-",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Tiểu Cầu",
+                    "compatibleBloodTypes": "A-, B-, AB-, O- (Ưu Tiên A-)"
+                },
+                {
+                    "receiverBloodType": "B+",
+                    "transfusionType": "Toàn Phần",
+                    "bloodComponent": "",
+                    "compatibleBloodTypes": "B+, B-, O+, O-"
+                },
+                {
+                    "receiverBloodType": "B+",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Hồng Cầu",
+                    "compatibleBloodTypes": "B+, B-, O+, O-"
+                },
+                {
+                    "receiverBloodType": "B+",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Tiểu Cầu",
+                    "compatibleBloodTypes": "A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên B+)"
+                },
+                {
+                    "receiverBloodType": "B-",
+                    "transfusionType": "Toàn Phần",
+                    "bloodComponent": "",
+                    "compatibleBloodTypes": "B-, O-"
+                },
+                {
+                    "receiverBloodType": "B-",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Hồng Cầu",
+                    "compatibleBloodTypes": "B-, O-"
+                },
+                {
+                    "receiverBloodType": "B-",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Tiểu Cầu",
+                    "compatibleBloodTypes": "A-, B-, AB-, O- (Ưu Tiên B-)"
+                },
+                {
+                    "receiverBloodType": "AB+",
+                    "transfusionType": "Toàn Phần",
+                    "bloodComponent": "",
+                    "compatibleBloodTypes": "A+, A-, B+, B-, AB+, AB-, O+, O-"
+                },
+                {
+                    "receiverBloodType": "AB+",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Hồng Cầu",
+                    "compatibleBloodTypes": "A+, A-, B+, B-, AB+, AB-, O+, O-"
+                },
+                {
+                    "receiverBloodType": "AB+",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Tiểu Cầu",
+                    "compatibleBloodTypes": "A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên AB+)"
+                },
+                {
+                    "receiverBloodType": "AB-",
+                    "transfusionType": "Toàn Phần",
+                    "bloodComponent": "",
+                    "compatibleBloodTypes": "A-, B-, AB-, O-"
+                },
+                {
+                    "receiverBloodType": "AB-",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Hồng Cầu",
+                    "compatibleBloodTypes": "A-, B-, AB-, O-"
+                },
+                {
+                    "receiverBloodType": "AB-",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Tiểu Cầu",
+                    "compatibleBloodTypes": "A-, B-, AB-, O- (Ưu Tiên AB-)"
+                },
+                {
+                    "receiverBloodType": "O+",
+                    "transfusionType": "Toàn Phần",
+                    "bloodComponent": "",
+                    "compatibleBloodTypes": "O+, O-"
+                },
+                {
+                    "receiverBloodType": "O+",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Hồng Cầu",
+                    "compatibleBloodTypes": "O+, O-"
+                },
+                {
+                    "receiverBloodType": "O+",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Tiểu Cầu",
+                    "compatibleBloodTypes": "A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên O+)"
+                },
+                {
+                    "receiverBloodType": "O-",
+                    "transfusionType": "Toàn Phần",
+                    "bloodComponent": "",
+                    "compatibleBloodTypes": "O-"
+                },
+                {
+                    "receiverBloodType": "O-",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Hồng Cầu",
+                    "compatibleBloodTypes": "O-"
+                },
+                {
+                    "receiverBloodType": "O-",
+                    "transfusionType": "Theo Thành Phần Máu",
+                    "bloodComponent": "Tiểu Cầu",
+                    "compatibleBloodTypes": "A-, B-, AB-, O- (Ưu Tiên O-)"
+                }
+            ]
+                };
+            });
+
+        // Initialize form
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add event listeners for radio buttons
+            document.querySelectorAll('input[name="transfusion-type"]').forEach(radio => {
+                radio.addEventListener('change', toggleBloodComponentSelect);
+            });
+            
+            // Add event listeners for selects
+            document.getElementById('blood-type-select').addEventListener('change', searchBloodCompatibility);
+            document.getElementById('blood-component').addEventListener('change', searchBloodCompatibility);
+            
+            // Initialize blood component select visibility
+            toggleBloodComponentSelect();
+        });
+
+        // Toggle blood component select visibility
+        function toggleBloodComponentSelect() {
+            const selectedType = document.querySelector('input[name="transfusion-type"]:checked')?.value;
+            const bloodComponentSelect = document.getElementById('blood-component-select');
+            
+            if (selectedType === 'Theo Thành Phần Máu') {
+                bloodComponentSelect.classList.add('show');
+            } else {
+                bloodComponentSelect.classList.remove('show');
+                document.getElementById('blood-component').value = '';
+            }
+        }
+
+        // Search blood compatibility
+        function searchBloodCompatibility() {
+            const bloodType = document.getElementById('blood-type-select').value;
+            const transfusionType = document.querySelector('input[name="transfusion-type"]:checked')?.value;
+            const bloodComponent = document.getElementById('blood-component').value;
+            
+            if (!bloodType || !transfusionType) {
+                displayResults([]);
+                return;
+            }
+            
+            // Filter data
+            const results = BLOOD_COMPATIBILITY_DATA.bloodCompatibilityData.filter(item => {
+                if (item.receiverBloodType !== bloodType) return false;
+                if (item.transfusionType !== transfusionType) return false;
+                
+                if (transfusionType === "Toàn Phần") {
+                    return true;
+                }
+                
+                if (transfusionType === "Theo Thành Phần Máu") {
+                    return item.bloodComponent === bloodComponent;
+                }
+                
+                return false;
+            });
+            
+            displayResults(results);
+        }
+
+        // Display results
+        function displayResults(results) {
+            const tbody = document.getElementById('blood-compatibility-results');
+            
+            if (results.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align: center; color: #666;">Không tìm thấy kết quả</td></tr>';
+                return;
+            }
+            
+            let html = '';
+            results.forEach(result => {
+                html += `
+                    <tr>
+                        <td><strong>${result.receiverBloodType}</strong></td>
+                        <td>${result.transfusionType}</td>
+                        <td>${result.bloodComponent || '-'}</td>
+                        <td><strong>${result.compatibleBloodTypes}</strong></td>
+                    </tr>
+                `;
+            });
+            
+            tbody.innerHTML = html;
+        }
+    </script>
+</body>
+</html> 

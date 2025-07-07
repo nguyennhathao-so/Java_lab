@@ -1,0 +1,148 @@
+{
+  "bloodCompatibilityData": [
+    {
+      "receiverBloodType": "A+",
+      "transfusionType": "Toàn Phần",
+      "bloodComponent": "",
+      "compatibleBloodTypes": "A+, A-, O+, O-"
+    },
+    {
+      "receiverBloodType": "A+",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Hồng Cầu",
+      "compatibleBloodTypes": "A+, A-, O+, O-"
+    },
+    {
+      "receiverBloodType": "A+",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Tiểu Cầu",
+      "compatibleBloodTypes": "A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên A+)"
+    },
+    {
+      "receiverBloodType": "A-",
+      "transfusionType": "Toàn Phần",
+      "bloodComponent": "",
+      "compatibleBloodTypes": "A-, O-"
+    },
+    {
+      "receiverBloodType": "A-",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Hồng Cầu",
+      "compatibleBloodTypes": "A-, O-"
+    },
+    {
+      "receiverBloodType": "A-",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Tiểu Cầu",
+      "compatibleBloodTypes": "A-, B-, AB-, O- (Ưu Tiên A-)"
+    },
+    {
+      "receiverBloodType": "B+",
+      "transfusionType": "Toàn Phần",
+      "bloodComponent": "",
+      "compatibleBloodTypes": "B+, B-, O+, O-"
+    },
+    {
+      "receiverBloodType": "B+",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Hồng Cầu",
+      "compatibleBloodTypes": "B+, B-, O+, O-"
+    },
+    {
+      "receiverBloodType": "B+",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Tiểu Cầu",
+      "compatibleBloodTypes": "A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên B+)"
+    },
+    {
+      "receiverBloodType": "B-",
+      "transfusionType": "Toàn Phần",
+      "bloodComponent": "",
+      "compatibleBloodTypes": "B-, O-"
+    },
+    {
+      "receiverBloodType": "B-",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Hồng Cầu",
+      "compatibleBloodTypes": "B-, O-"
+    },
+    {
+      "receiverBloodType": "B-",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Tiểu Cầu",
+      "compatibleBloodTypes": "A-, B-, AB-, O- (Ưu Tiên B-)"
+    },
+    {
+      "receiverBloodType": "AB+",
+      "transfusionType": "Toàn Phần",
+      "bloodComponent": "",
+      "compatibleBloodTypes": "A+, A-, B+, B-, AB+, AB-, O+, O-"
+    },
+    {
+      "receiverBloodType": "AB+",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Hồng Cầu",
+      "compatibleBloodTypes": "A+, A-, B+, B-, AB+, AB-, O+, O-"
+    },
+    {
+      "receiverBloodType": "AB+",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Tiểu Cầu",
+      "compatibleBloodTypes": "A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên AB+)"
+    },
+    {
+      "receiverBloodType": "AB-",
+      "transfusionType": "Toàn Phần",
+      "bloodComponent": "",
+      "compatibleBloodTypes": "A-, B-, AB-, O-"
+    },
+    {
+      "receiverBloodType": "AB-",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Hồng Cầu",
+      "compatibleBloodTypes": "A-, B-, AB-, O-"
+    },
+    {
+      "receiverBloodType": "AB-",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Tiểu Cầu",
+      "compatibleBloodTypes": "A-, B-, AB-, O- (Ưu Tiên AB-)"
+    },
+    {
+      "receiverBloodType": "O+",
+      "transfusionType": "Toàn Phần",
+      "bloodComponent": "",
+      "compatibleBloodTypes": "O+, O-"
+    },
+    {
+      "receiverBloodType": "O+",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Hồng Cầu",
+      "compatibleBloodTypes": "O+, O-"
+    },
+    {
+      "receiverBloodType": "O+",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Tiểu Cầu",
+      "compatibleBloodTypes": "A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên O+)"
+    },
+    {
+      "receiverBloodType": "O-",
+      "transfusionType": "Toàn Phần",
+      "bloodComponent": "",
+      "compatibleBloodTypes": "O-"
+    },
+    {
+      "receiverBloodType": "O-",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Hồng Cầu",
+      "compatibleBloodTypes": "O-"
+    },
+    {
+      "receiverBloodType": "O-",
+      "transfusionType": "Theo Thành Phần Máu",
+      "bloodComponent": "Tiểu Cầu",
+      "compatibleBloodTypes": "A-, B-, AB-, O- (Ưu Tiên O-)"
+    }
+  ]
+} 

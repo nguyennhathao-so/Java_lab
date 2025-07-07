@@ -11,4 +11,10 @@ public interface NotificationRepository extends JpaRepository<Notification, Stri
     List<Notification> findAllByOrderByCreatedAtDesc();
     List<Notification> findByUser_UserIdOrderByCreatedAtDesc(String userId);
     boolean existsByUser_UserIdAndMessageTypeAndStatus(String userId, String messageType, String status);
+    
+    // Method để đếm số lượng notifications
+    long count();
+    
+    // Method để save notification
+    Notification save(Notification notification);
 } 

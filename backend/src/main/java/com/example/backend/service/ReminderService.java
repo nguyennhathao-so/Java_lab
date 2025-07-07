@@ -4,6 +4,7 @@ import com.example.backend.entity.Notification;
 import com.example.backend.entity.User;
 import com.example.backend.repository.NotificationRepository;
 import com.example.backend.repository.UserRepository;
+import com.example.backend.util.IdGenerator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
@@ -71,8 +72,6 @@ public class ReminderService {
 
     // Hàm sinh notificationId dạng NT1, NT2, ...
     private String generateNotificationId() {
-        // Lấy số lượng notification hiện tại + 1
-        long count = notificationRepository.count() + 1;
-        return "NT" + count;
+        return IdGenerator.generateNotificationId();
     }
 } 

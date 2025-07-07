@@ -15,7 +15,6 @@ import com.example.backend.config.EntityIdListener;
 @EntityListeners(EntityIdListener.class)
 public class Donation {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "donation_id")
     private String donationId;
 

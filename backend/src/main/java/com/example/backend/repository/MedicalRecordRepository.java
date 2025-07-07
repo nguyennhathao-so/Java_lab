@@ -8,8 +8,10 @@ import org.springframework.data.repository.query.Param;
 
 public interface MedicalRecordRepository extends JpaRepository<MedicalRecord, String> {
     MedicalRecord findTopByUser_UserIdOrderByCheckedDateDesc(String userId);
-    
+
     @Modifying
     @Query("DELETE FROM MedicalRecord mr WHERE mr.user.userId = :userId")
     void deleteByUserId(@Param("userId") String userId);
+
+    MedicalRecord findTopByUser_UserIdOrderByCheckedDateDescRecordIdDesc(String userId);
 }

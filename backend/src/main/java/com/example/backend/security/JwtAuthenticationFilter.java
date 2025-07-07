@@ -37,24 +37,45 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
             throws ServletException, IOException {
         try {
             String jwt = getJwtFromRequest(request);
-            System.out.println("JWT Filter: " + jwt);
+            logger.info("JWT Filter - Request URI: " + request.getRequestURI());
+            logger.info("JWT Filter - JWT Token: "
+                    + (jwt != null ? jwt.substring(0, Math.min(20, jwt.length())) + "..." : "null"));
+
             if (StringUtils.hasText(jwt) && tokenProvider.validateToken(jwt)) {
                 Claims claims = tokenProvider.getClaimsFromJWT(jwt);
                 String username = claims.getSubject();
-                String authoritiesString = (String) claims.get("auth");
+                List<String> authoritiesList = claims.get("auth", List.class);
+                if (authoritiesList == null) {
+                    authoritiesList = claims.get("authorities", List.class);
+                }
 
-                List<SimpleGrantedAuthority> authorities = Arrays.stream(authoritiesString.split(","))
-                        .map(String::trim)
-                        .map(SimpleGrantedAuthority::new)
-                        .collect(Collectors.toList());
-                logger.info("JWT Authenticated user: " + username + ", roles = " + authorities);
+                // Xử lý trường hợp authoritiesList là null
+                List<SimpleGrantedAuthority> authorities = null;
+                if (authoritiesList != null && !authoritiesList.isEmpty()) {
+                    authorities = authoritiesList.stream()
+                            .map(SimpleGrantedAuthority::new)
+                            .collect(Collectors.toList());
+                } else {
+                    // Nếu không có authorities trong token, tạo default authority
+                    authorities = Arrays.asList(new SimpleGrantedAuthority("USER"));
+                }
 
-                UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
-                UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
-                        userDetails, null, authorities);
-                authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                logger.info("JWT Filter - Username: " + username);
+                logger.info("JWT Filter - Authorities: " + authorities);
 
-                SecurityContextHolder.getContext().setAuthentication(authentication);
+                if (authorities != null && !authorities.isEmpty()) {
+                    UserDetails userDetails = customUserDetailsService.loadUserByUsername(username);
+                    UsernamePasswordAuthenticationToken authentication = new UsernamePasswordAuthenticationToken(
+                            userDetails, null, authorities);
+                    authentication.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+
+                    SecurityContextHolder.getContext().setAuthentication(authentication);
+                    logger.info("JWT Filter - Authentication set successfully for user: " + username);
+                } else {
+                    logger.warn("JWT Filter - No authorities found in token for user: " + username);
+                }
+            } else {
+                logger.info("JWT Filter - No valid JWT token found");
             }
         } catch (Exception ex) {
             logger.error("Could not set user authentication in security context", ex);

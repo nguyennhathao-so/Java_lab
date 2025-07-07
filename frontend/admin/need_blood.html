@@ -136,8 +136,8 @@
                         <td>${request.quantity || 'N/A'}</td>
                         <td>${request.urgencyLevel === 'high' ? 'Khẩn cấp' : 'Bình thường'}</td>
                         <td class="action-buttons">
-                            <button class="delete" onclick="deleteBloodRequest(${request.requestId})">Xóa</button>
-                            <button class="accept" onclick="approveBloodRequest(${request.requestId})">Đồng ý</button>
+                            <button class="delete" onclick="deleteBloodRequest('${request.requestId}')">Xóa</button>
+                            <button class="accept" onclick="approveBloodRequest('${request.requestId}')">Đồng ý</button>
                         </td>
                     `;
                     tbody.appendChild(row);

@@ -9,11 +9,11 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface DonationRegistrationRepository extends JpaRepository<DonationRegistration, Long> {
+public interface DonationRegistrationRepository extends JpaRepository<DonationRegistration, String> {
     List<DonationRegistration> findByUser_UserIdOrderByRegistrationDateDesc(String userId);
     List<DonationRegistration> findByStatus(String status);
     
     @Modifying
     @Query("DELETE FROM DonationRegistration dr WHERE dr.user.userId = :userId")
     void deleteByUserId(@Param("userId") String userId);
-} 
+}

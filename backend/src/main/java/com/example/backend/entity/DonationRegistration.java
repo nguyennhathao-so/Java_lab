@@ -30,4 +30,4 @@ public class DonationRegistration {
 
     @Column(name = "status")
     private String status;
-} 
+}

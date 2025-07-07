@@ -45,22 +45,22 @@
                 .then(response => response.json())
                 .then(data => {
                     console.log('Blood inventory data:', data);
-                    
+
                     // Cập nhật số lượng cho từng nhóm máu
                     const bloodTypeCounts = data.bloodTypeCounts;
-                    
+
                     // Cập nhật các thẻ blood card
                     document.querySelectorAll('.blood-card').forEach(card => {
                         const bloodType = card.querySelector('span').textContent;
                         const quantityElement = card.querySelector('strong');
-                        
+
                         if (bloodTypeCounts[bloodType] !== undefined) {
                             quantityElement.textContent = bloodTypeCounts[bloodType];
                         } else {
                             quantityElement.textContent = '0';
                         }
                     });
-                    
+
                     // Cập nhật tổng đơn vị máu
                     const totalVolumeElement = document.getElementById('total-blood-volume');
                     if (totalVolumeElement) {
@@ -77,7 +77,7 @@
         }
 
         // Gọi hàm khi trang được load
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             loadBloodInventory();
             loadUserCount();
             loadTotalRequestsCount();
@@ -93,21 +93,21 @@
                     'Authorization': 'Bearer ' + localStorage.getItem('authToken')
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log('User count data:', data);
-                const userCountElement = document.getElementById('total-users-count');
-                if (userCountElement && data.userCount !== undefined) {
-                    userCountElement.textContent = data.userCount;
-                }
-            })
-            .catch(error => {
-                console.error('Error loading user count:', error);
-                const userCountElement = document.getElementById('total-users-count');
-                if (userCountElement) {
-                    userCountElement.textContent = 'N/A';
-                }
-            });
+                .then(response => response.json())
+                .then(data => {
+                    console.log('User count data:', data);
+                    const userCountElement = document.getElementById('total-users-count');
+                    if (userCountElement && data.userCount !== undefined) {
+                        userCountElement.textContent = data.userCount;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading user count:', error);
+                    const userCountElement = document.getElementById('total-users-count');
+                    if (userCountElement) {
+                        userCountElement.textContent = 'N/A';
+                    }
+                });
         }
 
         // Hàm để lấy tổng số yêu cầu
@@ -119,45 +119,45 @@
                     'Authorization': 'Bearer ' + localStorage.getItem('authToken')
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                console.log('Total requests data:', data);
-                const totalRequestsElement = document.getElementById('total-requests-count');
-                if (totalRequestsElement && data.totalRequests !== undefined) {
-                    totalRequestsElement.textContent = data.totalRequests;
-                }
-            })
-            .catch(error => {
-                console.error('Error loading total requests count:', error);
-                const totalRequestsElement = document.getElementById('total-requests-count');
-                if (totalRequestsElement) {
-                    totalRequestsElement.textContent = 'N/A';
-                }
-            });
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Total requests data:', data);
+                    const totalRequestsElement = document.getElementById('total-requests-count');
+                    if (totalRequestsElement && data.totalRequests !== undefined) {
+                        totalRequestsElement.textContent = data.totalRequests;
+                    }
+                })
+                .catch(error => {
+                    console.error('Error loading total requests count:', error);
+                    const totalRequestsElement = document.getElementById('total-requests-count');
+                    if (totalRequestsElement) {
+                        totalRequestsElement.textContent = 'N/A';
+                    }
+                });
         }
 
-        // Hàm để lấy tổng số yêu cầu được duyệt
+        // Hàm để lấy tổng số yêu cầu được phê duyệt (dựa trên lịch sử)
         function loadApprovedRequestsCount() {
-            fetch('http://localhost:8082/api/admin/requests/approved/count', {
+            fetch('http://localhost:8082/api/admin/history', {
                 method: 'GET',
                 headers: {
                     'Content-Type': 'application/json',
                     'Authorization': 'Bearer ' + localStorage.getItem('authToken')
                 }
             })
-            .then(response => response.json())
-            .then(data => {
-                const approvedRequestsElement = document.getElementById('approved-requests-count');
-                if (approvedRequestsElement && data.approvedRequests !== undefined) {
-                    approvedRequestsElement.textContent = data.approvedRequests;
-                }
-            })
-            .catch(error => {
-                const approvedRequestsElement = document.getElementById('approved-requests-count');
-                if (approvedRequestsElement) {
-                    approvedRequestsElement.textContent = 'N/A';
-                }
-            });
+                .then(response => response.json())
+                .then(data => {
+                    const approvedRequestsElement = document.getElementById('approved-requests-count');
+                    if (approvedRequestsElement && Array.isArray(data)) {
+                        approvedRequestsElement.textContent = data.length;
+                    }
+                })
+                .catch(error => {
+                    const approvedRequestsElement = document.getElementById('approved-requests-count');
+                    if (approvedRequestsElement) {
+                        approvedRequestsElement.textContent = 'N/A';
+                    }
+                });
         }
     </script>
 

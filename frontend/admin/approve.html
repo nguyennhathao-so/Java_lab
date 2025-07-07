@@ -97,8 +97,8 @@
                             <td>${donation.amount || 'N/A'}</td>
                             <td>Chưa cập nhật</td>
                             <td class="action-buttons">
-                                <button class="delete" onclick="deleteDonation(${donation.donationId})">Xóa</button>
-                                <button class="edit" onclick="editDonation(${donation.donationId})">Sửa</button>
+                                <button class="delete" onclick="deleteDonation('${donation.donationId}')">Xóa</button>
+                                <button class="edit" onclick="editDonation('${donation.donationId}')">Sửa</button>
                             </td>
                         </tr>
                     `;

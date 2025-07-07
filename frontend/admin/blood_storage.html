@@ -214,7 +214,7 @@
                     <div class="blood-card"><span>AB-</span><img src="../assets/images/icon/blood-drop-svgrepo-com.svg"
                             alt="drop"><strong>15</strong></div>
                 </div>
-                <div class="note">Chú thích: các con số là các túi máu,mỗi túi máu là 10ml</div>
+                <div class="note">Chú thích: các con số là các túi máu,mỗi túi máu là 300ml</div>
                 <div class="bloodquantity_update">CẬP NHẬT ĐƠN VỊ MÁU</div>
                 <div class="blood-update-form"
                     style="display: flex; flex-direction: column; align-items: center; gap: 12px; margin-top: 20px;">
@@ -242,12 +242,6 @@
                         style="padding: 10px 20px; font-size: 16px; background-color: #f76c5e; color: white; border: none; border-radius: 5px; cursor: pointer;">
                         CẬP NHẬT
                     </button>
-
-                    <select id="centerSelect" style="padding: 10px; font-size: 16px; width: 350px;">
-                        <option value="" disabled selected>Chọn trung tâm</option>
-
-                        <!-- Option sẽ được render bằng JS -->
-                    </select>
                 </div>
 
             </section>
@@ -275,16 +269,15 @@
     document.getElementById('updateButton').addEventListener('click', async function () {
         const bloodType = document.getElementById('bloodTypeSelect').value;
         const quantity = parseInt(document.getElementById('quantityInput').value);
-        const centerId = parseInt(document.getElementById('centerSelect').value);
 
-        if (!bloodType || !quantity || quantity < 1 || !centerId) {
+        if (!bloodType || !quantity || quantity < 1) {
             alert('Vui lòng chọn đầy đủ thông tin!');
             return;
         }
 
         try {
-            await adminApiService.updateBloodInventory(bloodType, quantity, centerId);
-            alert(`Đã cộng thêm ${quantity} túi cho nhóm máu ${bloodType} tại trung tâm đã chọn!`);
+            await adminApiService.updateBloodInventory(bloodType, quantity);
+            alert(`Đã cộng thêm ${quantity} túi cho nhóm máu ${bloodType}!`);
             loadBloodInventory();
         } catch (error) {
             alert('Cập nhật thất bại! ' + (error?.message || ''));

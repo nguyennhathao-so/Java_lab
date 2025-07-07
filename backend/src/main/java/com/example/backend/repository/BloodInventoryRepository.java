@@ -15,5 +15,5 @@ public interface BloodInventoryRepository extends JpaRepository<BloodInventory, 
     @Query("SELECT bi.bloodType, SUM(bi.quantity) as totalQuantity FROM BloodInventory bi WHERE bi.status = 'available' GROUP BY bi.bloodType")
     List<Object[]> getBloodTypeSummary();
 
-    List<BloodInventory> findByBloodTypeAndStatus(String bloodType, String status);
+    List<BloodInventory> findByBloodTypeAndStatus(String bloodType, BloodInventory.InventoryStatus status);
 }

@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS `health_centers` (
 
 -- Bảng donation_requests
 CREATE TABLE IF NOT EXISTS `donation_requests` (
-  `request_id` varchar(10) NOT NULL,
+  `request_id` varchar(32) NOT NULL,
   `user_id` varchar(10) DEFAULT NULL,
   `center_id` varchar(10) DEFAULT NULL,
   `blood_type_needed` varchar(3) DEFAULT NULL,
@@ -77,9 +77,9 @@ CREATE TABLE IF NOT EXISTS `donation_requests` (
 
 -- Bảng donations
 CREATE TABLE IF NOT EXISTS `donations` (
-  `donation_id` varchar(10) NOT NULL,
+  `donation_id` varchar(100) NOT NULL,
   `user_id` varchar(10) DEFAULT NULL,
-  `request_id` varchar(10) DEFAULT NULL,
+  `request_id` varchar(32) DEFAULT NULL,
   `donation_type` enum('whole','platelets','plasma') DEFAULT NULL,
   `amount` int DEFAULT NULL,
   `date` date DEFAULT NULL,
@@ -93,7 +93,7 @@ CREATE TABLE IF NOT EXISTS `donations` (
 
 -- Bảng blood_inventory
 CREATE TABLE IF NOT EXISTS `blood_inventory` (
-  `inventory_id` varchar(10) NOT NULL,
+  `inventory_id`  BIGINT AUTO_INCREMENT NOT NULL,
   `center_id` varchar(10) NOT NULL,
   `blood_type` varchar(3) NOT NULL,
   `component_type` enum('whole','platelets','plasma') NOT NULL,
@@ -153,7 +153,7 @@ CREATE TABLE IF NOT EXISTS `blogs` (
 
 -- Bảng medical_records
 CREATE TABLE IF NOT EXISTS `medical_records` (
-  `record_id` varchar(10) NOT NULL,
+  `record_id` varchar(100) NOT NULL,
   `user_id` varchar(10) DEFAULT NULL,
   `weight` float DEFAULT NULL,
   `blood_pressure` varchar(20) DEFAULT NULL,
@@ -181,7 +181,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
 
 -- Bảng donation_registrations (lưu nhiều ngày đăng ký hiến máu cho mỗi user)
 CREATE TABLE IF NOT EXISTS donation_registrations (
-  id VARCHAR(10) NOT NULL,
+  id VARCHAR(100) NOT NULL,
   user_id VARCHAR(10) NOT NULL,
   registration_date DATE NOT NULL,
   type ENUM('Hiến máu','Cần máu') NOT NULL,
@@ -232,14 +232,14 @@ INSERT INTO blood_types (blood_type, can_donate_to, can_receive_from) VALUES
 -- Bảng blood_inventory
 INSERT INTO blood_inventory (inventory_id, center_id, blood_type, component_type, quantity, status)
 VALUES
-('BI1', 'HC1', 'A+', 'whole', 25, 'available'),
-('BI2', 'HC1', 'A-', 'whole', 15, 'available'),
-('BI3', 'HC1', 'B+', 'whole', 30, 'available'),
-('BI4', 'HC1', 'B-', 'whole', 12, 'available'),
-('BI5', 'HC2', 'O+', 'whole', 45, 'available'),
-('BI6', 'HC2', 'O-', 'whole', 18, 'available'),
-('BI7', 'HC2', 'AB+', 'whole', 8, 'available'),
-('BI8', 'HC2', 'AB-', 'whole', 5, 'available');
+('1', 'HC1', 'A+', 'whole', 25, 'available'),
+('2', 'HC1', 'A-', 'whole', 15, 'available'),
+('3', 'HC1', 'B+', 'whole', 30, 'available'),
+('4', 'HC1', 'B-', 'whole', 12, 'available'),
+('5', 'HC2', 'O+', 'whole', 45, 'available'),
+('6', 'HC2', 'O-', 'whole', 18, 'available'),
+('7', 'HC2', 'AB+', 'whole', 8, 'available'),
+('8', 'HC2', 'AB-', 'whole', 5, 'available');
 
 -- Bảng donation_requests
 INSERT INTO donation_requests (request_id, user_id, center_id, blood_type_needed, quantity, urgency_level, status, request_type)

@@ -10,7 +10,10 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
 
 import javax.crypto.SecretKey;
+
+import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
@@ -31,16 +34,16 @@ public class JwtTokenProvider {
     // ✅ Tạo JWT từ Authentication
     public String generateToken(Authentication authentication) {
         String username = authentication.getName();
-        String authorities = authentication.getAuthorities().stream()
+        List<String> authoritiesList = authentication.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority)
-                .collect(Collectors.joining(","));
+                .collect(Collectors.toList());
 
         Date now = new Date();
         Date expiryDate = new Date(now.getTime() + jwtExpirationInMs);
 
         return Jwts.builder()
                 .setSubject(username)
-                .claim("auth", authorities)
+                .claim("authorities", authoritiesList)
                 .setIssuedAt(now)
                 .setExpiration(expiryDate)
                 .signWith(key, SignatureAlgorithm.HS512)

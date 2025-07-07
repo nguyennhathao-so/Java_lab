@@ -76,21 +76,25 @@
         // Load combined history
         async function loadHistory() {
             try {
+                console.log('Loading history...');
                 const historyItems = await adminApiService.getHistory();
+                console.log('History items:', historyItems);
+
                 const tbody = document.getElementById('historyTableBody');
                 tbody.innerHTML = '';
 
-                if (historyItems.length === 0) {
+                if (!historyItems || historyItems.length === 0) {
                     tbody.innerHTML = '<tr><td colspan="11" style="text-align: center;">Chưa có lịch sử yêu cầu.</td></tr>';
                     return;
                 }
 
                 historyItems.forEach((item, index) => {
+                    console.log('Processing item:', item);
                     const row = document.createElement('tr');
                     row.innerHTML = `
                         <td>${index + 1}</td>
-                        <td>${item.id}</td>
-                        <td>${item.type}</td>
+                        <td>${item.id || 'N/A'}</td>
+                        <td>${item.type || 'N/A'}</td>
                         <td>${item.name || 'N/A'}</td>
                         <td>${item.email || 'N/A'}</td>
                         <td>${item.contact || 'N/A'}</td>
@@ -98,13 +102,14 @@
                         <td>${item.bloodType || 'N/A'}</td>
                         <td>${item.amount || 'N/A'}</td>
                         <td>${item.date ? new Date(item.date).toLocaleDateString('vi-VN') : 'N/A'}</td>
-                        <td>${item.status}</td>
+                        <td>${item.status || 'N/A'}</td>
                     `;
                     tbody.appendChild(row);
                 });
             } catch (error) {
                 console.error('Error loading history:', error);
-                document.getElementById('historyTableBody').innerHTML = '<tr><td colspan="11">Không thể tải dữ liệu</td></tr>';
+                document.getElementById('historyTableBody').innerHTML =
+                    `<tr><td colspan="11" style="color: red;">Lỗi tải dữ liệu: ${error.message}</td></tr>`;
             }
         }
 

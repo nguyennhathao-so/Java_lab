@@ -116,5 +116,9 @@ const adminApiService = {
 
   async getTotalUsersCount() {
     return await apiService.getData("/api/admin/users/count");
+  },
+
+  async getDonationById(id) {
+    return await apiService.getData(`/api/admin/donations/${id}`);
   }
 };

@@ -34,7 +34,7 @@ Phần mềm hỗ trợ việc hiến máu cho 01 cơ sở y tế.
 - **Link use case**:https://drive.google.com/drive/folders/11U8IEAm0wlEs782jPfQsCB1V8r5Da21j?hl=vi
 - ![Use Case Diagram](())  
 - **Class Diagram**:  
-  ![Class Diagram](docs/diagrams/diagram_cleaned.png)  
+  ![Class Diagram](docs/diagrams/class_diagram.png)  
   
  
 ## Hướng dẫn sử dụng

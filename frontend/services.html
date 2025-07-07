@@ -554,6 +554,36 @@
       }
     }
   </script>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      // Lấy thông tin user từ localStorage
+      const userName = localStorage.getItem('userName') || '';
+      const userEmail = localStorage.getItem('userEmail') || '';
+      const userPhone = localStorage.getItem('userPhone') || '';
+      const userAddress = localStorage.getItem('userAddress') || '';
+
+      // Auto-fill form Đăng ký hiến máu
+      const donationForm = document.getElementById('donation-form');
+      if (donationForm) {
+        donationForm.elements['name'].value = userName;
+        donationForm.elements['email'].value = userEmail;
+        donationForm.elements['phone'].value = userPhone;
+        donationForm.elements['address'].value = userAddress;
+      }
+
+      // Auto-fill form Đăng ký cần máu
+      const needBloodForm = document.getElementById('needBloodForm');
+      if (needBloodForm) {
+        needBloodForm.elements['name'].value = userName;
+        needBloodForm.elements['phone'].value = userPhone;
+        // Nếu có địa chỉ, bạn có thể auto-fill vào trường location nếu muốn
+        if (needBloodForm.elements['location']) {
+          needBloodForm.elements['location'].value = userAddress;
+        }
+      }
+    });
+  </script>
 </body>
 
 </html>

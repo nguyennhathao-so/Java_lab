@@ -2,6 +2,7 @@ package com.example.backend.repository;
 
 import com.example.backend.entity.DonationRequest;
 import org.springframework.data.jpa.repository.JpaRepository;
+import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
@@ -20,4 +21,8 @@ public interface DonationRequestRepository extends JpaRepository<DonationRequest
     List<DonationRequest> findByStatusWithUserAndCenter(@Param("status") DonationRequest.RequestStatus status);
 
     long countByStatus(DonationRequest.RequestStatus status);
+    
+    @Modifying
+    @Query("DELETE FROM DonationRequest dr WHERE dr.user.userId = :userId")
+    void deleteByUserId(@Param("userId") String userId);
 }

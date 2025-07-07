@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS `donation_requests` (
   KEY `user_id` (`user_id`),
   KEY `center_id` (`center_id`),
   CONSTRAINT `donation_requests_ibfk_1` FOREIGN KEY (`center_id`) REFERENCES `health_centers` (`center_id`),
-  CONSTRAINT `donation_requests_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `donation_requests_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng donations
@@ -87,7 +87,7 @@ CREATE TABLE IF NOT EXISTS `donations` (
   PRIMARY KEY (`donation_id`),
   KEY `user_id` (`user_id`),
   KEY `request_id` (`request_id`),
-  CONSTRAINT `donations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `donations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
   CONSTRAINT `donations_ibfk_2` FOREIGN KEY (`request_id`) REFERENCES `donation_requests` (`request_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
@@ -122,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `appointments` (
   KEY `user_id` (`user_id`),
   KEY `center_id` (`center_id`),
   KEY `donation_id` (`donation_id`),
-  CONSTRAINT `appointments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `appointments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
   CONSTRAINT `appointments_ibfk_2` FOREIGN KEY (`center_id`) REFERENCES `health_centers` (`center_id`),
   CONSTRAINT `appointments_ibfk_3` FOREIGN KEY (`donation_id`) REFERENCES `donations` (`donation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -136,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `activity_logs` (
   `timestamp` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`log_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `activity_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `activity_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng blogs
@@ -148,7 +148,7 @@ CREATE TABLE IF NOT EXISTS `blogs` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`blog_id`),
   KEY `author_id` (`author_id`),
-  CONSTRAINT `blogs_ibfk_1` FOREIGN KEY (`author_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `blogs_ibfk_1` FOREIGN KEY (`author_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng medical_records
@@ -162,7 +162,7 @@ CREATE TABLE IF NOT EXISTS `medical_records` (
   `notes` text,
   PRIMARY KEY (`record_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `medical_records_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `medical_records_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng notifications
@@ -176,7 +176,7 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`notification_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng donation_registrations (lưu nhiều ngày đăng ký hiến máu cho mỗi user)
@@ -187,7 +187,7 @@ CREATE TABLE IF NOT EXISTS donation_registrations (
   type ENUM('Hiến máu','Cần máu') NOT NULL,
   status ENUM('Đã duyệt','Từ chối') NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (user_id) REFERENCES users(user_id)
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng blood_compatibility (lưu thông tin tương thích máu)

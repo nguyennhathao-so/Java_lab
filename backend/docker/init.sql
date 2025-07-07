@@ -222,14 +222,14 @@ INSERT INTO blood_types (blood_type, can_donate_to, can_receive_from) VALUES
 -- Bảng blood_inventory
 INSERT INTO blood_inventory (inventory_id, center_id, blood_type, component_type, quantity, status)
 VALUES
-('BI1', 'HC1', 'A+', 'whole', 25, 'available'),
-('BI2', 'HC1', 'A-', 'whole', 15, 'available'),
-('BI3', 'HC1', 'B+', 'whole', 30, 'available'),
-('BI4', 'HC1', 'B-', 'whole', 12, 'available'),
-('BI5', 'HC2', 'O+', 'whole', 45, 'available'),
-('BI6', 'HC2', 'O-', 'whole', 18, 'available'),
-('BI7', 'HC2', 'AB+', 'whole', 8, 'available'),
-('BI8', 'HC2', 'AB-', 'whole', 5, 'available');
+('1', 'HC1', 'A+', 'whole', 25, 'available'),
+('2', 'HC1', 'A-', 'whole', 15, 'available'),
+('3', 'HC1', 'B+', 'whole', 30, 'available'),
+('4', 'HC1', 'B-', 'whole', 12, 'available'),
+('5', 'HC2', 'O+', 'whole', 45, 'available'),
+('6', 'HC2', 'O-', 'whole', 18, 'available'),
+('7', 'HC2', 'AB+', 'whole', 8, 'available'),
+('8', 'HC2', 'AB-', 'whole', 5, 'available');
 
 -- Bảng donation_requests
 INSERT INTO donation_requests (request_id, user_id, center_id, blood_type_needed, quantity, urgency_level, status, request_type)

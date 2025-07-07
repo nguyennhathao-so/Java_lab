@@ -1,9 +1,9 @@
-#!/bin/bash
 
+#!/bin/bash
 # Start backend server
 echo "Starting backend server..."
 cd backend
-mvn spring-boot:run &
+mvn spring-boot:run
 
 # Wait for backend to start
 sleep 10

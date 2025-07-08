@@ -80,7 +80,7 @@ const adminApiService = {
 
   // Donation Registrations
   async getDonationRegistrationsByUserId(userId) {
-    return await apiService.getData(`/api/admin/donation-registrations/${userId}`);
+    return await apiService.getData(`/api/donation-requests/user/${userId}`);
   },
 
   // Medical Record

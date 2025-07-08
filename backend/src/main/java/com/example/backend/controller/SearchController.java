@@ -3,8 +3,10 @@ package com.example.backend.controller;
 import com.example.backend.dto.SearchRequestDto;
 import com.example.backend.dto.SearchResultDto;
 import com.example.backend.entity.DonationRegistration;
+import com.example.backend.entity.HealthCenter;
 import com.example.backend.entity.User;
 import com.example.backend.repository.DonationRegistrationRepository;
+import com.example.backend.repository.HealthCenterRepository;
 import com.example.backend.service.GeocodingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -17,6 +19,8 @@ public class SearchController {
     private DonationRegistrationRepository donationRegistrationRepository;
     @Autowired
     private GeocodingService geocodingService;
+    @Autowired
+    private HealthCenterRepository healthCenterRepository;
 
     @PostMapping("/search-donors")
     public List<SearchResultDto> searchDonors(@RequestBody SearchRequestDto request) {
@@ -59,6 +63,11 @@ public class SearchController {
         // Sắp xếp theo khoảng cách tăng dần
         results.sort(Comparator.comparingDouble(SearchResultDto::getDistance));
         return results;
+    }
+
+    @GetMapping("/health-centers")
+    public List<HealthCenter> getAllHealthCenters() {
+        return healthCenterRepository.findAll();
     }
 
     // Hàm tính khoảng cách Haversine

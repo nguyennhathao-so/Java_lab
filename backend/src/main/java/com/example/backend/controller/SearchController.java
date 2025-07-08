@@ -5,8 +5,10 @@ import com.example.backend.dto.SearchResultDto;
 import com.example.backend.entity.DonationRegistration;
 import com.example.backend.entity.HealthCenter;
 import com.example.backend.entity.User;
+import com.example.backend.entity.DonationRequest;
 import com.example.backend.repository.DonationRegistrationRepository;
 import com.example.backend.repository.HealthCenterRepository;
+import com.example.backend.repository.DonationRequestRepository;
 import com.example.backend.service.GeocodingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +23,8 @@ public class SearchController {
     private GeocodingService geocodingService;
     @Autowired
     private HealthCenterRepository healthCenterRepository;
+    @Autowired
+    private DonationRequestRepository donationRequestRepository;
 
     @PostMapping("/search-donors")
     public List<SearchResultDto> searchDonors(@RequestBody SearchRequestDto request) {
@@ -38,12 +42,14 @@ public class SearchController {
             searchLatLng = new double[]{Double.parseDouble(parts[0]), Double.parseDouble(parts[1])};
         }
 
-        // 2. Lấy danh sách user đã duyệt
-        List<DonationRegistration> regs = donationRegistrationRepository.findByStatus("Đã duyệt");
+        // 2. Lấy danh sách donation_requests có status != 'open'
+        List<DonationRequest> requests = donationRequestRepository.findAll();
         List<SearchResultDto> results = new ArrayList<>();
-        for (DonationRegistration reg : regs) {
-            User user = reg.getUser();
-            if (!user.getBloodType().equalsIgnoreCase(request.getBloodType())) continue;
+        for (DonationRequest dr : requests) {
+            if (dr.getStatus() == DonationRequest.RequestStatus.open) continue;
+            User user = dr.getUser();
+            if (user == null) continue;
+            if (!dr.getBloodTypeNeeded().equalsIgnoreCase(request.getBloodType())) continue;
             if (user.getLocation() == null) continue;
             String[] userLatLng = user.getLocation().split(",");
             double lat = Double.parseDouble(userLatLng[0]);
@@ -54,9 +60,9 @@ public class SearchController {
                     user.getName(),
                     user.getPhone(),
                     user.getBloodType(),
-                    reg.getType(),
+                    dr.getRequestType().name(),
                     user.getAddress(),
-                    Math.round(distance * 10.0) / 10.0 // Làm tròn 1 chữ số thập phân
+                    Math.round(distance * 10.0) / 10.0
                 ));
             }
         }

@@ -5,8 +5,11 @@ import com.example.backend.dto.SearchResultDto;
 import com.example.backend.entity.DonationRegistration;
 import com.example.backend.entity.HealthCenter;
 import com.example.backend.entity.User;
+import com.example.backend.entity.DonationRequest;
 import com.example.backend.repository.DonationRegistrationRepository;
+import com.example.backend.repository.DonationRequestRepository;
 import com.example.backend.repository.HealthCenterRepository;
+import com.example.backend.repository.DonationRequestRepository;
 import com.example.backend.service.GeocodingService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -21,6 +24,8 @@ public class SearchController {
     private GeocodingService geocodingService;
     @Autowired
     private HealthCenterRepository healthCenterRepository;
+    @Autowired
+    private DonationRequestRepository donationRequestRepository;
 
     @PostMapping("/search-donors")
     public List<SearchResultDto> searchDonors(@RequestBody SearchRequestDto request) {
@@ -38,25 +43,33 @@ public class SearchController {
             searchLatLng = new double[]{Double.parseDouble(parts[0]), Double.parseDouble(parts[1])};
         }
 
-        // 2. Lấy danh sách user đã duyệt
-        List<DonationRegistration> regs = donationRegistrationRepository.findByStatus("Đã duyệt");
+        // 2. Lấy danh sách yêu cầu hiến/cần máu đã hoàn thành (fulfilled)
+        List<com.example.backend.entity.DonationRequest> requests = donationRequestRepository.findByStatus(com.example.backend.entity.DonationRequest.RequestStatus.fulfilled);
         List<SearchResultDto> results = new ArrayList<>();
-        for (DonationRegistration reg : regs) {
-            User user = reg.getUser();
+        for (com.example.backend.entity.DonationRequest dr : requests) {
+            User user = dr.getUser();
+            if (user == null) continue;
             if (!user.getBloodType().equalsIgnoreCase(request.getBloodType())) continue;
             if (user.getLocation() == null) continue;
             String[] userLatLng = user.getLocation().split(",");
-            double lat = Double.parseDouble(userLatLng[0]);
-            double lng = Double.parseDouble(userLatLng[1]);
+            if (userLatLng.length != 2) continue;
+            double lat, lng;
+            try {
+                lat = Double.parseDouble(userLatLng[0]);
+                lng = Double.parseDouble(userLatLng[1]);
+            } catch (NumberFormatException e) {
+                continue;
+            }
             double distance = haversine(searchLatLng[0], searchLatLng[1], lat, lng);
             if (distance <= request.getMaxDistance()) {
+                String typeStr = dr.getRequestType() == com.example.backend.entity.DonationRequest.RequestType.donate ? "Hiến máu" : "Cần máu";
                 results.add(new SearchResultDto(
                     user.getName(),
                     user.getPhone(),
                     user.getBloodType(),
-                    reg.getType(),
+                    typeStr,
                     user.getAddress(),
-                    Math.round(distance * 10.0) / 10.0 // Làm tròn 1 chữ số thập phân
+                    Math.round(distance * 100.0) / 100.0 // Làm tròn 2 chữ số thập phân
                 ));
             }
         }

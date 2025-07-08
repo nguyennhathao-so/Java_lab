@@ -167,7 +167,7 @@ CREATE TABLE IF NOT EXISTS `medical_records` (
 
 -- Bảng notifications
 CREATE TABLE IF NOT EXISTS `notifications` (
-  `notification_id` varchar(10) NOT NULL,
+  `notification_id` varchar(50) NOT NULL,
   `user_id` varchar(10) DEFAULT NULL,
   `message` text,
   `message_type` enum('approved','rejected','reminder') DEFAULT NULL,

@@ -25,6 +25,7 @@
     <!-- css -->
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/style_admin.css">
+    <link rel="stylesheet" href="../css/notification-modal.css">
 
     <!-- js -->
     <script src="../js/jquery-3.7.1.min.js"></script>
@@ -62,6 +63,7 @@
     </div>
     <script src="../js/api.js"></script>
     <script src="../js/admin-api.js"></script>
+    <script src="../js/notification-modal.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
             // Tải slide bar
@@ -110,6 +112,38 @@
                     return;
                 }
 
+                // Lấy thông tin donation để tìm userId
+                try {
+                    const donationResponse = await fetch(`http://localhost:8082/api/admin/donations/${donationId}`, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+                        }
+                    });
+
+                    if (donationResponse.ok) {
+                        const donationData = await donationResponse.json();
+                        const userId = donationData.user && donationData.user.userId;
+
+                        if (userId) {
+                            // Hiển thị modal chỉ với option Đã duyệt
+                            notificationModal.show('complete_donation', donationId, userId, donationData, ['approved']);
+                        } else {
+                            // Nếu không tìm thấy userId, thực hiện cập nhật trực tiếp
+                            await completeDonationDirectly();
+                        }
+                    } else {
+                        await completeDonationDirectly();
+                    }
+                } catch (error) {
+                    console.error('Lỗi khi lấy thông tin donation:', error);
+                    await completeDonationDirectly();
+                }
+            });
+
+            async function completeDonationDirectly() {
+                const illness = document.getElementById('illness').value;
+                const amount = document.getElementById('amount').value;
+
                 const payload = {
                     notes: illness,
                     amount: parseInt(amount, 10)
@@ -123,7 +157,7 @@
                     console.error('Lỗi khi cập nhật:', error);
                     alert('Có lỗi xảy ra khi cập nhật. Vui lòng thử lại.');
                 }
-            });
+            }
 
             // Lấy thông tin donation trước
             fetch(`http://localhost:8082/api/admin/donations/${donationId}`, {

@@ -445,6 +445,45 @@ public class AdminController {
         return ResponseEntity.ok(notifications);
     }
 
+    // Create new notification
+    @PostMapping("/notifications")
+    public ResponseEntity<Notification> createNotification(@RequestBody Map<String, Object> request) {
+        try {
+            String userId = (String) request.get("userId");
+            String message = (String) request.get("message");
+            String messageType = (String) request.get("messageType");
+            String staffMessage = (String) request.get("staffMessage");
+            String status = (String) request.get("status");
+
+            // Validate required fields
+            if (userId == null || message == null || messageType == null) {
+                return ResponseEntity.badRequest().build();
+            }
+
+            // Find user
+            User user = userRepository.findById(userId)
+                    .orElseThrow(() -> new RuntimeException("User not found"));
+
+            // Generate notification ID
+            String notificationId = "NT" + System.currentTimeMillis();
+
+            // Create notification
+            Notification notification = new Notification();
+            notification.setNotificationId(notificationId);
+            notification.setUser(user);
+            notification.setMessage(message);
+            notification.setMessageType(messageType);
+            notification.setStaffMessage(staffMessage);
+            notification.setStatus(status != null ? status : "unread");
+            notification.setCreatedAt(new java.sql.Timestamp(System.currentTimeMillis()));
+
+            Notification savedNotification = notificationRepository.save(notification);
+            return ResponseEntity.ok(savedNotification);
+        } catch (Exception e) {
+            return ResponseEntity.badRequest().build();
+        }
+    }
+
     // Lấy lịch sử đăng ký hiến/cần máu của user
     @GetMapping("/donation-registrations/{userId}")
     public ResponseEntity<List<DonationRegistration>> getDonationRegistrations(@PathVariable String userId) {
@@ -494,32 +533,32 @@ public class AdminController {
             // Kiểm tra user có tồn tại không
             User user = userRepository.findById(id)
                     .orElseThrow(() -> new RuntimeException("User not found with id: " + id));
-            
+
             // Xóa các bản ghi phụ thuộc trước khi xóa user
             // 1. Xóa activity logs
             activityLogRepository.deleteByUserId(id);
-            
+
             // 2. Xóa notifications
             notificationRepository.deleteByUserId(id);
-            
+
             // 3. Xóa donation registrations
             donationRegistrationRepository.deleteByUserId(id);
-            
+
             // 4. Xóa medical records
             medicalRecordRepository.deleteByUserId(id);
-            
+
             // 5. Xóa blogs
             blogRepository.deleteByAuthorId(id);
-            
+
             // 6. Xóa appointments
             appointmentRepository.deleteByUserId(id);
-            
+
             // 7. Xóa donations
             donationRepository.deleteByUserId(id);
-            
+
             // 8. Xóa donation requests
             donationRequestRepository.deleteByUserId(id);
-            
+
             // Xóa user
             userRepository.deleteById(id);
             return ResponseEntity.ok().body("User deleted successfully");

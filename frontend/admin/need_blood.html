@@ -24,6 +24,7 @@
     <!-- css -->
     <link rel="stylesheet" href="../css/reset.css" />
     <link rel="stylesheet" href="../css/style_admin.css" />
+    <link rel="stylesheet" href="../css/notification-modal.css" />
 
     <!-- js -->
     <script src="../js/jquery-3.7.1.min.js"></script>
@@ -31,6 +32,7 @@
     <script src="../js/api.js"></script>
     <script src="../js/admin-api.js"></script>
     <script src="../js/example.js"></script>
+    <script src="../js/notification-modal.js"></script>
 </head>
 
 <body>
@@ -151,9 +153,19 @@
         async function deleteBloodRequest(id) {
             if (confirm(`Bạn có chắc chắn muốn xóa yêu cầu #${id}?`)) {
                 try {
-                    await adminApiService.deleteBloodRequest(id);
-                    alert('Đã xóa yêu cầu thành công.');
-                    loadBloodRequests(); // Tải lại danh sách
+                    // Tìm thông tin request để lấy userId
+                    const allRequests = await adminApiService.getBloodRequests();
+                    const request = allRequests.find(req => req.requestId === id);
+
+                    if (request && request.user && request.user.userId) {
+                        // Hiển thị modal thông báo chỉ với option Từ chối
+                        notificationModal.show('delete_blood_request', id, request.user.userId, request, ['rejected']);
+                    } else {
+                        // Nếu không tìm thấy thông tin user, thực hiện xóa trực tiếp
+                        await adminApiService.deleteBloodRequest(id);
+                        alert('Đã xóa yêu cầu thành công.');
+                        loadBloodRequests();
+                    }
                 } catch (error) {
                     console.error('Lỗi khi xóa yêu cầu:', error);
                     alert('Có lỗi xảy ra khi xóa yêu cầu.');
@@ -164,9 +176,17 @@
         async function approveBloodRequest(id) {
             if (confirm(`Bạn có chắc chắn muốn duyệt yêu cầu #${id}? Yêu cầu sẽ được chuyển vào lịch sử.`)) {
                 try {
-                    await adminApiService.approveBloodRequest(id);
-                    alert('Yêu cầu đã được duyệt thành công!');
-                    loadBloodRequests(); // Tải lại danh sách
+                    // Tìm thông tin request để lấy userId
+                    const allRequests = await adminApiService.getBloodRequests();
+                    const request = allRequests.find(req => req.requestId === id);
+                    if (request && request.user && request.user.userId) {
+                        // Hiển thị modal chỉ với option Đã duyệt
+                        notificationModal.show('approve_blood_request', id, request.user.userId, request, ['approved']);
+                    } else {
+                        await adminApiService.approveBloodRequest(id);
+                        alert('Yêu cầu đã được duyệt thành công!');
+                        loadBloodRequests();
+                    }
                 } catch (error) {
                     console.error('Lỗi khi duyệt yêu cầu:', error);
                     alert('Có lỗi xảy ra khi duyệt yêu cầu.');
@@ -174,7 +194,16 @@
             }
         }
 
-        document.addEventListener('DOMContentLoaded', loadBloodRequests);
+        document.addEventListener('DOMContentLoaded', () => {
+            loadBloodRequests();
+
+            // Reload bảng sau khi modal thực hiện xong
+            if (window.notificationModal) {
+                window.notificationModal.onActionComplete = () => {
+                    loadBloodRequests();
+                };
+            }
+        });
     </script>
 </body>
 

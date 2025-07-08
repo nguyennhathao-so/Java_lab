@@ -25,6 +25,7 @@
     <!-- css -->
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/style_admin.css">
+    <link rel="stylesheet" href="../css/notification-modal.css">
 
     <!-- js -->
     <script src="../js/jquery-3.7.1.min.js"></script>
@@ -33,6 +34,7 @@
     <script src="../js/api.js"></script>
     <script src="../js/admin-api.js"></script>
     <script src="../js/example.js"></script>
+    <script src="../js/notification-modal.js"></script>
 
 </head>
 
@@ -138,10 +140,21 @@
         async function deleteRequest(id) {
             if (confirm('Bạn có chắc chắn muốn xóa yêu cầu này không?')) {
                 try {
-                    await adminApiService.deleteBloodRequest(id);
-                    alert('Xóa thành công!');
-                    loadAndRenderDonations(); // reload lại bảng
+                    // Tìm thông tin request để lấy userId
+                    const allRequests = await adminApiService.getDonationRequestsByStatus('open');
+                    const request = allRequests.find(req => req.requestId === id);
+
+                    if (request && request.user && request.user.userId) {
+                        // Hiển thị modal thông báo chỉ với option Từ chối
+                        notificationModal.show('delete_donation', id, request.user.userId, request, ['rejected']);
+                    } else {
+                        // Nếu không tìm thấy thông tin user, thực hiện xóa trực tiếp
+                        await adminApiService.deleteBloodRequest(id);
+                        alert('Xóa thành công!');
+                        loadAndRenderDonations();
+                    }
                 } catch (error) {
+                    console.error('Lỗi khi xóa:', error);
                     alert('Có lỗi xảy ra khi xóa. Vui lòng thử lại.');
                 }
             }
@@ -188,6 +201,13 @@
                     slideBar.innerHTML = data;
                 })
                 .catch(error => console.error('Error loading slide bar:', error));
+
+            // Reload bảng sau khi modal thực hiện xong
+            if (window.notificationModal) {
+                window.notificationModal.onActionComplete = () => {
+                    loadAndRenderDonations();
+                };
+            }
         });
     </script>
 </body>

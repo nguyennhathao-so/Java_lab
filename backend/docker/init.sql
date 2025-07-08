@@ -250,8 +250,8 @@ VALUES
 -- Bảng donations
 INSERT INTO donations (donation_id, user_id, donation_type, amount, date, status)
 VALUES
-('DN1', 'US1', 'whole', 350, '2024-06-01', 'completed'),
-('DN2', 'US2', 'whole', 450, '2024-06-02', 'completed');
+('DN1', 'US1', 'whole', 350, '2024-06-01', 'Hoàn thành'),
+('DN2', 'US2', 'whole', 450, '2024-06-02', 'Hoàn thành');
 
 -- Bảng activity_logs
 INSERT INTO activity_logs (log_id, user_id, action, ip_address)

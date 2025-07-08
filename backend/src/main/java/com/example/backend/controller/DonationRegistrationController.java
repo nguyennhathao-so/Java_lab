@@ -4,10 +4,12 @@ import com.example.backend.entity.DonationRegistration;
 import com.example.backend.entity.User;
 import com.example.backend.entity.DonationRequest;
 import com.example.backend.entity.Donation;
+import com.example.backend.entity.HealthCenter;
 import com.example.backend.repository.DonationRegistrationRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.repository.DonationRequestRepository;
 import com.example.backend.repository.DonationRepository;
+import com.example.backend.repository.HealthCenterRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -36,6 +38,9 @@ public class DonationRegistrationController {
 
     @Autowired
     private DonationRepository donationRepository;
+
+    @Autowired
+    private HealthCenterRepository healthCenterRepository;
 
     // Đăng ký hiến máu - tạo DonationRegistration
     @PostMapping("/donate")
@@ -109,6 +114,16 @@ public class DonationRegistrationController {
                 }
             }
 
+            // Lấy centerId và set center cho donationRequest
+            if (request.get("centerId") != null) {
+                String centerId = request.get("centerId").toString();
+                HealthCenter center = healthCenterRepository.findById(centerId).orElse(null);
+                System.out.println("DEBUG centerId gửi lên: " + centerId);
+                System.out.println("DEBUG center object: " + center);
+                donationRequest.setCenter(center);
+            }
+            System.out.println("DEBUG donationRequest.getCenter(): " + donationRequest.getCenter());
+
             System.out.println("DEBUG: Trước khi save donationRequest");
             donationRequestRepository.save(donationRequest);
             System.out.println("DEBUG: Đã lưu donationRequest thành công với ID: " + donationRequest.getRequestId());
@@ -173,6 +188,16 @@ public class DonationRegistrationController {
                     System.out.println("Lỗi parse desiredDate: " + ex.getMessage());
                 }
             }
+
+            // Lấy centerId và set center cho donationRequest
+            if (request.get("centerId") != null) {
+                String centerId = request.get("centerId").toString();
+                HealthCenter center = healthCenterRepository.findById(centerId).orElse(null);
+                System.out.println("DEBUG centerId gửi lên: " + centerId);
+                System.out.println("DEBUG center object: " + center);
+                donationRequest.setCenter(center);
+            }
+            System.out.println("DEBUG donationRequest.getCenter(): " + donationRequest.getCenter());
 
             // Nếu có location thì lưu vào trường center hoặc custom field nếu cần
             // (Bỏ qua nếu không dùng)

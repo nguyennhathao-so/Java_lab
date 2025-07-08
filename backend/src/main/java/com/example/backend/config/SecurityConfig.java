@@ -29,6 +29,7 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .requestMatchers("/api/blogs/**").permitAll()
                         .requestMatchers("/api/geocoding/test-url").permitAll()
+                        .requestMatchers("/api/health-centers").permitAll()
                         .requestMatchers("/api/admin/notifications/user/**").authenticated()
                         .requestMatchers("/api/admin/**").hasAnyRole("ADMIN", "STAFF")
                         .requestMatchers("/api/donation-requests/**").hasAnyRole("USER", "ADMIN")

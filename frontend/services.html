@@ -107,11 +107,23 @@
       border: 1px solid #ddd;
       border-radius: 6px;
       font-size: 16px;
+      width: 100%;
+      box-sizing: border-box;
     }
 
     .form-input:focus {
       outline: none;
       border-color: #d32f2f;
+    }
+
+    select.form-input {
+      width: 100%;
+      padding: 0 15px;
+      height: 45px;
+      border-radius: 6px;
+      font-size: 16px;
+      border: 1px solid #ddd;
+      box-sizing: border-box;
     }
 
     /* Form tra cứu nhóm máu */
@@ -273,7 +285,8 @@
             name: formData.get('name'),
             email: formData.get('email'),
             phone: formData.get('phone'),
-            address: formData.get('address'),
+            // Đổi address thành centerId
+            centerId: formData.get('address'),
             gender: formData.get('gender'),
             bloodType: formData.get('bloodType'),
             desiredDate: formData.get('desiredDate'),
@@ -299,7 +312,8 @@
             phone: formData.get('phone'),
             bloodType: formData.get('bloodType'),
             desiredDate: formData.get('desiredDate'),
-            location: formData.get('location'),
+            // Đổi location thành centerId
+            centerId: formData.get('location'),
             urgencyLevel: formData.get('emergency') === 'true' ? 'high' : 'low',
             quantity: parseInt(formData.get('quantity'), 10)
           };
@@ -359,7 +373,9 @@
           </div>
           <div class="form-row">
             <input type="tel" class="form-input" name="phone" placeholder="Số Điện Thoại" required>
-            <input type="text" class="form-input" name="address" placeholder="Địa Chỉ" required>
+            <select class="form-input" name="address" id="donation-center-select" required>
+              <option value="">Chọn Trung Tâm Hiến Máu</option>
+            </select>
           </div>
           <div class="form-row">
             <select class="form-input" name="gender" required>
@@ -530,7 +546,9 @@
             <input type="date" class="form-input" name="desiredDate" required>
           </div>
           <div class="form-row">
-            <input type="text" class="form-input" name="location" placeholder="Nhập Vị Trí" required>
+            <select class="form-input" name="location" id="need-center-select" required>
+              <option value="">Chọn Trung Tâm Hiến Máu</option>
+            </select>
           </div>
           <div class="form-row">
             <div class="radio-group" style="width: 100%">
@@ -567,12 +585,40 @@
   </script>
 
   <script>
-    document.addEventListener('DOMContentLoaded', function () {
+    document.addEventListener('DOMContentLoaded', async function () {
       // Auto-fill user info
       const userName = localStorage.getItem('userName') || '';
       const userEmail = localStorage.getItem('userEmail') || '';
       const userPhone = localStorage.getItem('userPhone') || '';
       const userAddress = localStorage.getItem('userAddress') || '';
+
+      // Fetch health centers and populate dropdowns
+      async function populateCenters() {
+        try {
+          const centers = await apiService.getData('/api/health-centers');
+          const donationSelect = document.getElementById('donation-center-select');
+          const needSelect = document.getElementById('need-center-select');
+          if (donationSelect) {
+            centers.forEach(center => {
+              const opt = document.createElement('option');
+              opt.value = center.centerId;
+              opt.textContent = center.name + (center.address ? ' - ' + center.address : '');
+              donationSelect.appendChild(opt);
+            });
+          }
+          if (needSelect) {
+            centers.forEach(center => {
+              const opt = document.createElement('option');
+              opt.value = center.centerId;
+              opt.textContent = center.name + (center.address ? ' - ' + center.address : '');
+              needSelect.appendChild(opt);
+            });
+          }
+        } catch (e) {
+          console.error('Không lấy được danh sách trung tâm hiến máu', e);
+        }
+      }
+      await populateCenters();
 
       // Auto-fill form Đăng ký hiến máu
       const donationForm = document.getElementById('donation-form');
@@ -580,7 +626,16 @@
         donationForm.elements['name'].value = userName;
         donationForm.elements['email'].value = userEmail;
         donationForm.elements['phone'].value = userPhone;
-        donationForm.elements['address'].value = userAddress;
+        // Tự động chọn trung tâm nếu userAddress trùng địa chỉ trung tâm
+        const donationSelect = document.getElementById('donation-center-select');
+        if (donationSelect && userAddress) {
+          for (let i = 0; i < donationSelect.options.length; i++) {
+            if (donationSelect.options[i].textContent.includes(userAddress)) {
+              donationSelect.selectedIndex = i;
+              break;
+            }
+          }
+        }
       }
 
       // Auto-fill form Đăng ký cần máu
@@ -588,8 +643,15 @@
       if (needBloodForm) {
         needBloodForm.elements['name'].value = userName;
         needBloodForm.elements['phone'].value = userPhone;
-        if (needBloodForm.elements['location']) {
-          needBloodForm.elements['location'].value = userAddress;
+        // Tự động chọn trung tâm nếu userAddress trùng địa chỉ trung tâm
+        const needSelect = document.getElementById('need-center-select');
+        if (needSelect && userAddress) {
+          for (let i = 0; i < needSelect.options.length; i++) {
+            if (needSelect.options[i].textContent.includes(userAddress)) {
+              needSelect.selectedIndex = i;
+              break;
+            }
+          }
         }
       }
 

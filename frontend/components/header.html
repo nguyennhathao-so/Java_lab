@@ -55,11 +55,21 @@
       // User đã đăng nhập
       document.getElementById('guest-view').style.display = 'none';
       document.getElementById('user-view').style.display = 'block';
-      document.getElementById('user-email').textContent = userName || userEmail;
+      document.getElementById('user-name').textContent = userName || userEmail;
 
-      // Hiển thị các link khi đã đăng nhập
-      document.getElementById('service-link').style.display = 'inline-block';
-      document.getElementById('notification-link').style.display = 'inline-block';
+      // Hiển thị/ẩn link dịch vụ và thông báo dựa vào role
+      const serviceLink = document.getElementById('service-link');
+      const notificationLink = document.getElementById('notification-link');
+      
+      if (userRole === 'ADMIN' || userRole === 'STAFF') {
+        // Ẩn link dịch vụ và thông báo cho ADMIN và STAFF
+        serviceLink.style.display = 'none';
+        notificationLink.style.display = 'none';
+      } else {
+        // Hiển thị link dịch vụ và thông báo cho MEMBER và GUEST
+        serviceLink.style.display = 'inline-block';
+        notificationLink.style.display = 'inline-block';
+      }
     } else {
       // User chưa đăng nhập
       document.getElementById('guest-view').style.display = 'block';

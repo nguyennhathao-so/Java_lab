@@ -94,6 +94,7 @@ public class GeocodingService {
                             .build())
                     .retrieve()
                     .bodyToMono(new org.springframework.core.ParameterizedTypeReference<List<NominatimResponse>>() {})
+                    .timeout(java.time.Duration.ofSeconds(30))
                     .block();
             
             if (responses != null && !responses.isEmpty()) {
@@ -107,6 +108,7 @@ public class GeocodingService {
         } catch (Exception e) {
             // Log error but don't throw exception to avoid breaking registration
             System.err.println("Error geocoding address: " + address + " - " + e.getMessage());
+            e.printStackTrace();
             return null;
         }
     }
@@ -144,7 +146,7 @@ public class GeocodingService {
                             .build())
                     .retrieve()
                     .bodyToMono(new org.springframework.core.ParameterizedTypeReference<List<NominatimResponse>>() {})
-                    .timeout(java.time.Duration.ofSeconds(10))
+                    .timeout(java.time.Duration.ofSeconds(30))
                     .block();
             
             if (responses != null && !responses.isEmpty()) {
@@ -156,8 +158,12 @@ public class GeocodingService {
             
             return null;
         } catch (Exception e) {
-            // Log error but don't throw exception to avoid breaking registration
-            System.err.println("Error geocoding address: " + address + " - " + e.getMessage());
+            if (e.getMessage() != null && e.getMessage().contains("TimeoutException")) {
+                System.err.println("Timeout khi gọi Nominatim API cho địa chỉ: " + address + ". Vui lòng thử lại sau!");
+            } else {
+                System.err.println("Error geocoding address: " + address + " - " + e.getMessage());
+            }
+            e.printStackTrace();
             return null;
         }
     }

@@ -239,9 +239,15 @@ class NotificationModal {
     }
 
     async executeOriginalAction(messageType) {
-        // Nếu chỉ có allowedTypes là rejected hoặc action là delete thì xóa
+        // Nếu chỉ có allowedTypes là rejected hoặc action là delete thì cập nhật status closed
         if ((this.allowedTypes && this.allowedTypes.length === 1 && this.allowedTypes[0] === 'rejected') || messageType === 'rejected' || this.currentAction.startsWith('delete')) {
-            await adminApiService.deleteBloodRequest(this.currentRequestId);
+            // Gọi API cập nhật status closed
+            await fetch(`http://localhost:8082/api/admin/blood-requests/${this.currentRequestId}`, {
+                method: 'DELETE',
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+                }
+            });
         } else if ((this.allowedTypes && this.allowedTypes.length === 1 && this.allowedTypes[0] === 'approved') || messageType === 'approved' || this.currentAction === 'complete_donation' || this.currentAction === 'approve_blood_request') {
             // Hoàn thành hoặc duyệt
             if (this.currentAction === 'complete_donation') {

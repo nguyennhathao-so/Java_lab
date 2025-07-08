@@ -125,6 +125,10 @@
                         const userId = donationData.user && donationData.user.userId;
 
                         if (userId) {
+                            // Gán callback chuyển trang sau khi gửi thông báo thành công
+                            notificationModal.onActionComplete = () => {
+                                window.location.href = 'blood_donations_history.html';
+                            };
                             // Hiển thị modal chỉ với option Đã duyệt
                             notificationModal.show('complete_donation', donationId, userId, donationData, ['approved']);
                         } else {

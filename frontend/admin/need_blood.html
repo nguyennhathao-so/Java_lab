@@ -158,6 +158,9 @@
                     const request = allRequests.find(req => req.requestId === id);
 
                     if (request && request.user && request.user.userId) {
+                        notificationModal.onActionComplete = () => {
+                            loadBloodRequests();
+                        };
                         // Hiển thị modal thông báo chỉ với option Từ chối
                         notificationModal.show('delete_blood_request', id, request.user.userId, request, ['rejected']);
                     } else {
@@ -180,6 +183,9 @@
                     const allRequests = await adminApiService.getBloodRequests();
                     const request = allRequests.find(req => req.requestId === id);
                     if (request && request.user && request.user.userId) {
+                        notificationModal.onActionComplete = () => {
+                            loadBloodRequests();
+                        };
                         // Hiển thị modal chỉ với option Đã duyệt
                         notificationModal.show('approve_blood_request', id, request.user.userId, request, ['approved']);
                     } else {

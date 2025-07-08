@@ -145,6 +145,10 @@
                     const request = allRequests.find(req => req.requestId === id);
 
                     if (request && request.user && request.user.userId) {
+                        // Gán lại callback trước khi mở modal
+                        notificationModal.onActionComplete = () => {
+                            loadAndRenderDonations();
+                        };
                         // Hiển thị modal thông báo chỉ với option Từ chối
                         notificationModal.show('delete_donation', id, request.user.userId, request, ['rejected']);
                     } else {

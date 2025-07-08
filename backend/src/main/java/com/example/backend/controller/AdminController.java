@@ -159,21 +159,23 @@ public class AdminController {
                 .findByStatus(DonationRequest.RequestStatus.fulfilled);
         List<DonationRequest> closedRequests = donationRequestRepository
                 .findByStatus(DonationRequest.RequestStatus.closed);
-        List<DonationRequest> approvedRequests = donationRequestRepository
-                .findByStatus(DonationRequest.RequestStatus.approved);
+        // List<DonationRequest> approvedRequests = donationRequestRepository
+        // .findByStatus(DonationRequest.RequestStatus.approved);
         List<DonationRequest> requestHistory = new ArrayList<>();
         requestHistory.addAll(fulfilledRequests);
         requestHistory.addAll(closedRequests);
-        requestHistory.addAll(approvedRequests);
+        // requestHistory.addAll(approvedRequests);
 
         history.addAll(requestHistory.stream()
-                .filter(r -> r.getRequestType() == DonationRequest.RequestType.receive)
                 .map(r -> {
                     HealthCenter center = r.getCenter();
                     User user = r.getUser();
                     java.sql.Date sqlDate = r.getCreatedAt() != null ? new java.sql.Date(r.getCreatedAt().getTime())
                             : null;
 
+                    // Xác định loại yêu cầu
+                    String loaiYeuCau = r.getRequestType() == DonationRequest.RequestType.donate ? "Hiến máu"
+                            : "Cần máu";
                     String name = user != null ? user.getName() : (center != null ? center.getName() : "N/A");
                     String contact = user != null ? user.getPhone()
                             : (center != null ? center.getContactInfo() : "N/A");
@@ -181,7 +183,7 @@ public class AdminController {
                     String email = user != null ? user.getEmail() : "N/A";
 
                     return new HistoryItem(
-                            "Cần máu",
+                            loaiYeuCau,
                             r.getRequestId(),
                             name,
                             contact,
@@ -329,11 +331,14 @@ public class AdminController {
     @DeleteMapping("/blood-requests/{id}")
     public ResponseEntity<?> deleteBloodRequest(@PathVariable String id) {
         try {
-            donationRequestRepository.deleteById(id);
-            return ResponseEntity.ok().body("Blood request deleted successfully");
+            DonationRequest req = donationRequestRepository.findById(id)
+                    .orElseThrow(() -> new RuntimeException("Request not found"));
+            req.setStatus(DonationRequest.RequestStatus.closed);
+            donationRequestRepository.save(req);
+            return ResponseEntity.ok().body("Blood request closed (not deleted)");
         } catch (Exception e) {
             e.printStackTrace();
-            return ResponseEntity.badRequest().body("Error deleting blood request: " + e.getMessage());
+            return ResponseEntity.badRequest().body("Error closing blood request: " + e.getMessage());
         }
     }
 

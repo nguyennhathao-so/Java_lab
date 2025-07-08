@@ -34,6 +34,12 @@ public class DonationRequestController {
         return ResponseEntity.ok(requests);
     }
 
+    @GetMapping("/user/{userId}")
+    public ResponseEntity<List<DonationRequest>> getDonationRequestsByUser(@PathVariable String userId) {
+        List<DonationRequest> requests = donationRequestRepository.findByUser_UserIdOrderByCreatedAtDesc(userId);
+        return ResponseEntity.ok(requests);
+    }
+
     @PostMapping
     public ResponseEntity<?> createDonationRequest(@RequestBody DonationRequestDto dto) {
         try {

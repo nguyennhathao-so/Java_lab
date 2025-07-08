@@ -600,4 +600,9 @@ public class AdminController {
             return ResponseEntity.noContent().build();
         }
     }
+
+    @GetMapping("/donation-requests/user/{userId}")
+    public List<DonationRequest> getDonationRequestsByUser(@PathVariable String userId) {
+        return donationRequestRepository.findByUser_UserIdOrderByCreatedAtDesc(userId);
+    }
 }

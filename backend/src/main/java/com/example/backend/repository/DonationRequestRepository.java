@@ -21,8 +21,10 @@ public interface DonationRequestRepository extends JpaRepository<DonationRequest
     List<DonationRequest> findByStatusWithUserAndCenter(@Param("status") DonationRequest.RequestStatus status);
 
     long countByStatus(DonationRequest.RequestStatus status);
-    
+
     @Modifying
     @Query("DELETE FROM DonationRequest dr WHERE dr.user.userId = :userId")
     void deleteByUserId(@Param("userId") String userId);
+
+    List<DonationRequest> findByUser_UserIdOrderByCreatedAtDesc(String userId);
 }

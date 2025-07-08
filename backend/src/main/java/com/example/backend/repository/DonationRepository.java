@@ -19,6 +19,8 @@ public interface DonationRepository extends JpaRepository<Donation, String> {
 
     List<Donation> findByUser_UserId(String userId);
     
+    Donation findTopByUser_UserIdAndStatusOrderByDateDesc(String userId, String status);
+    
     @Modifying
     @Query("DELETE FROM Donation d WHERE d.user.userId = :userId")
     void deleteByUserId(@Param("userId") String userId);

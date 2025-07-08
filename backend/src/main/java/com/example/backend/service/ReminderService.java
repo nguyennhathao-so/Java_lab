@@ -1,7 +1,9 @@
 package com.example.backend.service;
 
+import com.example.backend.entity.Donation;
 import com.example.backend.entity.Notification;
 import com.example.backend.entity.User;
+import com.example.backend.repository.DonationRepository;
 import com.example.backend.repository.NotificationRepository;
 import com.example.backend.repository.UserRepository;
 import com.example.backend.util.IdGenerator;
@@ -21,6 +23,8 @@ public class ReminderService {
     private UserRepository userRepository;
     @Autowired
     private NotificationRepository notificationRepository;
+    @Autowired
+    private DonationRepository donationRepository;
 
     //@Scheduled(cron = "0 0 8 * * ?") // chạy mỗi ngày lúc 8h sáng
     @Scheduled(fixedDelay = 60000) // chạy mỗi phút
@@ -34,27 +38,48 @@ public class ReminderService {
 
     public void checkAndCreateReminderForUser(User user) {
         LocalDate today = LocalDate.now();
-        // Lấy notification mới nhất loại approved hoặc rejected
-        Notification latest = null;
+        // Lấy lần hiến máu gần nhất đã hoàn thành
+        Donation lastDonation = donationRepository.findTopByUser_UserIdAndStatusOrderByDateDesc(
+            user.getUserId(), "completed"
+        );
+        // Lấy danh sách notification của user, mới nhất trước
         List<Notification> notis = notificationRepository.findByUser_UserIdOrderByCreatedAtDesc(user.getUserId());
-        for (Notification n : notis) {
-            if ("approved".equals(n.getMessageType()) || "rejected".equals(n.getMessageType())) {
-                latest = n;
-                break;
+        // Tìm notification 'approved' hoặc 'rejected' mới nhất
+        Notification lastApprovedOrRejected = notis.stream()
+            .filter(n -> n.getMessageType() != null && (n.getMessageType().equalsIgnoreCase("approved") || n.getMessageType().equalsIgnoreCase("rejected")))
+            .findFirst().orElse(null);
+        if (lastApprovedOrRejected != null && lastApprovedOrRejected.getCreatedAt() != null) {
+            long days = ChronoUnit.DAYS.between(lastApprovedOrRejected.getCreatedAt().toLocalDateTime().toLocalDate(), today);
+            if (days >= 15) {
+                // Kiểm tra nếu đã có reminder sau notification này
+                boolean hasReminderAfter = notis.stream().anyMatch(n ->
+                    "reminder".equals(n.getMessageType()) &&
+                    n.getCreatedAt() != null &&
+                    n.getCreatedAt().after(lastApprovedOrRejected.getCreatedAt())
+                );
+                if (!hasReminderAfter) {
+                    Notification reminder = new Notification();
+                    reminder.setNotificationId(generateNotificationId());
+                    reminder.setUser(user);
+                    reminder.setMessage("Đã đến thời gian cần chú ý lại thông báo.");
+                    reminder.setMessageType("reminder");
+                    reminder.setStatus("unread");
+                    reminder.setCreatedAt(new Timestamp(System.currentTimeMillis()));
+                    reminder.setStaffMessage(null);
+                    notificationRepository.save(reminder);
+                    return;
+                }
             }
         }
-        if (latest != null && latest.getCreatedAt() != null) {
-            long days = ChronoUnit.DAYS.between(latest.getCreatedAt().toLocalDateTime().toLocalDate(), today);
+        // Logic cũ: dựa vào lần hiến máu gần nhất
+        if (lastDonation != null && lastDonation.getDate() != null) {
+            long days = ChronoUnit.DAYS.between(lastDonation.getDate().toLocalDateTime().toLocalDate(), today);
             if (days >= 15) {
-                // Kiểm tra nếu đã có reminder nào được tạo sau notification approved/rejected mới nhất thì không tạo nữa
-                boolean hasReminderAfter = false;
-                for (Notification n : notis) {
-                    if ("reminder".equals(n.getMessageType()) && n.getCreatedAt() != null &&
-                        n.getCreatedAt().after(latest.getCreatedAt())) {
-                        hasReminderAfter = true;
-                        break;
-                    }
-                }
+                boolean hasReminderAfter = notis.stream().anyMatch(n ->
+                    "reminder".equals(n.getMessageType()) &&
+                    n.getCreatedAt() != null &&
+                    n.getCreatedAt().after(lastDonation.getDate())
+                );
                 if (!hasReminderAfter) {
                     Notification reminder = new Notification();
                     reminder.setNotificationId(generateNotificationId());

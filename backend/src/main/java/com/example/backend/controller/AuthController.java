@@ -73,6 +73,7 @@ public class AuthController {
             response.put("phone", user.getPhone());
             response.put("address", user.getAddress());
             response.put("gender", user.getGender());
+            response.put("userId", user.getUserId());
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {

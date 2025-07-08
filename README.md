@@ -59,18 +59,35 @@
 - Docker (tùy chọn)
 
 ### Cách 1: Chạy với Docker (Chỉ Database)
-
 Hiện tại dự án chỉ có Docker Compose cho MySQL database:
 
 ```bash
+# Xoá hoàn toàn database sử dụng MySQL CLI
+DROP DATABASE blood_donation_db;
+
 # Di chuyển vào thư mục backend
 cd backend
+
+# Tắt toàn bộ container + network
+docker compose down
 
 # Chạy MySQL database với Docker Compose
 docker-compose up -d
 
 # Kiểm tra container đang chạy
 docker ps
+
+# Copy lại file init.sql vào container mới(thay"" bằng đường dẫn thực tế của file init.sql trong dự án)
+docker cp "D:\HOCTAP\merge\Java_lab\backend\docker\init.sql" blood_donation_mysql:/init.sql
+
+# Truy cập container và Mysql
+docker exec -it blood_donation_mysql bash
+mysql -u root -p
+
+# Tạo lại DB + chạy script
+CREATE DATABASE blood_donation_db CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
+USE blood_donation_db;
+SOURCE /init.sql;
 
 # Xem logs nếu cần
 docker-compose logs mysql
@@ -138,5 +155,3 @@ Java_lab/
 2. Tạo branch mới cho feature
 3. Commit changes
 4. Tạo Pull Request
-
-

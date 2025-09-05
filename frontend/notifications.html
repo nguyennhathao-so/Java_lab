@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,247 +15,250 @@
     <!-- Font chữ -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Akshar:wght@300..700&family=Inter:ital,wght@0,100..900;1,100..900&display=swap" rel="stylesheet" />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Akshar:wght@300..700&family=Inter:ital,wght@0,100..900;1,100..900&display=swap"
+        rel="stylesheet" />
 
     <!-- CSS -->
     <link rel="stylesheet" href="./css/reset.css" />
     <link rel="stylesheet" href="./css/style.css" />
     <style>
-    .thongbao-wrapper {
-        padding: 40px 20px;
-        background-color: #f5f5f5;
-        font-family: 'Inter', sans-serif;
-        min-height: 100vh;
-    }
+        .thongbao-wrapper {
+            padding: 40px 20px;
+            background-color: #f5f5f5;
+            font-family: 'Inter', sans-serif;
+            min-height: 100vh;
+        }
 
-    .notification-filters {
-        max-width: 800px;
-        margin: 0 auto 20px;
-        display: flex;
-        gap: 10px;
-        justify-content: center;
-    }
+        .notification-filters {
+            max-width: 800px;
+            margin: 0 auto 20px;
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
 
-    .filter-btn {
-        padding: 8px 16px;
-        border: none;
-        border-radius: 20px;
-        background: white;
-        color: #666;
-        cursor: pointer;
-        transition: all 0.3s ease;
-    }
+        .filter-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 20px;
+            background: white;
+            color: #666;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
 
-    .filter-btn.active {
-        background: #c62828;
-        color: white;
-    }
+        .filter-btn.active {
+            background: #c62828;
+            color: white;
+        }
 
-    .title-page {
-        text-align: center;
-        color: #c62828;
-        font-size: 28px;
-        font-weight: 700;
-        margin-bottom: 30px;
-    }
+        .title-page {
+            text-align: center;
+            color: #c62828;
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 30px;
+        }
 
-    .thongbao-container {
-        max-width: 800px;
-        margin: auto;
-    }
+        .thongbao-container {
+            max-width: 800px;
+            margin: auto;
+        }
 
-    .notification-list {
-        display: flex;
-        flex-direction: column;
-        gap: 20px;
-    }
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
 
-    .notification-item {
-        background: white;
-        border-radius: 12px;
-        padding: 20px;
-        box-shadow: 0 2px 10px rgba(0,0,0,0.1);
-        transition: all 0.3s ease;
-        border-left: 4px solid #c62828;
-    }
+        .notification-item {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+            border-left: 4px solid #c62828;
+        }
 
-    .notification-item:hover {
-        transform: translateY(-2px);
-        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-    }
+        .notification-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
 
-    .notification-item.unread {
-        background: #fff9f9;
-    }
+        .notification-item.unread {
+            background: #fff9f9;
+        }
 
-    .notification-item.read {
-        background: #f0f0f0;
-    }
+        .notification-item.read {
+            background: #f0f0f0;
+        }
 
-    .notification-item.success {
-        border-left-color: #4CAF50;
-    }
+        .notification-item.success {
+            border-left-color: #4CAF50;
+        }
 
-    .notification-item.warning {
-        border-left-color: #FFC107;
-    }
+        .notification-item.warning {
+            border-left-color: #FFC107;
+        }
 
-    .notification-item.danger {
-        border-left-color: #f44336;
-    }
+        .notification-item.danger {
+            border-left-color: #f44336;
+        }
 
-    .noti-header {
-        display: flex;
-        align-items: center;
-        gap: 15px;
-        margin-bottom: 15px;
-    }
+        .noti-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 15px;
+        }
 
-    .noti-icon {
-        width: 40px;
-        height: 40px;
-        border-radius: 50%;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        font-size: 20px;
-    }
+        .noti-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+        }
 
-    .success .noti-icon {
-        background: #e8f5e9;
-        color: #4CAF50;
-    }
+        .success .noti-icon {
+            background: #e8f5e9;
+            color: #4CAF50;
+        }
 
-    .warning .noti-icon {
-        background: #fff3e0;
-        color: #FFC107;
-    }
+        .warning .noti-icon {
+            background: #fff3e0;
+            color: #FFC107;
+        }
 
-    .danger .noti-icon {
-        background: #ffebee;
-        color: #f44336;
-    }
+        .danger .noti-icon {
+            background: #ffebee;
+            color: #f44336;
+        }
 
-    .noti-title {
-        font-weight: 600;
-        font-size: 18px;
-        flex-grow: 1;
-    }
+        .noti-title {
+            font-weight: 600;
+            font-size: 18px;
+            flex-grow: 1;
+        }
 
-    .success .noti-title {
-        color: #4CAF50;
-    }
+        .success .noti-title {
+            color: #4CAF50;
+        }
 
-    .warning .noti-title {
-        color: #FFC107;
-    }
+        .warning .noti-title {
+            color: #FFC107;
+        }
 
-    .danger .noti-title {
-        color: #f44336;
-    }
+        .danger .noti-title {
+            color: #f44336;
+        }
 
-    .noti-time {
-        color: #666;
-        font-size: 14px;
-    }
+        .noti-time {
+            color: #666;
+            font-size: 14px;
+        }
 
-    .noti-content {
-        color: #444;
-        line-height: 1.6;
-    }
+        .noti-content {
+            color: #444;
+            line-height: 1.6;
+        }
 
-    .noti-content p {
-        margin-bottom: 10px;
-    }
+        .noti-content p {
+            margin-bottom: 10px;
+        }
 
-    .noti-content ul {
-        margin: 10px 0;
-        padding-left: 20px;
-    }
+        .noti-content ul {
+            margin: 10px 0;
+            padding-left: 20px;
+        }
 
-    .noti-content li {
-        margin-bottom: 5px;
-    }
+        .noti-content li {
+            margin-bottom: 5px;
+        }
 
-    .noti-footer {
-        margin-top: 15px;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        padding-top: 15px;
-        border-top: 1px solid #eee;
-    }
+        .noti-footer {
+            margin-top: 15px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
 
-    .noti-actions {
-        display: flex;
-        gap: 10px;
-    }
+        .noti-actions {
+            display: flex;
+            gap: 10px;
+        }
 
-    .noti-btn {
-        padding: 8px 16px;
-        border-radius: 4px;
-        border: none;
-        cursor: pointer;
-        transition: all 0.3s ease;
-        text-decoration: none;
-        font-size: 14px;
-    }
+        .noti-btn {
+            padding: 8px 16px;
+            border-radius: 4px;
+            border: none;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            font-size: 14px;
+        }
 
-    .noti-btn.primary {
-        background: #c62828;
-        color: white;
-    }
+        .noti-btn.primary {
+            background: #c62828;
+            color: white;
+        }
 
-    .noti-btn.secondary {
-        background: #f5f5f5;
-        color: #666;
-    }
+        .noti-btn.secondary {
+            background: #f5f5f5;
+            color: #666;
+        }
 
-    .noti-btn.secondary.unread-btn {
-        background: #c62828;
-        color: #fff;
-    }
+        .noti-btn.secondary.unread-btn {
+            background: #c62828;
+            color: #fff;
+        }
 
-    .noti-btn.secondary.read-btn {
-        background: #f5f5f5;
-        color: #666;
-    }
+        .noti-btn.secondary.read-btn {
+            background: #f5f5f5;
+            color: #666;
+        }
 
-    .noti-status {
-        display: flex;
-        align-items: center;
-        gap: 5px;
-        font-size: 14px;
-    }
+        .noti-status {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            font-size: 14px;
+        }
 
-    .status-dot {
-        width: 8px;
-        height: 8px;
-        border-radius: 50%;
-    }
+        .status-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+        }
 
-    .success .status-dot {
-        background: #4CAF50;
-    }
+        .success .status-dot {
+            background: #4CAF50;
+        }
 
-    .warning .status-dot {
-        background: #FFC107;
-    }
+        .warning .status-dot {
+            background: #FFC107;
+        }
 
-    .danger .status-dot {
-        background: #f44336;
-    }
+        .danger .status-dot {
+            background: #f44336;
+        }
 
-    .no-notifications {
-        text-align: center;
-        padding: 40px;
-        color: #666;
-        background: white;
-        border-radius: 12px;
-        margin-top: 20px;
-    }
+        .no-notifications {
+            text-align: center;
+            padding: 40px;
+            color: #666;
+            background: white;
+            border-radius: 12px;
+            margin-top: 20px;
+        }
     </style>
 </head>
+
 <body>
     <!-- Header -->
     <div id="header"></div>
@@ -283,25 +287,29 @@
     <div id="footer"></div>
 
     <!-- Modal lịch sử yêu cầu -->
-    <div id="historyModal" class="modal" style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.3);align-items:center;justify-content:center;">
-      <div style="background:#fff;padding:32px 24px;border-radius:12px;max-width:600px;width:100%;box-shadow:0 2px 16px rgba(0,0,0,0.2);position:relative;">
-        <h3 style="margin-bottom:16px;font-size:20px;color:#c62828;">Lịch sử yêu cầu</h3>
-        <table style="width:100%;border-collapse:collapse;">
-          <thead>
-            <tr style="background:#f5f5f5;">
-              <th style="padding:8px 12px;border:1px solid #eee;">STT</th>
-              <th style="padding:8px 12px;border:1px solid #eee;">Loại</th>
-              <th style="padding:8px 12px;border:1px solid #eee;">Ngày yêu cầu</th>
-              <th style="padding:8px 12px;border:1px solid #eee;">Trạng thái</th>
-            </tr>
-          </thead>
-          <tbody id="historyTableBody">
-            <!-- Dữ liệu sẽ được render bằng JS -->
-          </tbody>
-        </table>
-        <button onclick="closeHistoryModal()" style="margin-top:20px;padding:8px 20px;background:#c62828;color:#fff;border:none;border-radius:4px;">Đóng</button>
-        <span style="position:absolute;top:12px;right:18px;cursor:pointer;font-size:22px;" onclick="closeHistoryModal()">&times;</span>
-      </div>
+    <div id="historyModal" class="modal"
+        style="display:none;position:fixed;z-index:9999;left:0;top:0;width:100vw;height:100vh;background:rgba(0,0,0,0.3);align-items:center;justify-content:center;">
+        <div
+            style="background:#fff;padding:32px 24px;border-radius:12px;max-width:600px;width:100%;box-shadow:0 2px 16px rgba(0,0,0,0.2);position:relative;">
+            <h3 style="margin-bottom:16px;font-size:20px;color:#c62828;">Lịch sử yêu cầu</h3>
+            <table style="width:100%;border-collapse:collapse;">
+                <thead>
+                    <tr style="background:#f5f5f5;">
+                        <th style="padding:8px 12px;border:1px solid #eee;">STT</th>
+                        <th style="padding:8px 12px;border:1px solid #eee;">Loại</th>
+                        <th style="padding:8px 12px;border:1px solid #eee;">Ngày yêu cầu</th>
+                        <th style="padding:8px 12px;border:1px solid #eee;">Trạng thái</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTableBody">
+                    <!-- Dữ liệu sẽ được render bằng JS -->
+                </tbody>
+            </table>
+            <button onclick="closeHistoryModal()"
+                style="margin-top:20px;padding:8px 20px;background:#c62828;color:#fff;border:none;border-radius:4px;">Đóng</button>
+            <span style="position:absolute;top:12px;right:18px;cursor:pointer;font-size:22px;"
+                onclick="closeHistoryModal()">&times;</span>
+        </div>
     </div>
 
     <!-- JS -->
@@ -464,7 +472,7 @@
 
                 // Gắn lại sự kiện đánh dấu đã đọc
                 document.querySelectorAll('.noti-btn.secondary').forEach(btn => {
-                    btn.addEventListener('click', function() {
+                    btn.addEventListener('click', function () {
                         const notificationItem = this.closest('.notification-item');
                         notificationItem.classList.remove('unread');
                         notificationItem.classList.add('read');
@@ -481,31 +489,32 @@
 
         // Hàm show modal lịch sử yêu cầu
         function showHistoryModal() {
-          const userId = localStorage.getItem('userId') || localStorage.getItem('user_id') || 'US1';
-          const tbody = document.getElementById('historyTableBody');
-          tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Đang tải...</td></tr>';
-          adminApiService.getDonationRegistrationsByUserId(userId).then(historyData => {
-            tbody.innerHTML = '';
-            if (!historyData.length) {
-              tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Không có dữ liệu</td></tr>';
-              return;
-            }
-            historyData.forEach((row, idx) => {
-              tbody.innerHTML += `<tr>
-                <td style='padding:8px 12px;border:1px solid #eee;text-align:center;'>${idx+1}</td>
-                <td style='padding:8px 12px;border:1px solid #eee;'>${row.type}</td>
-                <td style='padding:8px 12px;border:1px solid #eee;'>${row.registrationDate || row.registration_date}</td>
+            const userId = localStorage.getItem('userId') || localStorage.getItem('user_id') || 'US1';
+            const tbody = document.getElementById('historyTableBody');
+            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Đang tải...</td></tr>';
+            adminApiService.getDonationRegistrationsByUserId(userId).then(historyData => {
+                tbody.innerHTML = '';
+                if (!historyData.length) {
+                    tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Không có dữ liệu</td></tr>';
+                    return;
+                }
+                historyData.forEach((row, idx) => {
+                    tbody.innerHTML += `<tr>
+                <td style='padding:8px 12px;border:1px solid #eee;text-align:center;'>${idx + 1}</td>
+                <td style='padding:8px 12px;border:1px solid #eee;'>${row.requestType === 'donate' ? 'Hiến máu' : (row.requestType === 'receive' ? 'Cần máu' : row.requestType)}</td>
+                <td style='padding:8px 12px;border:1px solid #eee;'>${row.createdAt ? new Date(row.createdAt).toLocaleString() : ''}</td>
                 <td style='padding:8px 12px;border:1px solid #eee;'>${row.status}</td>
               </tr>`;
+                });
+            }).catch(() => {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Lỗi tải dữ liệu</td></tr>';
             });
-          }).catch(() => {
-            tbody.innerHTML = '<tr><td colspan="4" style="text-align:center;">Lỗi tải dữ liệu</td></tr>';
-          });
-          document.getElementById('historyModal').style.display = 'flex';
+            document.getElementById('historyModal').style.display = 'flex';
         }
         function closeHistoryModal() {
-          document.getElementById('historyModal').style.display = 'none';
+            document.getElementById('historyModal').style.display = 'none';
         }
     </script>
 </body>
+
 </html>

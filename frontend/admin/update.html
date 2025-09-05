@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Danh sách yêu cầu hiến máu</title>
+    <title>Cập nhật tình trạng hiến máu</title>
 
     <!-- favicon -->
     <link rel="apple-touch-icon" sizes="180x180" href="../assets/favicons/apple-icon-180x180.png" />
@@ -25,13 +25,11 @@
     <!-- css -->
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/style_admin.css">
+    <link rel="stylesheet" href="../css/notification-modal.css">
 
     <!-- js -->
-    <script src="../js/jquery-3.7.1.min.js" ></script>
-    <script src="../js/component_admin.js" ></script>
-    <script src="../js/blood_donations_history_admin.js"></script>
-    <script src="../js/api.js"></script>
-    <script src="../js/example.js"></script>
+    <script src="../js/jquery-3.7.1.min.js"></script>
+    <!-- Các file js dùng chung sẽ được nạp ở dưới body -->
 
 </head>
 
@@ -48,17 +46,171 @@
             </header>
             <section class="content form-section">
                 <form>
-                    <label for="illness">Có Dấu Hiệu Của Bệnh Ẩn Gì Không</label>
-                    <input type="text" id="illness" placeholder="Nhập Tình Trạng Bệnh">
+                    <label for="illness">Ghi chú (bệnh hoặc thông tin khác)</label>
+                    <input type="text" id="illness" placeholder="Để trống nếu không có">
 
                     <label for="amount">Số Lượng Máu Hiến (ml)</label>
-                    <input type="text" id="amount" placeholder="Nhập Tình Trạng Bệnh">
+                    <input type="number" id="amount" placeholder="Nhập số lượng máu thực tế">
 
-                    <button type="submit" class="submit-button">CẬP NHẬT</button>
+                    <div class="button-group" style="display: flex; gap: 10px; margin-top: 20px;">
+                        <button type="submit" class="submit-button" style="flex: 1;">CẬP NHẬT & HOÀN THÀNH</button>
+                        <button type="button" id="cancel-button" class="cancel-button"
+                            style="flex: 1; background-color: #f44336;">HỦY BỎ</button>
+                    </div>
                 </form>
             </section>
         </main>
     </div>
+    <script src="../js/api.js"></script>
+    <script src="../js/admin-api.js"></script>
+    <script src="../js/notification-modal.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            // Tải slide bar
+            const slideBar = document.getElementById('slide-bar');
+            fetch('../components/slibar_admin.html')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    slideBar.innerHTML = data;
+                })
+                .catch(error => console.error('Error loading slide bar:', error));
+
+            // Lấy ID từ URL
+            const urlParams = new URLSearchParams(window.location.search);
+            const donationId = urlParams.get('id');
+
+            if (!donationId) {
+                alert('Không tìm thấy ID của lượt hiến máu.');
+                window.location.href = 'approve.html'; // Quay lại trang trước
+                return;
+            }
+
+            // Xử lý sự kiện hủy bỏ
+            const cancelButton = document.getElementById('cancel-button');
+            cancelButton.addEventListener('click', () => {
+                if (confirm('Bạn có chắc chắn muốn hủy việc cập nhật này không?')) {
+                    // Chỉ quay lại trang duyệt hiến máu, không thay đổi gì cả
+                    window.location.href = 'approve.html';
+                }
+            });
+
+            // Xử lý sự kiện submit form
+            const form = document.querySelector('form');
+            form.addEventListener('submit', async (event) => {
+                event.preventDefault(); // Ngăn form submit theo cách truyền thống
+
+                const illness = document.getElementById('illness').value;
+                const amount = document.getElementById('amount').value;
+
+                if (!amount) {
+                    alert('Vui lòng nhập số lượng máu hiến.');
+                    return;
+                }
+
+                // Lấy thông tin donation để tìm userId
+                try {
+                    const donationResponse = await fetch(`http://localhost:8082/api/admin/donations/${donationId}`, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+                        }
+                    });
+
+                    if (donationResponse.ok) {
+                        const donationData = await donationResponse.json();
+                        const userId = donationData.user && donationData.user.userId;
+
+                        if (userId) {
+                            // Gán callback chuyển trang sau khi gửi thông báo thành công
+                            notificationModal.onActionComplete = () => {
+                                window.location.href = 'blood_donations_history.html';
+                            };
+                            // Hiển thị modal chỉ với option Đã duyệt
+                            notificationModal.show('complete_donation', donationId, userId, donationData, ['approved']);
+                        } else {
+                            // Nếu không tìm thấy userId, thực hiện cập nhật trực tiếp
+                            await completeDonationDirectly();
+                        }
+                    } else {
+                        await completeDonationDirectly();
+                    }
+                } catch (error) {
+                    console.error('Lỗi khi lấy thông tin donation:', error);
+                    await completeDonationDirectly();
+                }
+            });
+
+            async function completeDonationDirectly() {
+                const illness = document.getElementById('illness').value;
+                const amount = document.getElementById('amount').value;
+
+                const payload = {
+                    notes: illness,
+                    amount: parseInt(amount, 10)
+                };
+
+                try {
+                    await adminApiService.completeDonation(donationId, payload);
+                    alert('Cập nhật thành công! Lượt hiến máu đã được chuyển vào lịch sử.');
+                    window.location.href = 'blood_donations_history.html';
+                } catch (error) {
+                    console.error('Lỗi khi cập nhật:', error);
+                    alert('Có lỗi xảy ra khi cập nhật. Vui lòng thử lại.');
+                }
+            }
+
+            // Lấy thông tin donation trước
+            fetch(`http://localhost:8082/api/admin/donations/${donationId}`, {
+                headers: {
+                    'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+                }
+            })
+                .then(response => response.json())
+                .then(donationData => {
+                    // Gán số lượng máu
+                    document.getElementById('amount').value = donationData.amount || 350;
+
+                    // Lấy userId từ donationData
+                    const userId = donationData.user && donationData.user.userId;
+                    if (!userId) {
+                        document.getElementById('illness').value = "Chưa cập nhật";
+                        return;
+                    }
+
+                    // Gọi API lấy notes gần nhất
+                    fetch(`http://localhost:8082/api/admin/medical-records/last/${userId}`, {
+                        headers: {
+                            'Authorization': 'Bearer ' + localStorage.getItem('authToken')
+                        }
+                    })
+                        .then(response => {
+                            if (response.status === 204) { // No Content
+                                document.getElementById('illness').value = "Chưa cập nhật";
+                                return null;
+                            }
+                            return response.json();
+                        })
+                        .then(medicalData => {
+                            if (medicalData && medicalData.notes) {
+                                document.getElementById('illness').value = medicalData.notes;
+                            } else if (medicalData !== null) {
+                                document.getElementById('illness').value = "Chưa cập nhật";
+                            }
+                        })
+                        .catch(() => {
+                            document.getElementById('illness').value = "Chưa cập nhật";
+                        });
+                })
+                .catch(() => {
+                    document.getElementById('amount').value = 350;
+                    document.getElementById('illness').value = "Chưa cập nhật";
+                });
+        });
+    </script>
 </body>
 
 </html>

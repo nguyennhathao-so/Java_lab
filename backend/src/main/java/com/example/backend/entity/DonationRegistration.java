@@ -24,4 +24,10 @@ public class DonationRegistration {
 
     @Column(name = "registration_date")
     private Date registrationDate;
-} 
+
+    @Column(name = "type")
+    private String type;
+
+    @Column(name = "status")
+    private String status;
+}

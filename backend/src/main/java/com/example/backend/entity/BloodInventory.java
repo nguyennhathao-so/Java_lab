@@ -19,10 +19,6 @@ public class BloodInventory {
     @Column(name = "inventory_id")
     private String inventoryId;
 
-    @ManyToOne
-    @JoinColumn(name = "center_id", nullable = false)
-    private HealthCenter center;
-
     @Column(name = "blood_type", nullable = false)
     private String bloodType;
 

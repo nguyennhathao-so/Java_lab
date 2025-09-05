@@ -25,7 +25,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   `blood_type` varchar(3) NOT NULL,
   `role_id` varchar(10) NOT NULL,
   `last_donation_date` date DEFAULT NULL,
-  `location` point DEFAULT NULL,
+  `location` varchar(50) DEFAULT NULL,
   `status` enum('active','inactive') DEFAULT 'active',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   `phone` varchar(15) DEFAULT NULL,
@@ -52,42 +52,48 @@ CREATE TABLE IF NOT EXISTS `health_centers` (
   `name` varchar(100) NOT NULL,
   `address` varchar(255) DEFAULT NULL,
   `contact_info` varchar(100) DEFAULT NULL,
-  `location` point DEFAULT NULL,
+  `location` varchar(50) DEFAULT NULL,
   PRIMARY KEY (`center_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng donation_requests
 CREATE TABLE IF NOT EXISTS `donation_requests` (
-  `request_id` varchar(10) NOT NULL,
+  `request_id` varchar(32) NOT NULL,
+  `user_id` varchar(10) DEFAULT NULL,
   `center_id` varchar(10) DEFAULT NULL,
   `blood_type_needed` varchar(3) DEFAULT NULL,
   `quantity` int DEFAULT NULL,
   `urgency_level` enum('low','medium','high') DEFAULT 'medium',
-  `status` enum('open','fulfilled','closed') DEFAULT 'open',
+  `status` enum('open','fulfilled','closed','approved') DEFAULT 'open',
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
+  `desired_date` datetime DEFAULT NULL,
+  `request_type` enum('donate','receive') NOT NULL DEFAULT 'donate',
   PRIMARY KEY (`request_id`),
+  KEY `user_id` (`user_id`),
   KEY `center_id` (`center_id`),
-  CONSTRAINT `donation_requests_ibfk_1` FOREIGN KEY (`center_id`) REFERENCES `health_centers` (`center_id`)
+  CONSTRAINT `donation_requests_ibfk_1` FOREIGN KEY (`center_id`) REFERENCES `health_centers` (`center_id`),
+  CONSTRAINT `donation_requests_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng donations
 CREATE TABLE IF NOT EXISTS `donations` (
-  `donation_id` varchar(10) NOT NULL,
+  `donation_id` varchar(100) NOT NULL,
   `user_id` varchar(10) DEFAULT NULL,
-  `request_id` varchar(10) DEFAULT NULL,
+  `request_id` varchar(32) DEFAULT NULL,
   `donation_type` enum('whole','platelets','plasma') DEFAULT NULL,
   `amount` int DEFAULT NULL,
   `date` date DEFAULT NULL,
+  `status` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`donation_id`),
   KEY `user_id` (`user_id`),
   KEY `request_id` (`request_id`),
-  CONSTRAINT `donations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `donations_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
   CONSTRAINT `donations_ibfk_2` FOREIGN KEY (`request_id`) REFERENCES `donation_requests` (`request_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng blood_inventory
 CREATE TABLE IF NOT EXISTS `blood_inventory` (
-  `inventory_id` varchar(10) NOT NULL,
+  `inventory_id`  BIGINT AUTO_INCREMENT NOT NULL,
   `center_id` varchar(10) NOT NULL,
   `blood_type` varchar(3) NOT NULL,
   `component_type` enum('whole','platelets','plasma') NOT NULL,
@@ -116,7 +122,7 @@ CREATE TABLE IF NOT EXISTS `appointments` (
   KEY `user_id` (`user_id`),
   KEY `center_id` (`center_id`),
   KEY `donation_id` (`donation_id`),
-  CONSTRAINT `appointments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
+  CONSTRAINT `appointments_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE,
   CONSTRAINT `appointments_ibfk_2` FOREIGN KEY (`center_id`) REFERENCES `health_centers` (`center_id`),
   CONSTRAINT `appointments_ibfk_3` FOREIGN KEY (`donation_id`) REFERENCES `donations` (`donation_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -130,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `activity_logs` (
   `timestamp` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`log_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `activity_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `activity_logs_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng blogs
@@ -142,12 +148,12 @@ CREATE TABLE IF NOT EXISTS `blogs` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`blog_id`),
   KEY `author_id` (`author_id`),
-  CONSTRAINT `blogs_ibfk_1` FOREIGN KEY (`author_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `blogs_ibfk_1` FOREIGN KEY (`author_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng medical_records
 CREATE TABLE IF NOT EXISTS `medical_records` (
-  `record_id` varchar(10) NOT NULL,
+  `record_id` varchar(100) NOT NULL,
   `user_id` varchar(10) DEFAULT NULL,
   `weight` float DEFAULT NULL,
   `blood_pressure` varchar(20) DEFAULT NULL,
@@ -156,12 +162,12 @@ CREATE TABLE IF NOT EXISTS `medical_records` (
   `notes` text,
   PRIMARY KEY (`record_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `medical_records_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `medical_records_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng notifications
 CREATE TABLE IF NOT EXISTS `notifications` (
-  `notification_id` varchar(10) NOT NULL,
+  `notification_id` varchar(50) NOT NULL,
   `user_id` varchar(10) DEFAULT NULL,
   `message` text,
   `message_type` enum('approved','rejected','reminder') DEFAULT NULL,
@@ -170,18 +176,27 @@ CREATE TABLE IF NOT EXISTS `notifications` (
   `created_at` datetime DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`notification_id`),
   KEY `user_id` (`user_id`),
-  CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`)
+  CONSTRAINT `notifications_ibfk_1` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`) ON DELETE CASCADE
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- Bảng donation_registrations (lưu nhiều ngày đăng ký hiến máu cho mỗi user)
 CREATE TABLE IF NOT EXISTS donation_registrations (
-  id VARCHAR(10) NOT NULL,
+  id VARCHAR(100) NOT NULL,
   user_id VARCHAR(10) NOT NULL,
   registration_date DATE NOT NULL,
   type ENUM('Hiến máu','Cần máu') NOT NULL,
   status ENUM('Đã duyệt','Từ chối') NOT NULL,
   PRIMARY KEY (id),
-  FOREIGN KEY (user_id) REFERENCES users(user_id)
+  FOREIGN KEY (user_id) REFERENCES users(user_id) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+
+-- Bảng blood_compatibility (lưu thông tin tương thích máu)
+CREATE TABLE IF NOT EXISTS blood_compatibility (
+  id BIGINT AUTO_INCREMENT PRIMARY KEY,
+  receiver_blood_type VARCHAR(3) NOT NULL,
+  transfusion_type VARCHAR(50) NOT NULL,
+  blood_component VARCHAR(50),
+  compatible_blood_types TEXT NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 -- DỮ LIỆU MẪU CHO CÁC BẢNG CHÍNH
@@ -190,17 +205,18 @@ CREATE TABLE IF NOT EXISTS donation_registrations (
 INSERT INTO roles (role_id, role_name) VALUES ('RL1', 'USER'), ('RL2', 'ADMIN'), ('RL3', 'STAFF');
 
 -- Bảng users
-INSERT INTO users (user_id, name, email, password, blood_type, role_id, phone, gender, address)
+INSERT INTO users (user_id, name, email, password, blood_type, role_id, phone, gender, address, location)
 VALUES
-('US1', 'Nguyen Van A', 'a@gmail.com', '$2a$10$examplehash', 'A+', 'RL1', '0123456789', 'Nam', 'Hà Nội'),
-('US2', 'Nguyen Van B', 'b@gmail.com', '$2a$10$examplehash', 'B-', 'RL2', '0987654321', 'Nữ', 'Hồ Chí Minh'),
-('US3', 'Nguyen Van C', 'c@gmail.com', '$2b$10$examplehash', 'O+', 'RL1', '0987654320', 'Nữ', 'Hồ Chí Minh');
+('US1', 'Nguyen Van A', 'a@gmail.com', '$2a$10$examplehash', 'A+', 'RL1', '0123456789', 'Nam', 'Hà Nội', '21.0285,105.8542'),
+('US2', 'Nguyen Van B', 'b@gmail.com', '$2a$10$examplehash', 'B-', 'RL2', '0987654321', 'Nữ', 'Hồ Chí Minh', '10.8231,106.6297'),
+('US3', 'Nguyen Van C', 'c@gmail.com', '$2b$10$examplehash', 'O+', 'RL1', '0987654320', 'Nữ', 'Hồ Chí Minh', '10.8231,106.6297');
 
 -- Bảng health_centers
-INSERT INTO health_centers (center_id, name, address, contact_info)
-VALUES
-('HC1', 'Trung tâm 1', '123 Đường A, Hà Nội', '0123456789'),
-('HC2', 'Trung tâm 2', '456 Đường B, Hồ Chí Minh', '0987654321');
+INSERT INTO health_centers (center_id, name, address, contact_info, location) VALUES
+('HC1', 'QUẬN HOÀN KIẾM', '26 Lương Ngọc Quyến, HN', '(024) 3718 3154', '21.0341,105.8525'),
+('HC2', 'QUẬN THANH XUÂN', '132 Quan Nhân, Hà Nội', '(024) 3207 9699', '21.0061,105.8122'),
+('HC3', 'QUẬN ĐỐNG ĐA', 'Số 10, Ngõ 122, Đường Láng', '(024) 3203 0032', '21.0172,105.8165'),
+('HC4', 'HUYỆN THANH TRÌ', 'BV ĐK Nông nghiệp, Km13+500, Ngọc Hồi, Hà Nội', '(024) 3200 0407', '20.9477,105.8571');
 
 -- Bảng blood_types
 INSERT INTO blood_types (blood_type, can_donate_to, can_receive_from) VALUES
@@ -216,26 +232,26 @@ INSERT INTO blood_types (blood_type, can_donate_to, can_receive_from) VALUES
 -- Bảng blood_inventory
 INSERT INTO blood_inventory (inventory_id, center_id, blood_type, component_type, quantity, status)
 VALUES
-('BI1', 'HC1', 'A+', 'whole', 25, 'available'),
-('BI2', 'HC1', 'A-', 'whole', 15, 'available'),
-('BI3', 'HC1', 'B+', 'whole', 30, 'available'),
-('BI4', 'HC1', 'B-', 'whole', 12, 'available'),
-('BI5', 'HC2', 'O+', 'whole', 45, 'available'),
-('BI6', 'HC2', 'O-', 'whole', 18, 'available'),
-('BI7', 'HC2', 'AB+', 'whole', 8, 'available'),
-('BI8', 'HC2', 'AB-', 'whole', 5, 'available');
+('1', 'HC1', 'A+', 'whole', 25, 'available'),
+('2', 'HC1', 'A-', 'whole', 15, 'available'),
+('3', 'HC1', 'B+', 'whole', 30, 'available'),
+('4', 'HC1', 'B-', 'whole', 12, 'available'),
+('5', 'HC2', 'O+', 'whole', 45, 'available'),
+('6', 'HC2', 'O-', 'whole', 18, 'available'),
+('7', 'HC2', 'AB+', 'whole', 8, 'available'),
+('8', 'HC2', 'AB-', 'whole', 5, 'available');
 
 -- Bảng donation_requests
-INSERT INTO donation_requests (request_id, center_id, blood_type_needed, quantity, urgency_level, status)
+INSERT INTO donation_requests (request_id, user_id, center_id, blood_type_needed, quantity, urgency_level, status, request_type)
 VALUES
-('DR1', 'HC1', 'A+', 2, 'high', 'open'),
-('DR2', 'HC2', 'B-', 1, 'medium', 'open');
+('DR1', 'US1', 'HC1', 'A+', 2, 'high', 'open', 'donate'),
+('DR2', 'US2', 'HC2', 'B-', 1, 'medium', 'open', 'receive');
 
 -- Bảng donations
-INSERT INTO donations (donation_id, user_id, donation_type, amount, date)
+INSERT INTO donations (donation_id, user_id, donation_type, amount, date, status)
 VALUES
-('DN1', 'US1', 'whole', 350, '2024-06-01'),
-('DN2', 'US2', 'whole', 450, '2024-06-02');
+('DN1', 'US1', 'whole', 350, '2024-06-01', 'Hoàn thành'),
+('DN2', 'US2', 'whole', 450, '2024-06-02', 'Hoàn thành');
 
 -- Bảng activity_logs
 INSERT INTO activity_logs (log_id, user_id, action, ip_address)
@@ -268,5 +284,105 @@ INSERT INTO donation_registrations (id, user_id, registration_date, type, status
 ('DRG2', 'US1', '2024-06-10', 'Cần máu', 'Từ chối'),
 ('DRG3', 'US2', '2024-06-05', 'Hiến máu', 'Đã duyệt'),
 ('DRG4', 'US3', '2024-06-12', 'Cần máu', 'Đã duyệt');
+
+-- Dữ liệu mẫu cho blood_compatibility
+-- Insert dữ liệu cho bảng blood_compatibility
+-- Định dạng: receiver_blood_type, transfusion_type, blood_component, compatible_blood_types
+
+-- A+ Toàn Phần
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('A+', 'Toàn Phần', NULL, 'A+, A-, O+, O-');
+
+-- A+ Theo Thành Phần Máu - Hồng Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('A+', 'Theo Thành Phần Máu', 'Hồng Cầu', 'A+, A-, O+, O-');
+
+-- A+ Theo Thành Phần Máu - Tiểu Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('A+', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên A+)');
+
+-- A- Toàn Phần
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('A-', 'Toàn Phần', NULL, 'A-, O-');
+
+-- A- Theo Thành Phần Máu - Hồng Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('A-', 'Theo Thành Phần Máu', 'Hồng Cầu', 'A-, O-');
+
+-- A- Theo Thành Phần Máu - Tiểu Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('A-', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A-, B-, AB-, O- (Ưu Tiên A-)');
+
+-- B+ Toàn Phần
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('B+', 'Toàn Phần', NULL, 'B+, B-, O+, O-');
+
+-- B+ Theo Thành Phần Máu - Hồng Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('B+', 'Theo Thành Phần Máu', 'Hồng Cầu', 'B+, B-, O+, O-');
+
+-- B+ Theo Thành Phần Máu - Tiểu Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('B+', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên B+)');
+
+-- B- Toàn Phần
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('B-', 'Toàn Phần', NULL, 'B-, O-');
+
+-- B- Theo Thành Phần Máu - Hồng Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('B-', 'Theo Thành Phần Máu', 'Hồng Cầu', 'B-, O-');
+
+-- B- Theo Thành Phần Máu - Tiểu Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('B-', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A-, B-, AB-, O- (Ưu Tiên B-)');
+
+-- AB+ Toàn Phần
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('AB+', 'Toàn Phần', NULL, 'A+, A-, B+, B-, AB+, AB-, O+, O-');
+
+-- AB+ Theo Thành Phần Máu - Hồng Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('AB+', 'Theo Thành Phần Máu', 'Hồng Cầu', 'A+, A-, B+, B-, AB+, AB-, O+, O-');
+
+-- AB+ Theo Thành Phần Máu - Tiểu Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('AB+', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên AB+)');
+
+-- AB- Toàn Phần
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('AB-', 'Toàn Phần', NULL, 'A-, B-, AB-, O-');
+
+-- AB- Theo Thành Phần Máu - Hồng Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('AB-', 'Theo Thành Phần Máu', 'Hồng Cầu', 'A-, B-, AB-, O-');
+
+-- AB- Theo Thành Phần Máu - Tiểu Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('AB-', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A-, B-, AB-, O- (Ưu Tiên AB-)');
+
+-- O+ Toàn Phần
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('O+', 'Toàn Phần', NULL, 'O+, O-');
+
+-- O+ Theo Thành Phần Máu - Hồng Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('O+', 'Theo Thành Phần Máu', 'Hồng Cầu', 'O+, O-');
+
+-- O+ Theo Thành Phần Máu - Tiểu Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('O+', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A+, A-, B+, B-, AB+, AB-, O+, O- (Ưu Tiên O+)');
+
+-- O- Toàn Phần
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('O-', 'Toàn Phần', NULL, 'O-');
+
+-- O- Theo Thành Phần Máu - Hồng Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('O-', 'Theo Thành Phần Máu', 'Hồng Cầu', 'O-');
+
+-- O- Theo Thành Phần Máu - Tiểu Cầu
+INSERT INTO blood_compatibility (receiver_blood_type, transfusion_type, blood_component, compatible_blood_types) 
+VALUES ('O-', 'Theo Thành Phần Máu', 'Tiểu Cầu', 'A-, B-, AB-, O- (Ưu Tiên O-)');
 
 

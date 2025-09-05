@@ -35,25 +35,26 @@ public class IdGeneratorInitializer {
     }
 
     private void initializeCounter(String prefix, String entityName, String idFieldName) {
-        String queryString = String.format("SELECT e.%s FROM %s e WHERE e.%s LIKE :prefix", idFieldName, entityName, idFieldName);
+        String queryString = String.format("SELECT e.%s FROM %s e WHERE e.%s LIKE :prefix", idFieldName, entityName,
+                idFieldName);
         Query query = entityManager.createQuery(queryString);
         query.setParameter("prefix", prefix + "%");
-        
+
         List<String> ids = query.getResultList();
-        
-        int maxId = 0;
+
+        long maxId = 0;
         Pattern pattern = Pattern.compile(prefix + "(\\d+)");
-        
+
         for (String id : ids) {
             Matcher matcher = pattern.matcher(id);
             if (matcher.matches()) {
-                int currentId = Integer.parseInt(matcher.group(1));
+                long currentId = Long.parseLong(matcher.group(1));
                 if (currentId > maxId) {
                     maxId = currentId;
                 }
             }
         }
-        
-        IdGenerator.setCounter(prefix, maxId);
+
+        IdGenerator.setCounter(prefix, (int) maxId);
     }
-} 
+}

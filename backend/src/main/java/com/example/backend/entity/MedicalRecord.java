@@ -15,7 +15,6 @@ import com.example.backend.config.EntityIdListener;
 @EntityListeners(EntityIdListener.class)
 public class MedicalRecord {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "record_id")
     private String recordId;
 
@@ -37,4 +36,8 @@ public class MedicalRecord {
 
     @Column(name = "notes", columnDefinition = "text")
     private String notes;
-} 
+
+    public void setRecordId(String recordId) {
+        this.recordId = recordId;
+    }
+}

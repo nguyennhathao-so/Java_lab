@@ -16,14 +16,16 @@ $(document).ready(function () {
     if (userEmail && authToken) {
       $('#guest-view').hide();
       $('#user-view').show();
-      $('#user-email').text(userName || userEmail);
-      $('#service-link').show();
-      $('#notification-link').show();
+      $('#user-name').text(userName || userEmail);
 
       if (role === "ADMIN" || role === "STAFF") {
         $('#admin-link').show();
+        $('#service-link').hide();
+        $('#notification-link').hide();
       } else {
         $('#admin-link').hide();
+        $('#service-link').show();
+        $('#notification-link').show();
       }
     } else {
       $('#guest-view').show();

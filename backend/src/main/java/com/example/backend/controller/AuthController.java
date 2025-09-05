@@ -3,12 +3,23 @@ package com.example.backend.controller;
 import com.example.backend.dto.LoginResponse;
 import com.example.backend.dto.RegisterRequest;
 import com.example.backend.entity.User;
+import com.example.backend.repository.HealthCenterRepository;
 import com.example.backend.dto.LoginRequest;
+import com.example.backend.security.JwtTokenProvider;
 import com.example.backend.service.UserService;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.Map;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -20,29 +31,61 @@ public class AuthController {
 
     @Autowired
     private PasswordEncoder passwordEncoder;
+    @Autowired
+    private HealthCenterRepository healthCenterRepository;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JwtTokenProvider tokenProvider;
 
     @PostMapping("/register")
     public ResponseEntity<?> register(@RequestBody RegisterRequest request) {
         try {
             userService.register(request);
             // Tự động đăng nhập sau khi đăng ký
-            LoginRequest loginRequest = new LoginRequest();
-            loginRequest.setEmail(request.getEmail());
-            loginRequest.setPassword(request.getPassword());
-            LoginResponse loginResponse = userService.login(loginRequest);
-            return ResponseEntity.ok(loginResponse);
+            return login(new LoginRequest(request.getEmail(), request.getPassword()));
         } catch (RuntimeException e) {
             return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest request) {
+    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
         try {
-            LoginResponse response = userService.login(request);
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            loginRequest.getEmail(),
+                            loginRequest.getPassword()));
+
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+
+            String jwt = tokenProvider.generateToken(authentication);
+
+            User user = userService.findByEmail(loginRequest.getEmail());
+
+            Map<String, Object> response = new HashMap<>();
+            response.put("token", jwt);
+            response.put("role", user.getRole().getRoleName());
+            response.put("fullName", user.getName());
+            response.put("email", user.getEmail());
+            response.put("phone", user.getPhone());
+            response.put("address", user.getAddress());
+            response.put("gender", user.getGender());
+            response.put("userId", user.getUserId());
+
             return ResponseEntity.ok(response);
-        } catch (RuntimeException e) {
-            return ResponseEntity.badRequest().body(e.getMessage());
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.badRequest().body("Email hoặc mật khẩu không đúng!");
+        }
+    }
+
+    public class Main {
+        public static void main(String[] args) {
+            BCryptPasswordEncoder encoder = new BCryptPasswordEncoder();
+            System.out.println(encoder.encode("1"));
         }
     }
 }

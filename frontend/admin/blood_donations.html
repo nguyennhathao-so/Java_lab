@@ -25,6 +25,7 @@
     <!-- css -->
     <link rel="stylesheet" href="../css/reset.css">
     <link rel="stylesheet" href="../css/style_admin.css">
+    <link rel="stylesheet" href="../css/notification-modal.css">
 
     <!-- js -->
     <script src="../js/jquery-3.7.1.min.js"></script>
@@ -33,6 +34,7 @@
     <script src="../js/api.js"></script>
     <script src="../js/admin-api.js"></script>
     <script src="../js/example.js"></script>
+    <script src="../js/notification-modal.js"></script>
 
 </head>
 
@@ -70,64 +72,147 @@
     </div>
 
     <script>
-        // Load blood donations data
-        async function loadBloodDonations() {
+        // Hàm này sẽ được gọi khi DOM đã tải xong
+        async function loadAndRenderDonations() {
+            const tbody = document.querySelector('tbody');
             try {
-                const donations = await adminApiService.getBloodDonations();
-                const tbody = document.getElementById('donationsTableBody');
-                tbody.innerHTML = '';
+                // Bước 1: Gọi API để lấy danh sách yêu cầu "Chờ duyệt"
+                const allRequests = await adminApiService.getDonationRequestsByStatus('open');
 
-                donations.forEach((donation, index) => {
-                    const row = document.createElement('tr');
-                    row.innerHTML = `
-                        <td>${index + 1}</td>
-                        <td>${donation.donationId}</td>
-                        <td>${donation.user ? donation.user.name : 'N/A'}</td>
-                        <td>${donation.user ? donation.user.phone : 'N/A'}</td>
-                        <td>${donation.date ? new Date(donation.date).toLocaleDateString('vi-VN') : 'N/A'}</td>
-                        <td>${donation.user ? donation.user.gender : 'N/A'}</td>
-                        <td>${donation.user ? donation.user.bloodType : 'N/A'}</td>
-                        <td>
-                            <button class="delete" onclick="deleteDonation(${donation.donationId})">Xóa</button>
-                            <button class="accept" onclick="approveDonation(${donation.donationId})">Đồng ý</button>
-                        </td>
-                    `;
-                    tbody.appendChild(row);
+                // Bước 2: Lọc chỉ lấy các yêu cầu HIẾN MÁU (donate)
+                const donateRequests = allRequests.filter(req => req.requestType === 'donate');
+
+                if (donateRequests.length === 0) {
+                    tbody.innerHTML = '<tr><td colspan="8" class="text-center">Không có yêu cầu hiến máu nào cần duyệt.</td></tr>';
+                    return;
+                }
+
+                // Bước 3: Xóa nội dung cũ và điền dữ liệu mới, đảm bảo đúng các trường
+                tbody.innerHTML = '';
+                donateRequests.forEach((req, idx) => {
+                    const user = req.user || {};
+                    const requestDate = req.createdAt ? new Date(req.createdAt).toLocaleString('vi-VN') : 'N/A';
+                    const row = `
+                        <tr>
+                            <td>${idx + 1}</td>
+                            <td>${req.requestId}</td>
+                            <td>${user.name || 'N/A'}</td>
+                            <td>${user.phone || 'N/A'}</td>
+                            <td>${requestDate}</td>
+                            <td>${user.gender || 'N/A'}</td>
+                            <td>${user.bloodType || 'N/A'}</td>
+                            <td class="action-buttons">
+                                <button class="delete" onclick="deleteRequest('${req.requestId}')">Xóa</button>
+                                <button class="accept" onclick="approveRequest('${req.requestId}')">Đồng ý</button>
+                            </td>
+                        </tr>`;
+                    tbody.innerHTML += row;
                 });
             } catch (error) {
-                console.error('Error loading blood donations:', error);
-                document.getElementById('donationsTableBody').innerHTML = '<tr><td colspan="8">Không thể tải dữ liệu</td></tr>';
+                console.error('Không thể tải danh sách yêu cầu hiến máu:', error);
+                tbody.innerHTML = '<tr><td colspan="8" class="text-center">Lỗi tải dữ liệu. Vui lòng thử lại.</td></tr>';
             }
         }
 
-        // Delete donation
-        async function deleteDonation(id) {
-            if (confirm('Bạn có chắc chắn muốn xóa yêu cầu này?')) {
+        // Hàm xử lý khi nhấn nút "Đồng ý"
+        async function approveRequest(id) {
+            if (confirm('Bạn có chắc chắn muốn duyệt yêu cầu này không?')) {
                 try {
-                    await adminApiService.deleteDonation(id);
-                    alert('Đã xóa yêu cầu thành công!');
-                    loadBloodDonations(); // Reload data
+                    console.log('Approving request:', id);
+                    console.log('Auth token:', localStorage.getItem('authToken'));
+
+                    const result = await adminApiService.approveBloodRequest(id);
+                    console.log('Approve result:', result);
+
+                    alert('✔️ Đã duyệt yêu cầu thành công!');
+                    loadAndRenderDonations(); // reload lại bảng
                 } catch (error) {
-                    console.error('Error deleting donation:', error);
-                    alert('Lỗi khi xóa yêu cầu!');
+                    console.error('❌ Approve error:', error);
+                    console.error('Error details:', error.response || error);
+                    alert('❌ Duyệt thất bại: ' + error.message);
+                    // KHÔNG reload bảng nếu có lỗi
                 }
             }
         }
 
-        // Approve donation
-        async function approveDonation(id) {
-            try {
-                await adminApiService.approveDonation(id);
-                alert('Đã đồng ý yêu cầu hiến máu!');
-                loadBloodDonations(); // Reload data
-            } catch (error) {
-                console.error('Error approving donation:', error);
-                alert('Lỗi khi duyệt yêu cầu!');
+
+        // Hàm xử lý khi nhấn nút "Xóa"
+        async function deleteRequest(id) {
+            if (confirm('Bạn có chắc chắn muốn xóa yêu cầu này không?')) {
+                try {
+                    // Tìm thông tin request để lấy userId
+                    const allRequests = await adminApiService.getDonationRequestsByStatus('open');
+                    const request = allRequests.find(req => req.requestId === id);
+
+                    if (request && request.user && request.user.userId) {
+                        // Gán lại callback trước khi mở modal
+                        notificationModal.onActionComplete = () => {
+                            loadAndRenderDonations();
+                        };
+                        // Hiển thị modal thông báo chỉ với option Từ chối
+                        notificationModal.show('delete_donation', id, request.user.userId, request, ['rejected']);
+                    } else {
+                        // Nếu không tìm thấy thông tin user, thực hiện xóa trực tiếp
+                        await adminApiService.deleteBloodRequest(id);
+                        alert('Xóa thành công!');
+                        loadAndRenderDonations();
+                    }
+                } catch (error) {
+                    console.error('Lỗi khi xóa:', error);
+                    alert('Có lỗi xảy ra khi xóa. Vui lòng thử lại.');
+                }
             }
         }
 
-        // Load data when page loads
-        document.addEventListener('DOMContentLoaded', loadBloodDonations);
+        // Test function để kiểm tra authentication
+        // async function testAuth() {
+        //     try {
+        //         const response = await fetch('http://localhost:8082/api/admin/test-auth', {
+        //             method: 'POST',
+        //             headers: {
+        //                 'Authorization': 'Bearer ' + localStorage.getItem('authToken'),
+        //                 'Content-Type': 'application/json'
+        //             },
+        //             credentials: 'include'
+        //         });
+
+        //         if (response.ok) {
+        //             const result = await response.json();
+        //             console.log('Auth test successful:', result);
+        //             alert('Authentication working!');
+        //         } else {
+        //             console.error('Auth test failed:', response.status);
+        //             alert('Authentication failed: ' + response.status);
+        //         }
+        //     } catch (error) {
+        //         console.error('Auth test error:', error);
+        //         alert('Auth test error: ' + error.message);
+        //     }
+        // }
+
+        // Chạy hàm tải dữ liệu khi trang được tải lần đầu
+        document.addEventListener('DOMContentLoaded', loadAndRenderDonations);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Bước 4: Tải slide bar và dữ liệu chính
+            const slideBar = document.getElementById('slide-bar');
+            fetch('../components/slibar_admin.html')
+                .then(response => {
+                    if (!response.ok) throw new Error('Network response was not ok');
+                    return response.text();
+                })
+                .then(data => {
+                    slideBar.innerHTML = data;
+                })
+                .catch(error => console.error('Error loading slide bar:', error));
+
+            // Reload bảng sau khi modal thực hiện xong
+            if (window.notificationModal) {
+                window.notificationModal.onActionComplete = () => {
+                    loadAndRenderDonations();
+                };
+            }
+        });
     </script>
 </body>
 

@@ -16,11 +16,25 @@ $(document).ready(function () {
         // User is logged in
         guestView.style.display = 'none';
         userView.style.display = 'block';
-        userName.textContent = user.fullName;
+        userName.textContent = user.name;
 
-        // Show admin link if user is admin
-        if (user.role === 'ADMIN') {
+        // Show admin link if user is admin or staff
+        if (user.role === 'ADMIN' || user.role === 'STAFF') {
             adminLink.style.display = 'block';
+        }
+
+        // Hide service and notification links for admin and staff
+        const serviceLink = document.getElementById('service-link');
+        const notificationLink = document.getElementById('notification-link');
+        
+        if (serviceLink && notificationLink) {
+            if (user.role === 'ADMIN' || user.role === 'STAFF') {
+                serviceLink.style.display = 'none';
+                notificationLink.style.display = 'none';
+            } else {
+                serviceLink.style.display = 'inline-block';
+                notificationLink.style.display = 'inline-block';
+            }
         }
 
         // Handle logout
@@ -61,9 +75,23 @@ function initHeaderAuth() {
     if (token && user) {
         guestView.style.display = 'none';
         userView.style.display = 'block';
-        userName.textContent = user.fullName;
-        if (user.role === 'ADMIN') {
+        userName.textContent = user.name;
+        if (user.role === 'ADMIN' || user.role === 'STAFF') {
             adminLink.style.display = 'block';
+        }
+
+        // Hide service and notification links for admin and staff
+        const serviceLink = document.getElementById('service-link');
+        const notificationLink = document.getElementById('notification-link');
+        
+        if (serviceLink && notificationLink) {
+            if (user.role === 'ADMIN' || user.role === 'STAFF') {
+                serviceLink.style.display = 'none';
+                notificationLink.style.display = 'none';
+            } else {
+                serviceLink.style.display = 'inline-block';
+                notificationLink.style.display = 'inline-block';
+            }
         }
         logoutBtn.addEventListener('click', function (e) {
             e.preventDefault();

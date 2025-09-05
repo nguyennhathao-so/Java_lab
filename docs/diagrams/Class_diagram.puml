@@ -1,0 +1,155 @@
+@startuml
+skinparam dpi 200
+title Blood Donation Database Schema
+
+entity roles {
+  * role_id : varchar(10)
+  * role_name : varchar(50)
+}
+
+entity users {
+  * user_id : varchar(10)
+  name : varchar(100)
+  email : varchar(100)
+  password : varchar(255)
+  blood_type : varchar(3)
+  role_id : varchar(10)
+  last_donation_date : date
+  location : varchar(50)
+  status : enum
+  created_at : datetime
+  phone : varchar(15)
+  gender : varchar(5)
+  address : text
+}
+
+entity blood_types {
+  * blood_type : varchar(3)
+  can_donate_to : text
+  can_receive_from : text
+}
+
+entity health_centers {
+  * center_id : varchar(10)
+  name : varchar(100)
+  address : varchar(255)
+  contact_info : varchar(100)
+  location : varchar(50)
+}
+
+entity donation_requests {
+  * request_id : varchar(32)
+  user_id : varchar(10)
+  center_id : varchar(10)
+  blood_type_needed : varchar(3)
+  quantity : int
+  urgency_level : enum
+  status : enum
+  created_at : datetime
+  desired_date : datetime
+  request_type : enum
+}
+
+entity donations {
+  * donation_id : varchar(100)
+  user_id : varchar(10)
+  request_id : varchar(32)
+  donation_type : enum
+  amount : int
+  date : date
+  status : varchar(255)
+}
+
+entity blood_inventory {
+  * inventory_id : bigint
+  center_id : varchar(10)
+  blood_type : varchar(3)
+  component_type : enum
+  quantity : int
+  expiry_date : date
+  status : enum
+  donation_id : varchar(10)
+}
+
+entity appointments {
+  * appointment_id : varchar(10)
+  user_id : varchar(10)
+  center_id : varchar(10)
+  scheduled_time : datetime
+  status : enum
+  donation_id : varchar(10)
+}
+
+entity activity_logs {
+  * log_id : varchar(10)
+  user_id : varchar(10)
+  action : varchar(255)
+  ip_address : varchar(45)
+  timestamp : datetime
+}
+
+entity blogs {
+  * blog_id : varchar(10)
+  author_id : varchar(10)
+  title : varchar(255)
+  content : text
+  created_at : datetime
+}
+
+entity medical_records {
+  * record_id : varchar(100)
+  user_id : varchar(10)
+  weight : float
+  blood_pressure : varchar(20)
+  disease_history : text
+  checked_date : date
+  notes : text
+}
+
+entity notifications {
+  * notification_id : varchar(10)
+  user_id : varchar(10)
+  message : text
+  message_type : enum
+  staff_message : text
+  status : enum
+  created_at : datetime
+}
+
+entity donation_registrations {
+  * id : varchar(100)
+  user_id : varchar(10)
+  registration_date : date
+  type : enum
+  status : enum
+}
+
+entity blood_compatibility {
+  * id : bigint
+  receiver_blood_type : varchar(3)
+  transfusion_type : varchar(50)
+  blood_component : varchar(50)
+  compatible_blood_types : text
+}
+
+users }o--|| roles
+users ||--o{ donation_requests
+users ||--o{ donations
+users ||--o{ appointments
+users ||--o{ activity_logs
+users ||--o{ blogs
+users ||--o{ medical_records
+users ||--o{ notifications
+users ||--o{ donation_registrations
+
+donation_requests ||--|{ donations
+donation_requests }|--|| health_centers
+
+blood_inventory }|--|| health_centers
+blood_inventory }|--|| blood_types
+blood_inventory }|--|| donations
+
+appointments }|--|| health_centers
+appointments }|--|| donations
+
+@enduml

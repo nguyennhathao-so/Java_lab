@@ -1,0 +1,27 @@
+### Geocoding API
+
+### Cập nhật tọa độ cho tất cả user
+POST http://localhost:8080/api/geocoding/update-all-users
+Content-Type: application/json
+
+###
+
+### Cập nhật tọa độ cho user cụ thể
+POST http://localhost:8080/api/geocoding/update-user/US1
+Content-Type: application/json
+
+###
+
+### Test đăng ký user mới (sẽ tự động geocoding)
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
+
+{
+  "name": "Test User",
+  "email": "test@example.com",
+  "password": "password123",
+  "phoneNumber": "0123456789",
+  "address": "123 Đường ABC, Quận 1, TP.HCM",
+  "gender": "Nam",
+  "bloodType": "A+"
+} 

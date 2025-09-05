@@ -46,6 +46,7 @@
     <script src="../js/component_admin.js"></script>
     <script src="../js/blood_donations_history_admin.js"></script>
     <script src="../js/api.js"></script>
+    <script src="../js/admin-api.js"></script>
     <script src="../js/example.js"></script>
   </head>
 
@@ -80,27 +81,32 @@
           <h1 class="edit-title">CHỈNH SỬA NGƯỜI DÙNG</h1>
           <form class="form-user">
             <label>Họ Và Tên *</label>
-            <input type="text" placeholder="Nhập Họ Tên" required />
+            <input id="name" type="text" placeholder="Nhập Họ Tên" required />
 
             <label>Email *</label>
-            <input type="email" placeholder="Nhập Email" required />
+            <input id="email" type="email" placeholder="Nhập Email" required />
 
             <label>Mật Khẩu *</label>
             <div class="password-group">
-              <input type="password" placeholder="***********" required />
+              <input
+                id="password"
+                type="password"
+                placeholder="***********"
+                required
+              />
               <span class="toggle-eye">👁️</span>
             </div>
 
             <label>Số Điện Thoại *</label>
-            <input type="tel" placeholder="Số Điện Thoại" required />
+            <input id="phone" type="tel" placeholder="Số Điện Thoại" required />
 
             <label>Địa Chỉ</label>
-            <input type="text" placeholder="Nhập Địa Chỉ" />
+            <input id="address" type="text" placeholder="Nhập Địa Chỉ" />
 
             <div class="row">
               <div class="col">
                 <label>Giới Tính *</label>
-                <select required>
+                <select id="gender" required>
                   <option disabled selected>Giới Tính</option>
                   <option>Nam</option>
                   <option>Nữ</option>
@@ -108,7 +114,7 @@
               </div>
               <div class="col">
                 <label>Nhóm Máu *</label>
-                <select required>
+                <select id="bloodType" required>
                   <option disabled selected>Nhóm Máu</option>
                   <option>A+</option>
                   <option>A-</option>
@@ -127,5 +133,60 @@
         </section>
       </main>
     </div>
+
+    <script>
+      // Hàm lấy userId từ URL (giả sử dạng ?id=123)
+      function getUserIdFromURL() {
+        const params = new URLSearchParams(window.location.search);
+        return params.get('id');
+      }
+
+      // Nếu không có userId, cảnh báo và disable form
+      const userId = getUserIdFromURL();
+      if (!userId) {
+        alert('Không tìm thấy userId! Vui lòng truy cập từ trang danh sách người dùng.');
+        document.querySelector('.form-user').querySelectorAll('input, select, button').forEach(el => el.disabled = true);
+      } else {
+        // Hàm load dữ liệu user lên form
+        async function loadUserData() {
+          try {
+            const users = await adminApiService.getAllUsers();
+            const user = users.find(u => u.userId === userId);
+            if (user) {
+              document.getElementById('name').value = user.name || '';
+              document.getElementById('email').value = user.email || '';
+              document.getElementById('password').value = user.password || '';
+              document.getElementById('phone').value = user.phone || '';
+              document.getElementById('address').value = user.address || '';
+              document.getElementById('gender').value = user.gender || '';
+              document.getElementById('bloodType').value = user.bloodType || '';
+            }
+          } catch (e) {
+            alert('Không thể tải dữ liệu người dùng!');
+          }
+        }
+        loadUserData();
+
+        document.querySelector('.form-user').onsubmit = async function(e) {
+          e.preventDefault();
+          const userData = {
+            name: document.getElementById('name').value,
+            email: document.getElementById('email').value,
+            password: document.getElementById('password').value,
+            phone: document.getElementById('phone').value,
+            address: document.getElementById('address').value,
+            gender: document.getElementById('gender').value,
+            bloodType: document.getElementById('bloodType').value
+          };
+          try {
+            await adminApiService.updateUser(userId, userData);
+            alert('Cập nhật thành công!');
+            window.location.href = 'user_management.html';
+          } catch (err) {
+            alert('Cập nhật thất bại!');
+          }
+        }
+      }
+    </script>
   </body>
 </html>

@@ -23,4 +23,6 @@ public interface IUserService {
      * @return true nếu số điện thoại đã tồn tại, false nếu chưa
      */
     boolean isPhoneNumberExists(String phoneNumber);
+
+    void deleteUserById(String id);
 } 

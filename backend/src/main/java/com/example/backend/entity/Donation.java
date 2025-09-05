@@ -4,7 +4,7 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import java.sql.Date;
+import java.sql.Timestamp;
 import com.example.backend.config.EntityIdListener;
 
 @Data
@@ -15,7 +15,6 @@ import com.example.backend.config.EntityIdListener;
 @EntityListeners(EntityIdListener.class)
 public class Donation {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "donation_id")
     private String donationId;
 
@@ -35,9 +34,20 @@ public class Donation {
     private Integer amount;
 
     @Column(name = "date")
-    private Date date;
+    private Timestamp date;
+
+    @Column(name = "status")
+    private String status;
 
     public enum DonationType {
         whole, platelets, plasma
+    }
+
+    public Timestamp getDate() {
+        return date;
+    }
+
+    public void setDate(Timestamp date) {
+        this.date = date;
     }
 }
